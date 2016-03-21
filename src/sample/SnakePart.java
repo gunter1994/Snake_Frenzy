@@ -1,0 +1,44 @@
+package sample;
+
+import javafx.scene.image.*;
+
+/**
+ * Created by gunter on 3/20/16.
+ */
+public class SnakePart {
+    private Position pos;
+    private Image pic;
+    private SnakePart next = null;
+
+    public SnakePart() {;
+        this.pos = new Position(0,0);
+    }
+
+    public SnakePart(Position p) {
+        this.pos = p;
+    }
+
+    public void setPic(Image i) {
+        this.pic = i;
+    }
+
+    public Image getPic() {
+        return this.pic;
+    }
+
+    public void setPos(Position p) {
+        this.pos = p;
+    }
+
+    public Position getPos() {
+        return this.pos;
+    }
+
+    public void setNext(SnakePart s) {
+        this.next = s;
+    }
+
+    public SnakePart getNext() {
+        return this.next;
+    }
+}
