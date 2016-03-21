@@ -68,7 +68,6 @@ public class Main extends Application {
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode()==KeyCode.LEFT) {
                 System.out.println("You pressed Left");
-                
             }
         });
 
