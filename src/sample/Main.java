@@ -24,7 +24,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.awt.event.KeyListener;
 import java.io.File;
+import java.security.Key;
 
 public class Main extends Application {
     Scene scene;
@@ -62,16 +64,29 @@ public class Main extends Application {
 
     public void play(GridPane grid, Snake s) {
         int dir = 1;
+
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+            if(key.getCode()==KeyCode.LEFT) {
+                System.out.println("You pressed Left");
+                
+            }
+        });
+
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+            if(key.getCode()==KeyCode.RIGHT) {
+                System.out.println("You pressed Right");
+            }
+        });
+
         timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
 
         timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-
             }
-
         };
+
 
 
         KeyValue keyValueX = new KeyValue(grid.scaleXProperty(), 1);
