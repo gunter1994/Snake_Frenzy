@@ -31,7 +31,8 @@ public class SnakePart {
     }
 
     public Position getPos() {
-        return this.pos;
+        Position p = new Position(this.pos.getX(), this.pos.getY());
+        return p;
     }
 
     public void setNext(SnakePart s) {
