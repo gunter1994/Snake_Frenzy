@@ -63,7 +63,7 @@ public class Snake {
         }
         Position p = c.getPos();
         if (d == 0) {
-            p.setY(p.getY()-1);
+            p.setY((p.getY()-1);
             c.setPos(p);
         }
         else if (d == 1) {
