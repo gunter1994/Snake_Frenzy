@@ -32,6 +32,7 @@ public class Main extends Application {
     Scene scene;
     private Timeline timeline;
     private AnimationTimer timer;
+    private int dir;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -63,17 +64,17 @@ public class Main extends Application {
     }
 
     public void play(GridPane grid, Snake s) {
-        int dir = 1;
+        dir = 1;
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode()==KeyCode.LEFT) {
-                System.out.println("You pressed Left");
+                dirLeft();
             }
         });
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode()==KeyCode.RIGHT) {
-                System.out.println("You pressed Right");
+                dirRight();
             }
         });
 
@@ -102,6 +103,23 @@ public class Main extends Application {
 
         timeline.play();
         timer.start();
+    }
+
+    public void dirLeft()
+    {
+        System.out.println("test");
+        dir--;
+        if (dir == -1) {
+            dir = 3;
+        }
+    }
+
+    public void dirRight()
+    {
+        dir++;
+        if (dir == 4) {
+            dir = 0;
+        }
     }
 }
 

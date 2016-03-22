@@ -47,7 +47,6 @@ public class Snake {
                 c.setPic(new Image(new File("snake_art/body.png").toURI().toString()));
             }
             view[j].setImage(c.getPic());
-            System.out.println(p.getX() + " " + p.getY());
             grid.add(view[j], p.getX(), p.getY());
             c = c.getNext();
             j++;
