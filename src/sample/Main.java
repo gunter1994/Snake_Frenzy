@@ -15,13 +15,12 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Popup;
@@ -32,12 +31,14 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.security.Key;
+import java.util.Random;
 
 public class Main extends Application {
     Scene scene;
     private Timeline timeline;
     private AnimationTimer timer;
     private int dir;
+    private Position food;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -56,6 +57,7 @@ public class Main extends Application {
         Snake s = new Snake();
         s.drawSnake(grid);
         s.move(grid, dir); //snake must move once for collision purposes
+        newFood(grid, s);
 
         root.getChildren().add(grid);
         scene = new Scene(root, Color.WHITE);
@@ -104,6 +106,7 @@ public class Main extends Application {
                     gameOver(grid, primaryStage);
                 }
                 s.move(grid, dir);
+                checkFood(grid, s);
             }
         };
         KeyFrame keyFrame = new KeyFrame(duration, onFinished , keyValueX, keyValueY);
@@ -160,6 +163,48 @@ public class Main extends Application {
         layout.getChildren().addAll(play, quit);
         stage.setScene(new Scene(layout));
         stage.show();
+    }
+
+    public void checkFood(GridPane grid, Snake s)
+    {
+        if (food.equals(s.tail.getPos()))
+        {
+            s.grow += 3;
+            newFood(grid, s);
+        }
+        placeFood(grid);
+    }
+
+    public void newFood(GridPane grid, Snake s)
+    {
+        Random rand = new Random();
+        int x = 0;
+        int y = 0;
+        boolean available = false;
+        while (!available) {
+            available = true;
+            x = rand.nextInt(40);
+            y = rand.nextInt(40);
+            food = new Position(x, y);
+            SnakePart c = s.head;
+            while (c != null) {
+                if (food.equals(c.getPos())) {
+                    available = false;
+                    break;
+                }
+                c = c.getNext();
+            }
+        }
+        food.setX(x);
+        food.setY(y);
+    }
+
+    public void placeFood(GridPane grid)
+    {
+        Image foodPic = new Image(new File("snake_art/food.png").toURI().toString());
+        ImageView foodView = new ImageView();
+        foodView.setImage(foodPic);
+        grid.add(foodView, food.getX(), food.getY());
     }
 }
 
