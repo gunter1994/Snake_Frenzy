@@ -107,8 +107,6 @@ public class Main extends Application {
 
     public void dirLeft()
     {
-        System.out.println("test");
-
         dir--;
         if (dir == -1) {
             dir = 3;

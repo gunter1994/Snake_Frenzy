@@ -15,18 +15,20 @@ public class Snake {
     public SnakePart tail;
     public Snake() {
         Position p = new Position(19,20);
-        head = new SnakePart(p);
-        Position p2 = new Position(20,20);
-        head.setNext(new SnakePart(p2));
-        Position p3 = new Position(21,20);
-        head.getNext().setNext(new SnakePart(p3));
-        tail = head.getNext().getNext();
+        SnakePart c = new SnakePart(p);
+        head = c;
+        for (int i = 0; i < 4; i++) {
+            p.setX(p.getX()+1);
+            c.setNext(new SnakePart(p));
+            c = c.getNext();
+        }
+        tail = c;
     }
 
     public void drawSnake(GridPane grid)
     {
         SnakePart c = head;
-        ImageView[] view = new ImageView[1600];
+        ImageView[] view = new ImageView[1600]; //largest possible snake
         for (int i = 0; i < 1600; i++)
         {
             view[i] = new ImageView();
