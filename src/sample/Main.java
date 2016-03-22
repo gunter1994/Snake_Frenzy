@@ -135,7 +135,6 @@ public class Main extends Application {
 
     public void gameOver(GridPane grid, Stage primaryStage)
     {
-        System.out.println("test");
         Stage stage = new Stage();
         stage.setTitle("Game Over");
 
