@@ -5,32 +5,20 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import java.awt.event.KeyListener;
 import java.io.File;
-import java.io.IOException;
-import java.security.Key;
 import java.util.Random;
 
 public class Main extends Application {
@@ -56,7 +44,6 @@ public class Main extends Application {
         }
         Snake s = new Snake();
         s.drawSnake(grid);
-        s.move(grid, dir); //snake must move once for collision purposes
         newFood(grid, s);
 
         root.getChildren().add(grid);
@@ -73,7 +60,10 @@ public class Main extends Application {
 
     public void play(GridPane grid, Snake s, Stage primaryStage) {
         dir = 0;
+        s.move(grid, dir);
 
+        //controls change every time you play again
+        //normal, reverse, backwards, nothing
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode()==KeyCode.LEFT) {
                 dirLeft();
@@ -143,7 +133,6 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent event) {
                 Snake s = new Snake();
-                s.move(grid, dir);
                 stage.close();
                 play(grid, s, primaryStage);
             }

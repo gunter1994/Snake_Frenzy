@@ -11,7 +11,7 @@ public class SnakePart {
     private Image pic;
     private SnakePart next = null;
 
-    public SnakePart() {;
+    public SnakePart() {
         this.pos = new Position(0,0);
     }
 
