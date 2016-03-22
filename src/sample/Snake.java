@@ -13,8 +13,10 @@ import java.io.File;
 public class Snake {
     public SnakePart head;
     public SnakePart tail;
+    public int grow;
+
     public Snake() {
-        Position p = new Position(19,20);
+        Position p = new Position(16,20);
         SnakePart c = new SnakePart(p);
         head = c;
         for (int i = 0; i < 4; i++) {
@@ -60,9 +62,21 @@ public class Snake {
     {
         SnakePart c = head;
         //tail needs different orientation than others
-        c.setPos(c.getNext().getPos());
-        c.setOrientation(c.getNext().getNext().getOrientation());
-        c = c.getNext();
+        if (grow == 0) //grows snake if needed
+        {
+            c.setPos(c.getNext().getPos());
+            c.setOrientation(c.getNext().getNext().getOrientation());
+            c = c.getNext();
+        }
+        else //adds a new joint where the tail would move too, and doesn't move tail
+        {
+            grow--;
+            SnakePart temp = new SnakePart(c.getNext().getPos());
+            temp.setNext(c.getNext());
+            c.setNext(temp);
+            c = c.getNext();
+            c = c.getNext();
+        }
         while (c != tail) {
             c.setPos(c.getNext().getPos());
             c.setOrientation(c.getNext().getOrientation());
@@ -89,7 +103,27 @@ public class Snake {
             c.setPos(p);
             c.setOrientation(3);
         }
+        if (!this.checkCollision()) {
         grid.getChildren().clear();
-        this.drawSnake(grid);
+            this.drawSnake(grid);
+        }
+    }
+
+    public boolean checkCollision() {
+        SnakePart c = tail; //actually the head of the snake
+        if (c.getPos().getX() > 39 || c.getPos().getX() < 0 || c.getPos().getY() > 39 || c.getPos().getY() < 0)
+        {
+            return true;
+        }
+        SnakePart temp = head;
+        while (temp.getNext().getNext() != tail)
+        {
+            if (temp.getPos().equals(c.getPos()))
+            {
+                return true;
+            }
+            temp = temp.getNext();
+        }
+        return false;
     }
 }

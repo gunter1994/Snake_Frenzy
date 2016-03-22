@@ -14,18 +14,23 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.io.IOException;
 import java.security.Key;
 
 public class Main extends Application {
@@ -50,20 +55,21 @@ public class Main extends Application {
         }
         Snake s = new Snake();
         s.drawSnake(grid);
+        s.move(grid, dir); //snake must move once for collision purposes
 
         root.getChildren().add(grid);
         scene = new Scene(root, Color.WHITE);
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        play(grid, s);
+        play(grid, s, primaryStage);
     }
 
     public static void main(String[] args) {
         launch(args);
     }
 
-    public void play(GridPane grid, Snake s) {
+    public void play(GridPane grid, Snake s, Stage primaryStage) {
         dir = 0;
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
@@ -87,13 +93,16 @@ public class Main extends Application {
             }
         };
 
-
-
         KeyValue keyValueX = new KeyValue(grid.scaleXProperty(), 1);
         KeyValue keyValueY = new KeyValue(grid.scaleYProperty(), 1);
         Duration duration = Duration.millis(100);
         EventHandler onFinished = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
+                if (s.checkCollision())
+                {
+                    timeline.stop();
+                    gameOver(grid, primaryStage);
+                }
                 s.move(grid, dir);
             }
         };
@@ -119,6 +128,38 @@ public class Main extends Application {
         if (dir == 4) {
             dir = 0;
         }
+    }
+
+    public void gameOver(GridPane grid, Stage primaryStage)
+    {
+        System.out.println("test");
+        Stage stage = new Stage();
+        stage.setTitle("Game Over");
+
+        Button play = new Button("Play Again");
+        play.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Snake s = new Snake();
+                stage.close();
+                play(grid, s, primaryStage);
+            }
+        });
+
+        Button quit = new Button("Quit");
+        quit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                stage.close();
+                primaryStage.close();
+            }
+        });
+
+        HBox layout = new HBox(10);
+        layout.setStyle("-fx-background-color: white; -fx-padding: 20;");
+        layout.getChildren().addAll(play, quit);
+        stage.setScene(new Scene(layout));
+        stage.show();
     }
 }
 

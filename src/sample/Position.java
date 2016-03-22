@@ -30,4 +30,12 @@ public class Position {
     public void setY(int y) {
         this.y = y;
     }
+
+    public boolean equals(Position p) {
+        if (this.x == p.getX() && this.y == p.getY())
+        {
+            return true;
+        }
+        return false;
+    }
 }
