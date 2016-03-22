@@ -39,12 +39,12 @@ public class Main extends Application {
         Group root = new Group();
 
         GridPane grid = new GridPane();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 40; i++) {
             ColumnConstraints column = new ColumnConstraints(20);
             grid.getColumnConstraints().add(column);
         }
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 40; i++) {
             RowConstraints row = new RowConstraints(20);
             grid.getRowConstraints().add(row);
         }
@@ -64,7 +64,7 @@ public class Main extends Application {
     }
 
     public void play(GridPane grid, Snake s) {
-        dir = 1;
+        dir = 0;
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode()==KeyCode.LEFT) {
@@ -91,7 +91,7 @@ public class Main extends Application {
 
         KeyValue keyValueX = new KeyValue(grid.scaleXProperty(), 1);
         KeyValue keyValueY = new KeyValue(grid.scaleYProperty(), 1);
-        Duration duration = Duration.millis(500);
+        Duration duration = Duration.millis(100);
         EventHandler onFinished = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 s.move(grid, dir);
@@ -108,6 +108,7 @@ public class Main extends Application {
     public void dirLeft()
     {
         System.out.println("test");
+
         dir--;
         if (dir == -1) {
             dir = 3;

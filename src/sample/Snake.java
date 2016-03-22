@@ -14,11 +14,11 @@ public class Snake {
     public SnakePart head;
     public SnakePart tail;
     public Snake() {
-        Position p = new Position(9,10);
+        Position p = new Position(19,20);
         head = new SnakePart(p);
-        Position p2 = new Position(10,10);
+        Position p2 = new Position(20,20);
         head.setNext(new SnakePart(p2));
-        Position p3 = new Position(11,10);
+        Position p3 = new Position(21,20);
         head.getNext().setNext(new SnakePart(p3));
         tail = head.getNext().getNext();
     }
@@ -26,8 +26,8 @@ public class Snake {
     public void drawSnake(GridPane grid)
     {
         SnakePart c = head;
-        ImageView[] view = new ImageView[400];
-        for (int i = 0; i < 400; i++)
+        ImageView[] view = new ImageView[1600];
+        for (int i = 0; i < 1600; i++)
         {
             view[i] = new ImageView();
         }
@@ -47,6 +47,7 @@ public class Snake {
                 c.setPic(new Image(new File("snake_art/body.png").toURI().toString()));
             }
             view[j].setImage(c.getPic());
+            view[j].setRotate(90*c.getOrientation());
             grid.add(view[j], p.getX(), p.getY());
             c = c.getNext();
             j++;
@@ -56,26 +57,35 @@ public class Snake {
     public void move(GridPane grid, int d)
     {
         SnakePart c = head;
+        //tail needs different orientation than others
+        c.setPos(c.getNext().getPos());
+        c.setOrientation(c.getNext().getNext().getOrientation());
+        c = c.getNext();
         while (c != tail) {
             c.setPos(c.getNext().getPos());
+            c.setOrientation(c.getNext().getOrientation());
             c = c.getNext();
         }
         Position p = c.getPos();
         if (d == 0) {
-            p.setY((p.getY()-1));
-            c.setPos(p);
-        }
-        else if (d == 1) {
             p.setX(p.getX()+1);
             c.setPos(p);
+            c.setOrientation(0);
         }
-        else if (d == 2) {
+        else if (d == 1) {
             p.setY(p.getY()+1);
             c.setPos(p);
+            c.setOrientation(1);
         }
-        else if (d == 3) {
+        else if (d == 2) {
             p.setX(p.getX()-1);
             c.setPos(p);
+            c.setOrientation(2);
+        }
+        else if (d == 3) {
+            p.setY((p.getY()-1));
+            c.setPos(p);
+            c.setOrientation(3);
         }
         grid.getChildren().clear();
         this.drawSnake(grid);
