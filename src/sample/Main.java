@@ -143,6 +143,7 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent event) {
                 Snake s = new Snake();
+                s.move(grid, dir);
                 stage.close();
                 play(grid, s, primaryStage);
             }
