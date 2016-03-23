@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -24,7 +23,7 @@ import java.util.Random;
 public class Main extends Application {
     Scene scene;
     private Timeline timeline;
-    private AnimationTimer timer;
+    //private AnimationTimer timer;
     private int dir;
     private Position food;
 
@@ -33,18 +32,18 @@ public class Main extends Application {
         Group root = new Group();
 
         GridPane grid = new GridPane();
-        for (int i = 0; i < 40; i++) {
-            ColumnConstraints column = new ColumnConstraints(20);
+        for (int i = 0; i < 36; i++) {
+            ColumnConstraints column = new ColumnConstraints(18);
             grid.getColumnConstraints().add(column);
         }
 
-        for (int i = 0; i < 40; i++) {
-            RowConstraints row = new RowConstraints(20);
+        for (int i = 0; i < 36; i++) {
+            RowConstraints row = new RowConstraints(18);
             grid.getRowConstraints().add(row);
         }
         Snake s = new Snake();
         s.drawSnake(grid);
-        newFood(grid, s);
+        newFood(s);
 
         root.getChildren().add(grid);
         scene = new Scene(root, Color.WHITE);
@@ -52,13 +51,22 @@ public class Main extends Application {
         primaryStage.show();
 
         play(grid, s, primaryStage);
+        /*try {
+            play(grid, s, primaryStage);
+        } catch(GameOverException dead){
+            s.move(grid, dir);
+            timeline.stop();
+            gameOver(grid, primaryStage);
+        }*/
     }
 
     public static void main(String[] args) {
         launch(args);
     }
 
-    public void play(GridPane grid, Snake s, Stage primaryStage) {
+
+
+    private void play(GridPane grid, Snake s, Stage primaryStage) /*throws GameOverException*/ {
         dir = 0;
         s.move(grid, dir);
 
@@ -66,24 +74,27 @@ public class Main extends Application {
         //normal, reverse, backwards, nothing
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode()==KeyCode.LEFT) {
-                dirLeft();
+                dir--;
+                if (dir==-1){
+                    dir=3;
+                }
             }
         });
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode()==KeyCode.RIGHT) {
-                dirRight();
+                dir = (dir+1)%4;
             }
         });
 
         timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
 
-        timer = new AnimationTimer() {
+        /*timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
             }
-        };
+        };*/
 
         KeyValue keyValueX = new KeyValue(grid.scaleXProperty(), 1);
         KeyValue keyValueY = new KeyValue(grid.scaleYProperty(), 1);
@@ -92,6 +103,7 @@ public class Main extends Application {
             public void handle(ActionEvent t) {
                 if (s.checkCollision())
                 {
+                    s.move(grid, dir);
                     timeline.stop();
                     gameOver(grid, primaryStage);
                 }
@@ -104,26 +116,12 @@ public class Main extends Application {
         timeline.getKeyFrames().add(keyFrame);
 
         timeline.play();
-        timer.start();
+        //timer.start();
     }
 
-    public void dirLeft()
-    {
-        dir--;
-        if (dir == -1) {
-            dir = 3;
-        }
-    }
 
-    public void dirRight()
-    {
-        dir++;
-        if (dir == 4) {
-            dir = 0;
-        }
-    }
 
-    public void gameOver(GridPane grid, Stage primaryStage)
+    private void gameOver(GridPane grid, Stage primaryStage)
     {
         Stage stage = new Stage();
         stage.setTitle("Game Over");
@@ -154,17 +152,19 @@ public class Main extends Application {
         stage.show();
     }
 
+
+
     public void checkFood(GridPane grid, Snake s)
     {
         if (food.equals(s.tail.getPos()))
         {
             s.grow += 3;
-            newFood(grid, s);
+            newFood(s);
         }
         placeFood(grid);
     }
 
-    public void newFood(GridPane grid, Snake s)
+    private void newFood(Snake s)
     {
         Random rand = new Random();
         int x = 0;
@@ -172,8 +172,8 @@ public class Main extends Application {
         boolean available = false;
         while (!available) {
             available = true;
-            x = rand.nextInt(40);
-            y = rand.nextInt(40);
+            x = rand.nextInt(36);
+            y = rand.nextInt(36);
             food = new Position(x, y);
             SnakePart c = s.head;
             while (c != null) {
@@ -188,7 +188,9 @@ public class Main extends Application {
         food.setY(y);
     }
 
-    public void placeFood(GridPane grid)
+
+
+    private void placeFood(GridPane grid)
     {
         Image foodPic = new Image(new File("snake_art/food.png").toURI().toString());
         ImageView foodView = new ImageView();

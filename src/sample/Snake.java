@@ -28,8 +28,8 @@ public class Snake {
     public void drawSnake(GridPane grid)
     {
         SnakePart c = head;
-        ImageView[] view = new ImageView[1600]; //largest possible snake
-        for (int i = 0; i < 1600; i++)
+        ImageView[] view = new ImageView[1296]; //largest possible snake
+        for (int i = 0; i < 1296; i++)
         {
             view[i] = new ImageView();
         }
@@ -109,7 +109,7 @@ public class Snake {
 
     public boolean checkCollision() {
         SnakePart c = tail; //actually the head of the snake
-        if (c.getPos().getX() > 39 || c.getPos().getX() < 0 || c.getPos().getY() > 39 || c.getPos().getY() < 0)
+        if (c.getPos().getX() > 35 || c.getPos().getX() < 0 || c.getPos().getY() > 35 || c.getPos().getY() < 0)
         {
             return true;
         }
