@@ -26,6 +26,7 @@ public class MainGame extends Application {
     //private AnimationTimer timer;
     private int dir;
     private Position food;
+    private boolean moved = false;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -48,6 +49,7 @@ public class MainGame extends Application {
         root.getChildren().add(grid);
         scene = new Scene(root, Color.WHITE);
         primaryStage.setScene(scene);
+        primaryStage.setTitle("Snake Frenzy");
         primaryStage.show();
 
         play(grid, s, primaryStage);
@@ -60,39 +62,43 @@ public class MainGame extends Application {
         }*/
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     private void play(GridPane grid, Snake s, Stage primaryStage) /*throws GameOverException*/ {
         dir = 0;
         s.move(grid, dir);
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.RIGHT) {
-                if (dir == 3 || dir == 1)
+            if(key.getCode()==KeyCode.RIGHT && !moved) {
+                if (dir == 3 || dir == 1) {
                     dir = 0;
+                    moved = true;
+                }
             }
         });
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.DOWN) {
-                if (dir == 0 || dir == 2)
+            if(key.getCode()==KeyCode.DOWN && !moved) {
+                if (dir == 0 || dir == 2) {
                     dir = 1;
+                    moved = true;
+                }
             }
         });
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.LEFT) {
-                if (dir == 3 || dir == 1)
+            if(key.getCode()==KeyCode.LEFT && !moved) {
+                if (dir == 3 || dir == 1) {
                     dir = 2;
+                    moved = true;
+                }
             }
         });
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.UP) {
-                if (dir == 0 || dir == 2)
+            if(key.getCode()==KeyCode.UP && !moved) {
+                if (dir == 0 || dir == 2) {
                     dir = 3;
+                    moved = true;
+                }
             }
         });
 
@@ -118,6 +124,7 @@ public class MainGame extends Application {
                 }
                 s.move(grid, dir);
                 checkFood(grid, s);
+                moved = false;
             }
         };
         KeyFrame keyFrame = new KeyFrame(duration, onFinished , keyValueX, keyValueY);
@@ -199,6 +206,10 @@ public class MainGame extends Application {
         ImageView foodView = new ImageView();
         foodView.setImage(foodPic);
         grid.add(foodView, food.getX(), food.getY());
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
 
