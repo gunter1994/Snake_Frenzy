@@ -68,20 +68,31 @@ public class MainGame extends Application {
         dir = 0;
         s.move(grid, dir);
 
-        //controls change every time you play again
-        //normal, reverse, backwards, nothing
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.LEFT) {
-                dir--;
-                if (dir==-1){
-                    dir=3;
-                }
+            if(key.getCode()==KeyCode.RIGHT) {
+                if (dir == 3 || dir == 1)
+                    dir = 0;
             }
         });
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.RIGHT) {
-                dir = (dir+1)%4;
+            if(key.getCode()==KeyCode.DOWN) {
+                if (dir == 0 || dir == 2)
+                    dir = 1;
+            }
+        });
+
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+            if(key.getCode()==KeyCode.LEFT) {
+                if (dir == 3 || dir == 1)
+                    dir = 2;
+            }
+        });
+
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+            if(key.getCode()==KeyCode.UP) {
+                if (dir == 0 || dir == 2)
+                    dir = 3;
             }
         });
 
