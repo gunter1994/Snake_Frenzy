@@ -1,4 +1,4 @@
-package sample;
+package application;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -20,7 +20,7 @@ import javafx.util.Duration;
 import java.io.File;
 import java.util.Random;
 
-public class Main extends Application {
+public class MainGame extends Application {
     Scene scene;
     private Timeline timeline;
     //private AnimationTimer timer;
@@ -63,8 +63,6 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
-
 
     private void play(GridPane grid, Snake s, Stage primaryStage) /*throws GameOverException*/ {
         dir = 0;
@@ -119,8 +117,6 @@ public class Main extends Application {
         //timer.start();
     }
 
-
-
     private void gameOver(GridPane grid, Stage primaryStage)
     {
         Stage stage = new Stage();
@@ -151,8 +147,6 @@ public class Main extends Application {
         stage.setScene(new Scene(layout));
         stage.show();
     }
-
-
 
     public void checkFood(GridPane grid, Snake s)
     {
@@ -187,8 +181,6 @@ public class Main extends Application {
         food.setX(x);
         food.setY(y);
     }
-
-
 
     private void placeFood(GridPane grid)
     {

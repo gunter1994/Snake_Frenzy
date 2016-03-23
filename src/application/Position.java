@@ -1,4 +1,4 @@
-package sample;
+package application;
 
 /**
  * Created by gunter on 3/20/16.
