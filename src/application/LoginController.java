@@ -29,7 +29,7 @@ public class LoginController {
             Stage primaryStage = new Stage();
             primaryStage.setTitle("Main Menu");
             Parent root = FXMLLoader.load(getClass().getResource("Home_Screen.fxml"));
-            Scene home_screen_scene = new Scene(root,400,400);
+            Scene home_screen_scene = new Scene(root,600,600);
             primaryStage.setScene(home_screen_scene);
             primaryStage.show();
         }
