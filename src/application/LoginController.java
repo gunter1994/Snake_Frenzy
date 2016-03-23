@@ -27,6 +27,7 @@ public class LoginController {
         else {
             lblStatus.setText("Login Success");
             Stage primaryStage = new Stage();
+            primaryStage.setTitle("Main Menu");
             Parent root = FXMLLoader.load(getClass().getResource("Home_Screen.fxml"));
             Scene home_screen_scene = new Scene(root,400,400);
             primaryStage.setScene(home_screen_scene);

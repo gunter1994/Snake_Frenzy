@@ -3,7 +3,6 @@ package application;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -20,16 +19,23 @@ import javafx.util.Duration;
 import java.io.File;
 import java.util.Random;
 
-public class MainGame extends Application {
+public class MainGame {
     Scene scene;
     private Timeline timeline;
     //private AnimationTimer timer;
     private int dir;
     private Position food;
-    private boolean moved = false;
+    private boolean moved;
 
-    @Override
+    public MainGame() {
+        this.timeline = new Timeline();
+        this.dir = 0;
+        this.food = new Position(0,0);
+        this.moved = false;
+    }
+
     public void start(Stage primaryStage) throws Exception {
+        //Stage primaryStage = new Stage();
         Group root = new Group();
 
         GridPane grid = new GridPane();
@@ -102,7 +108,7 @@ public class MainGame extends Application {
             }
         });
 
-        timeline = new Timeline();
+        //timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
 
         /*timer = new AnimationTimer() {
@@ -208,8 +214,5 @@ public class MainGame extends Application {
         grid.add(foodView, food.getX(), food.getY());
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
 
