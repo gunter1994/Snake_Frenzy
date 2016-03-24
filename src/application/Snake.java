@@ -36,19 +36,20 @@ public class Snake {
         int j = 0;
         while (c != null) {
             Position p = c.getPos();
+            Image im;
             if (c == head)
             {
-                c.setPic(new Image(new File("snake_art/tail.png").toURI().toString()));
+                im =(new Image(new File("snake_art/tail.png").toURI().toString()));
             }
             else if (c == tail)
             {
-                c.setPic(new Image(new File("snake_art/head.png").toURI().toString()));
+                im = (new Image(new File("snake_art/head.png").toURI().toString()));
             }
             else
             {
-                c.setPic(new Image(new File("snake_art/body.png").toURI().toString()));
+                im = (new Image(new File("snake_art/body.png").toURI().toString()));
             }
-            view[j].setImage(c.getPic());
+            view[j].setImage(im);
             view[j].setRotate(90*c.getOrientation());
             grid.add(view[j], p.getX(), p.getY());
             c = c.getNext();

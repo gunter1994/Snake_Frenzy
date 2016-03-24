@@ -21,14 +21,12 @@ import java.util.Random;
 
 public class MainGame {
     Scene scene;
-    private Timeline timeline;
     //private AnimationTimer timer;
     private int dir;
     private Position food;
     private boolean moved;
 
     public MainGame() {
-        this.timeline = new Timeline();
         this.dir = 0;
         this.food = new Position(0,0);
         this.moved = false;
@@ -40,37 +38,20 @@ public class MainGame {
 
         GridPane grid = new GridPane();
         for (int i = 0; i < 36; i++) {
-            ColumnConstraints column = new ColumnConstraints(18);
+            ColumnConstraints column = new ColumnConstraints(20);
             grid.getColumnConstraints().add(column);
         }
 
         for (int i = 0; i < 36; i++) {
-            RowConstraints row = new RowConstraints(18);
+            RowConstraints row = new RowConstraints(20);
             grid.getRowConstraints().add(row);
         }
-        Snake s = new Snake();
-        s.drawSnake(grid);
-        newFood(s);
 
         root.getChildren().add(grid);
         scene = new Scene(root, Color.WHITE);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Snake Frenzy");
         primaryStage.show();
-
-        play(grid, s, primaryStage);
-        /*try {
-            play(grid, s, primaryStage);
-        } catch(GameOverException dead){
-            s.move(grid, dir);
-            timeline.stop();
-            gameOver(grid, primaryStage);
-        }*/
-    }
-
-    private void play(GridPane grid, Snake s, Stage primaryStage) /*throws GameOverException*/ {
-        dir = 0;
-        s.move(grid, dir);
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode()==KeyCode.RIGHT && !moved) {
@@ -108,14 +89,25 @@ public class MainGame {
             }
         });
 
-        //timeline = new Timeline();
-        timeline.setCycleCount(Timeline.INDEFINITE);
+        play(grid, primaryStage);
+        /*try {
+            play(grid, s, primaryStage);
+        } catch(GameOverException dead){
+            s.move(grid, dir);
+            timeline.stop();
+            gameOver(grid, primaryStage);
+        }*/
+    }
 
-        /*timer = new AnimationTimer() {
-            @Override
-            public void handle(long l) {
-            }
-        };*/
+    private void play(GridPane grid, Stage primaryStage) /*throws GameOverException*/ {
+        dir = 0;
+        Snake s = new Snake();
+        s.drawSnake(grid);
+        newFood(s);
+        s.move(grid, dir);
+
+        Timeline timeline = new Timeline();
+        timeline.setCycleCount(Timeline.INDEFINITE);
 
         KeyValue keyValueX = new KeyValue(grid.scaleXProperty(), 1);
         KeyValue keyValueY = new KeyValue(grid.scaleYProperty(), 1);
@@ -138,7 +130,6 @@ public class MainGame {
         timeline.getKeyFrames().add(keyFrame);
 
         timeline.play();
-        //timer.start();
     }
 
     private void gameOver(GridPane grid, Stage primaryStage)
@@ -150,9 +141,8 @@ public class MainGame {
         play.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Snake s = new Snake();
                 stage.close();
-                play(grid, s, primaryStage);
+                play(grid, primaryStage);
             }
         });
 
