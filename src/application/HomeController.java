@@ -6,6 +6,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -14,6 +16,12 @@ import java.io.IOException;
  * Created by samantha on 23/03/16.
  */
 public class HomeController {
+
+    @FXML
+    ToggleGroup BodyColours;
+    @FXML
+    ToggleGroup EyeColours;
+
 
     public void handleNewGame(ActionEvent event) {
         MainGame g = new MainGame();
@@ -30,7 +38,10 @@ public class HomeController {
         Scene customizeSnake = new Scene(root,300,300);
         primaryStage.setScene(customizeSnake);
         primaryStage.show();
+    }
 
+    public void saveSnakeDesign(ActionEvent event) {
+        //System.out.println(BodyColours.getSelectedToggle().getProperties()); //test
 
 
 
