@@ -12,9 +12,17 @@ public class Snake {
     public SnakePart head;
     public SnakePart tail;
     public int grow;
+    private String pic;
+    public void setPic(String i) {
+        this.pic = i;
+    }
 
-    public Snake() {
-        Position p = new Position(16,20);
+    public String getPic() {
+        return this.pic;
+    }
+
+    public Snake(String pic, Position p) {
+        this.setPic(pic);
         SnakePart c = new SnakePart(p);
         head = c;
         for (int i = 0; i < 4; i++) {
@@ -39,15 +47,15 @@ public class Snake {
             Image im;
             if (c == head)
             {
-                im =(new Image(new File("snake_art/tail.png").toURI().toString()));
+                im =(new Image(new File("snake_art/" + this.getPic() + "/tail.png").toURI().toString()));
             }
             else if (c == tail)
             {
-                im = (new Image(new File("snake_art/head.png").toURI().toString()));
+                im = (new Image(new File("snake_art/" + this.getPic() + "/head.png").toURI().toString()));
             }
             else
             {
-                im = (new Image(new File("snake_art/body.png").toURI().toString()));
+                im = (new Image(new File("snake_art/" + this.getPic() + "/body.png").toURI().toString()));
             }
             view[j].setImage(im);
             view[j].setRotate(90*c.getOrientation());

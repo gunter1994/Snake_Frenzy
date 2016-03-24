@@ -8,7 +8,6 @@ import javafx.scene.image.*;
 public class SnakePart {
     private int orientation;
     private Position pos;
-    private String pic;
     private SnakePart next = null;
 
     public SnakePart() {
@@ -18,14 +17,6 @@ public class SnakePart {
     public SnakePart(Position p) {
         this.pos = p;
         this.orientation = 0;
-    }
-
-    public void setPic(String i) {
-        this.pic = i;
-    }
-
-    public String getPic() {
-        return this.pic;
     }
 
     public void setPos(Position p) {

@@ -23,6 +23,7 @@ public class MainGame {
     Scene scene;
     //private AnimationTimer timer;
     private int dir;
+    private int storedDir;
     private Position food;
     private boolean moved;
 
@@ -30,6 +31,7 @@ public class MainGame {
         this.dir = 0;
         this.food = new Position(0,0);
         this.moved = false;
+        this.storedDir = 4;
     }
 
     public void start(Stage primaryStage) throws Exception {
@@ -54,37 +56,51 @@ public class MainGame {
         primaryStage.show();
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.RIGHT && !moved) {
-                if (dir == 3 || dir == 1) {
+            if(key.getCode()==KeyCode.RIGHT) {
+                if ((dir == 3 || dir == 1) && !moved) {
                     dir = 0;
                     moved = true;
+                }
+                else if (dir != 2 && moved)
+                {
+                    storedDir = 0;
                 }
             }
         });
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode()==KeyCode.DOWN && !moved) {
-                if (dir == 0 || dir == 2) {
+                if ((dir == 0 || dir == 2) && !moved) {
                     dir = 1;
                     moved = true;
                 }
-            }
-        });
-
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.LEFT && !moved) {
-                if (dir == 3 || dir == 1) {
-                    dir = 2;
-                    moved = true;
+                else if (dir != 3 && moved)
+                {
+                    storedDir = 1;
                 }
             }
         });
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.UP && !moved) {
-                if (dir == 0 || dir == 2) {
+            if(key.getCode()==KeyCode.LEFT) {
+                if ((dir == 3 || dir == 1) && !moved) {
+                    dir = 2;
+                    moved = true;
+                }
+                else if (dir != 0 && moved){
+                    storedDir = 2;
+                }
+            }
+        });
+
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+            if(key.getCode()==KeyCode.UP) {
+                if ((dir == 0 || dir == 2) && !moved) {
                     dir = 3;
                     moved = true;
+                }
+                else if (dir != 1 && moved){
+                    storedDir = 3;
                 }
             }
         });
@@ -101,7 +117,9 @@ public class MainGame {
 
     private void play(GridPane grid, Stage primaryStage) /*throws GameOverException*/ {
         dir = 0;
-        Snake s = new Snake();
+        storedDir = 4;
+        Position p = new Position(15,18);
+        Snake s = new Snake(HomeController.custom, p);
         s.drawSnake(grid);
         newFood(s);
         s.move(grid, dir);
@@ -116,11 +134,18 @@ public class MainGame {
             public void handle(ActionEvent t) {
                 if (s.checkCollision())
                 {
-                    s.move(grid, dir);
                     timeline.stop();
                     gameOver(grid, primaryStage);
                 }
-                s.move(grid, dir);
+                if (storedDir != 4 && dir == s.tail.getOrientation())
+                {
+                    s.move(grid, storedDir);
+                    dir = storedDir;
+                    storedDir = 4;
+                }
+                else {
+                    s.move(grid, dir);
+                }
                 checkFood(grid, s);
                 moved = false;
             }

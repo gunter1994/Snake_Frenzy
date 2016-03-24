@@ -1,11 +1,13 @@
 package application;
 
 import javafx.animation.Timeline;
+import javafx.collections.MapChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
@@ -18,10 +20,9 @@ import java.io.IOException;
 public class HomeController {
 
     @FXML
-    ToggleGroup BodyColours;
-    @FXML
-    ToggleGroup EyeColours;
+    ToggleGroup BodyColours, EyeColours, Patterns;
 
+    public static String custom = "Blue/Blue/None";
 
     public void handleNewGame(ActionEvent event) {
         MainGame g = new MainGame();
@@ -41,10 +42,13 @@ public class HomeController {
     }
 
     public void saveSnakeDesign(ActionEvent event) {
-        //System.out.println(BodyColours.getSelectedToggle().getProperties()); //test
-
-
-
+        RadioMenuItem body = (RadioMenuItem)BodyColours.getSelectedToggle(); //test
+        String bodyS = body.getText();
+        RadioMenuItem eye = (RadioMenuItem)EyeColours.getSelectedToggle(); //test
+        String eyeS = eye.getText();
+        RadioMenuItem pattern = (RadioMenuItem)Patterns.getSelectedToggle(); //test
+        String patternS = pattern.getText();
+        this.custom = bodyS + "/" + eyeS + "/" + patternS;
     }
 
 
