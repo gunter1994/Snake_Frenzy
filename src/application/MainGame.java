@@ -21,7 +21,6 @@ import java.util.Random;
 
 public class MainGame {
     Scene scene;
-    //private AnimationTimer timer;
     private int dir;
     private int storedDir;
     private Position food;
@@ -35,7 +34,6 @@ public class MainGame {
     }
 
     public void start(Stage primaryStage) throws Exception {
-        //Stage primaryStage = new Stage();
         Group root = new Group();
 
         GridPane grid = new GridPane();
@@ -106,16 +104,9 @@ public class MainGame {
         });
 
         play(grid, primaryStage);
-        /*try {
-            play(grid, s, primaryStage);
-        } catch(GameOverException dead){
-            s.move(grid, dir);
-            timeline.stop();
-            gameOver(grid, primaryStage);
-        }*/
     }
 
-    private void play(GridPane grid, Stage primaryStage) /*throws GameOverException*/ {
+    private void play(GridPane grid, Stage primaryStage){
         dir = 0;
         storedDir = 4;
         Position p = new Position(15,18);
@@ -229,4 +220,3 @@ public class MainGame {
     }
 
 }
-
