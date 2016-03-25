@@ -122,7 +122,6 @@ public class MainGame {
         Snake s = new Snake(HomeController.custom, p);
         s.drawSnake(grid);
         newFood(s);
-        s.move(grid, dir);
 
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);

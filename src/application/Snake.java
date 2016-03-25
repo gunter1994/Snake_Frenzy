@@ -25,9 +25,9 @@ public class Snake {
         this.setPic(pic);
         SnakePart c = new SnakePart(p);
         head = c;
-        for (int i = 0; i < 4; i++) {
-            p.setX(p.getX()+1);
-            c.setNext(new SnakePart(p));
+        for (int i = 1; i < 5; i++) {
+            Position p2 = new Position(p.getX()+i, p.getY());
+            c.setNext(new SnakePart(p2));
             c = c.getNext();
         }
         tail = c;
@@ -78,9 +78,11 @@ public class Snake {
                 }
             }
             view[j].setImage(im);
+            //special case for corner tiles
             if (!c.equals(tail) && !c.equals(head) && (c.getNext().getOrientation() != c.getOrientation())){
                 view[j].setRotate(90 * cornerOri);
             }
+            //normal case
             else {
                 view[j].setRotate(90 * c.getOrientation());
             }

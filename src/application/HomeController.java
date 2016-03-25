@@ -10,6 +10,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -23,6 +27,7 @@ public class HomeController {
     ToggleGroup BodyColours, EyeColours, Patterns;
 
     public static String custom = "Blue/Blue/None";
+    GridPane grid = new GridPane();
 
     public void handleNewGame(ActionEvent event) {
         MainGame g = new MainGame();
@@ -36,7 +41,17 @@ public class HomeController {
         Stage primaryStage = new Stage();
         primaryStage.setTitle("Snake Customization");
         Parent root = FXMLLoader.load(getClass().getResource("Customize_Snake.fxml"));
-        Scene customizeSnake = new Scene(root,300,300);
+        for (int i = 0; i < 5; i++) {
+            RowConstraints row = new RowConstraints(20);
+            grid.getRowConstraints().add(row);
+        }
+        Position p = new Position(0,0);
+        Snake s = new Snake(custom, p);
+        s.drawSnake(grid);
+        BorderPane layout = new BorderPane();
+        layout.setCenter(root);
+        layout.setBottom(grid);
+        Scene customizeSnake = new Scene(layout,300,500);
         primaryStage.setScene(customizeSnake);
         primaryStage.show();
     }
@@ -49,6 +64,9 @@ public class HomeController {
         RadioMenuItem pattern = (RadioMenuItem)Patterns.getSelectedToggle(); //test
         String patternS = pattern.getText();
         this.custom = bodyS + "/" + eyeS + "/" + patternS;
+        Position p = new Position(0,0);
+        Snake s = new Snake(this.custom, p);
+        s.drawSnake(grid);
     }
 
 
