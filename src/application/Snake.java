@@ -106,6 +106,7 @@ public class Snake {
         {
             grow--;
             SnakePart temp = new SnakePart(c.getNext().getPos());
+            temp.setOrientation(c.getNext().getOrientation());
             temp.setNext(c.getNext());
             c.setNext(temp);
             c = c.getNext();
