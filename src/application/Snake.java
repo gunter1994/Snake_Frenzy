@@ -45,6 +45,7 @@ public class Snake {
         while (c != null) {
             Position p = c.getPos();
             Image im;
+            int cornerOri = 0;
             if (c == head)
             {
                 im =(new Image(new File("snake_art/" + this.getPic() + "/tail.png").toURI().toString()));
@@ -55,10 +56,34 @@ public class Snake {
             }
             else
             {
-                im = (new Image(new File("snake_art/" + this.getPic() + "/body.png").toURI().toString()));
+                if (c.getNext().getOrientation() == c.getOrientation()) {
+                    im = (new Image(new File("snake_art/" + this.getPic() + "/body.png").toURI().toString()));
+                }
+                else
+                {
+                    //0 = right up and down left 1 = down right 2 and left up 2 = left down and up right 3 = up left and right down
+                    if ((c.getOrientation() == 0 && c.getNext().getOrientation() == 3) || (c.getOrientation() == 1 && c.getNext().getOrientation() == 2)) {
+                        cornerOri = 0;
+                    }
+                    else if ((c.getOrientation() == 1 && c.getNext().getOrientation() == 0) || (c.getOrientation() == 2 && c.getNext().getOrientation() == 3)) {
+                        cornerOri = 1;
+                    }
+                    else if ((c.getOrientation() == 2 && c.getNext().getOrientation() == 1) || (c.getOrientation() == 3 && c.getNext().getOrientation() == 0)) {
+                        cornerOri = 2;
+                    }
+                    else if ((c.getOrientation() == 3 && c.getNext().getOrientation() == 2) || (c.getOrientation() == 0 && c.getNext().getOrientation() == 1)) {
+                        cornerOri = 3;
+                    }
+                    im = (new Image(new File("snake_art/" + this.getPic() + "/corner.png").toURI().toString()));
+                }
             }
             view[j].setImage(im);
-            view[j].setRotate(90*c.getOrientation());
+            if (!c.equals(tail) && !c.equals(head) && (c.getNext().getOrientation() != c.getOrientation())){
+                view[j].setRotate(90 * cornerOri);
+            }
+            else {
+                view[j].setRotate(90 * c.getOrientation());
+            }
             grid.add(view[j], p.getX(), p.getY());
             c = c.getNext();
             j++;
