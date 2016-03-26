@@ -25,6 +25,7 @@ public class MainGame {
     private int storedDir;
     private Position food;
     private boolean moved;
+    private int score;
 
     public MainGame() {
         this.dir = 0;
@@ -109,6 +110,7 @@ public class MainGame {
     private void play(GridPane grid, Stage primaryStage){
         dir = 0;
         storedDir = 4;
+        score = 0;
         Position p = new Position(15,18);
         Snake s = new Snake(HomeController.custom, p);
         s.drawSnake(grid);
@@ -150,6 +152,7 @@ public class MainGame {
     private void gameOver(GridPane grid, Stage primaryStage)
     {
         Stage stage = new Stage();
+        System.out.println("Final score: " + score);
         stage.setTitle("Game Over");
 
         Button play = new Button("Play Again");
@@ -183,6 +186,7 @@ public class MainGame {
         {
             s.grow += 3;
             newFood(s);
+            score++;
         }
         placeFood(grid);
     }
