@@ -55,7 +55,7 @@ public class MainGame {
         primaryStage.show();
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.RIGHT) {
+            if(key.getCode()==KeyCode.RIGHT || key.getCode()==KeyCode.D) {
                 if ((dir == 3 || dir == 1) && !moved) {
                     dir = 0;
                     moved = true;
@@ -68,7 +68,7 @@ public class MainGame {
         });
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.DOWN && !moved) {
+            if(key.getCode()==KeyCode.DOWN || key.getCode()==KeyCode.S) {
                 if ((dir == 0 || dir == 2) && !moved) {
                     dir = 1;
                     moved = true;
@@ -81,7 +81,7 @@ public class MainGame {
         });
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.LEFT) {
+            if(key.getCode()==KeyCode.LEFT || key.getCode()==KeyCode.A) {
                 if ((dir == 3 || dir == 1) && !moved) {
                     dir = 2;
                     moved = true;
@@ -93,7 +93,7 @@ public class MainGame {
         });
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.UP) {
+            if(key.getCode()==KeyCode.UP || key.getCode()==KeyCode.W) {
                 if ((dir == 0 || dir == 2) && !moved) {
                     dir = 3;
                     moved = true;
@@ -180,7 +180,7 @@ public class MainGame {
         stage.show();
     }
 
-    public void checkFood(GridPane grid, Snake s)
+    private void checkFood(GridPane grid, Snake s)
     {
         if (food.equals(s.tail.getPos()))
         {
