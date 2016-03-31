@@ -33,14 +33,11 @@ public class MainGame {
     }
 
     public void start(Stage primaryStage) throws Exception {
-        SplitPane split1 = new SplitPane();
-        SplitPane split2 = new SplitPane();
-        SplitPane split3 = new SplitPane();
-        split1.setOrientation(Orientation.HORIZONTAL);
-        split2.setOrientation(Orientation.VERTICAL);
-        split3.setOrientation(Orientation.VERTICAL);
+        HBox hbox = new HBox();
+        VBox v1 = new VBox();
+        VBox v2 = new VBox();
 
-        scene = new Scene(split1, Color.WHITE);
+        scene = new Scene(hbox, Color.WHITE);
 
         KeyCode[] keys1 = {KeyCode.RIGHT, KeyCode.DOWN, KeyCode.LEFT, KeyCode.UP};
         GamePlayer player1 = new GamePlayer(keys1);
@@ -51,25 +48,24 @@ public class MainGame {
         KeyCode[] keys4 = {KeyCode.L, KeyCode.K, KeyCode.J, KeyCode.I};
         GamePlayer player4 = new GamePlayer(keys4);
 
-        BorderPane layout1 = new BorderPane();
-        BorderPane layout2 = new BorderPane();
-        BorderPane layout3 = new BorderPane();
-        BorderPane layout4 = new BorderPane();
+        VBox layout1 = new VBox();
+        VBox layout2 = new VBox();
+        VBox layout3 = new VBox();
+        VBox layout4 = new VBox();
 
+        layout1.setStyle("-fx-border-color: black;");
+        layout2.setStyle("-fx-border-color: black;");
+        layout3.setStyle("-fx-border-color: black;");
+        layout4.setStyle("-fx-border-color: black;");
 
-        layout1.setTop(player1.getScoreText());
-        layout2.setTop(player2.getScoreText());
-        layout3.setTop(player3.getScoreText());
-        layout4.setTop(player4.getScoreText());
+        layout1.getChildren().addAll(player1.getScoreText(), player1.getGrid());
+        layout2.getChildren().addAll(player2.getScoreText(), player2.getGrid());
+        layout3.getChildren().addAll(player3.getScoreText(), player3.getGrid());
+        layout4.getChildren().addAll(player4.getScoreText(), player4.getGrid());
 
-        layout1.setCenter(player1.getGrid());
-        layout2.setCenter(player2.getGrid());
-        layout3.setCenter(player3.getGrid());
-        layout4.setCenter(player4.getGrid());
-
-        split2.getItems().addAll(layout1, layout2);
-        split3.getItems().addAll(layout3, layout4);
-        split1.getItems().addAll(split2, split3);
+        v1.getChildren().addAll(layout1, layout2);
+        v2.getChildren().addAll(layout3, layout4);
+        hbox.getChildren().addAll(v1,v2);
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Snake Frenzy");
@@ -99,7 +95,8 @@ public class MainGame {
             moved = false;
             score = 0;
             grid = new GridPane();
-            grid.setStyle("-fx-border: 1px solid; -fx-border-color: black;");
+            grid.setStyle("-fx-background-color: palegreen");
+            grid.setPrefSize(820,420);
             scoreText = new Text("Score: " + score);
             for (int i = 0; i < 40; i++) {
                 ColumnConstraints column = new ColumnConstraints(20);
@@ -221,6 +218,7 @@ public class MainGame {
         public void gameOver(GridPane grid) {
             alive = false;
             grid.setStyle("-fx-background-color: gray");
+            timeline.stop();
         }
 
         private void checkFood(GridPane grid, Snake s) {
