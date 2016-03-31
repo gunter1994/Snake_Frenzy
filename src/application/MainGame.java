@@ -19,6 +19,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.File;
@@ -27,17 +28,8 @@ import java.util.Random;
 
 public class MainGame {
     Scene scene;
-    private int dir;
-    private int storedDir;
-    private Position food;
-    private boolean moved;
-    private int score;
 
     public MainGame() {
-        this.dir = 0;
-        this.food = new Position(0,0);
-        this.moved = false;
-        this.storedDir = 4;
     }
 
     public void start(Stage primaryStage) throws Exception {
@@ -59,8 +51,24 @@ public class MainGame {
         KeyCode[] keys4 = {KeyCode.L, KeyCode.K, KeyCode.J, KeyCode.I};
         GamePlayer player4 = new GamePlayer(keys4);
 
-        split2.getItems().addAll(player1.getGrid(), player2.getGrid());
-        split3.getItems().addAll(player3.getGrid(), player4.getGrid());
+        BorderPane layout1 = new BorderPane();
+        BorderPane layout2 = new BorderPane();
+        BorderPane layout3 = new BorderPane();
+        BorderPane layout4 = new BorderPane();
+
+
+        layout1.setTop(player1.getScoreText());
+        layout2.setTop(player2.getScoreText());
+        layout3.setTop(player3.getScoreText());
+        layout4.setTop(player4.getScoreText());
+
+        layout1.setCenter(player1.getGrid());
+        layout2.setCenter(player2.getGrid());
+        layout3.setCenter(player3.getGrid());
+        layout4.setCenter(player4.getGrid());
+
+        split2.getItems().addAll(layout1, layout2);
+        split3.getItems().addAll(layout3, layout4);
         split1.getItems().addAll(split2, split3);
 
         primaryStage.setScene(scene);
@@ -71,37 +79,6 @@ public class MainGame {
         player2.start();
         player3.start();
         player4.start();
-        int left = 4;
-        while (left > 1) {
-            if(!player1.getAlive()) {
-                player1.getTimeline().stop();
-                System.out.println("Player 1 is dead");
-            }
-            if(!player2.getAlive()) {
-                player2.getTimeline().stop();
-                System.out.println("Player 2 is dead");
-            }
-            if(!player3.getAlive()) {
-                player3.getTimeline().stop();
-                System.out.println("Player 3 is dead");
-            }
-            if(!player4.getAlive()) {
-                player4.getTimeline().stop();
-                System.out.println("Player 4 is dead");
-            }
-        }
-        if (player1.getAlive()) {
-            System.out.println("Player 1 Wins!");
-        }
-        else if (player2.getAlive()) {
-            System.out.println("Player 2 Wins!");
-        }
-        else if (player3.getAlive()) {
-            System.out.println("Player 3 Wins!");
-        }
-        else if (player4.getAlive()) {
-            System.out.println("Player 4 Wins!");
-        }
     }
 
     private class GamePlayer extends Thread {
@@ -109,10 +86,21 @@ public class MainGame {
         private Timeline timeline;
         private boolean alive;
         private Snake s;
+        private int dir;
+        private int storedDir;
+        private Position food;
+        private boolean moved;
+        private int score;
+        private Text scoreText;
 
         public GamePlayer(KeyCode[] keys){
             alive = true;
+            timeline = new Timeline();
+            moved = false;
+            score = 0;
             grid = new GridPane();
+            grid.setStyle("-fx-border: 1px solid; -fx-border-color: black;");
+            scoreText = new Text("Score: " + score);
             for (int i = 0; i < 40; i++) {
                 ColumnConstraints column = new ColumnConstraints(20);
                 grid.getColumnConstraints().add(column);
@@ -190,6 +178,9 @@ public class MainGame {
             return alive;
         }
 
+        public Text getScoreText() {
+            return scoreText;
+        }
 
         public void run() {
             dir = 0;
@@ -197,12 +188,12 @@ public class MainGame {
             score = 0;
             newFood(s);
 
-            timeline = new Timeline();
             timeline.setCycleCount(Timeline.INDEFINITE);
 
             KeyValue keyValueX = new KeyValue(grid.scaleXProperty(), 1);
             KeyValue keyValueY = new KeyValue(grid.scaleYProperty(), 1);
             Duration duration = Duration.millis(100);
+
             EventHandler onFinished = new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent t) {
                     if (s.checkCollision()) {
@@ -220,6 +211,7 @@ public class MainGame {
                     moved = false;
                 }
             };
+
             KeyFrame keyFrame = new KeyFrame(duration, onFinished, keyValueX, keyValueY);
             //add the keyframe to the timeline
             timeline.getKeyFrames().add(keyFrame);
@@ -228,6 +220,7 @@ public class MainGame {
 
         public void gameOver(GridPane grid) {
             alive = false;
+            grid.setStyle("-fx-background-color: gray");
         }
 
         private void checkFood(GridPane grid, Snake s) {
@@ -235,6 +228,7 @@ public class MainGame {
                 s.grow += 3;
                 newFood(s);
                 score++;
+                scoreText.setText("Score: " + score);
             }
             placeFood(grid);
         }
@@ -246,8 +240,8 @@ public class MainGame {
             boolean available = false;
             while (!available) {
                 available = true;
-                x = rand.nextInt(36);
-                y = rand.nextInt(36);
+                x = rand.nextInt(40);
+                y = rand.nextInt(20);
                 food = new Position(x, y);
                 SnakePart c = s.head;
                 while (c != null) {
