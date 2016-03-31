@@ -10,10 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -30,11 +28,7 @@ public class HomeController {
     GridPane grid = new GridPane();
 
     public void handleNewGame(ActionEvent event) {
-        MainGame g = new MainGame();
-        try{
-            Stage primaryStage = new Stage();
-            g.start(primaryStage);
-        }catch(Exception e){System.err.println();}
+        MainGame m = new MainGame();
     }
 
     public void customizeSnake(ActionEvent event) throws IOException {

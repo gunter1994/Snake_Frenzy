@@ -5,10 +5,9 @@ package application;
  */
 public class Player {
     String username;
-    Snake s;
     int highscore;
 
-    public Player() {
-
+    public Player(String u) {
+        this.username = u;
     }
 }

@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Group;
@@ -27,26 +28,30 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class MainGame {
+    Stage primaryStage;
     Scene scene;
+    GamePlayer player1;
+    GamePlayer player2;
+    GamePlayer player3;
+    GamePlayer player4;
 
     public MainGame() {
-    }
-
-    public void start(Stage primaryStage) throws Exception {
+        primaryStage = new Stage();
         HBox hbox = new HBox();
         VBox v1 = new VBox();
         VBox v2 = new VBox();
 
         scene = new Scene(hbox, Color.WHITE);
 
+        //preset playernames for now
         KeyCode[] keys1 = {KeyCode.RIGHT, KeyCode.DOWN, KeyCode.LEFT, KeyCode.UP};
-        GamePlayer player1 = new GamePlayer(keys1);
+        player1 = new GamePlayer(keys1, "Hunter");
         KeyCode[] keys2 = {KeyCode.D, KeyCode.S, KeyCode.A, KeyCode.W};
-        GamePlayer player2 = new GamePlayer(keys2);
+        player2 = new GamePlayer(keys2, "Nathaniel");
         KeyCode[] keys3 = {KeyCode.NUMPAD6, KeyCode.NUMPAD5, KeyCode.NUMPAD4, KeyCode.NUMPAD8};
-        GamePlayer player3 = new GamePlayer(keys3);
+        player3 = new GamePlayer(keys3, "Sam");
         KeyCode[] keys4 = {KeyCode.L, KeyCode.K, KeyCode.J, KeyCode.I};
-        GamePlayer player4 = new GamePlayer(keys4);
+        player4 = new GamePlayer(keys4, "Adam");
 
         VBox layout1 = new VBox();
         VBox layout2 = new VBox();
@@ -77,6 +82,10 @@ public class MainGame {
         player4.start();
     }
 
+    public void done() {
+        primaryStage.close();
+    }
+
     private class GamePlayer extends Thread {
         private GridPane grid;
         private Timeline timeline;
@@ -88,8 +97,10 @@ public class MainGame {
         private boolean moved;
         private int score;
         private Text scoreText;
+        private String name;
 
-        public GamePlayer(KeyCode[] keys){
+        public GamePlayer(KeyCode[] keys, String n){
+            name = n;
             alive = true;
             timeline = new Timeline();
             moved = false;
@@ -167,16 +178,16 @@ public class MainGame {
             return grid;
         }
 
-        public Timeline getTimeline() {
-            return timeline;
-        }
-
         public boolean getAlive() {
             return alive;
         }
 
         public Text getScoreText() {
             return scoreText;
+        }
+
+        public String getPName() {
+            return name;
         }
 
         public void run() {
