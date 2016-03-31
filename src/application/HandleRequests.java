@@ -1,4 +1,4 @@
-package application;
+/*package application;
 
 import java.io.*;
 import java.net.Socket;
@@ -16,4 +16,4 @@ public class HandleRequests implements Runnable{
             e.printStackTrace();
         }
     }
-}
+}*/

@@ -146,7 +146,7 @@ public class Snake {
 
     public boolean checkCollision() {
         SnakePart c = tail; //actually the head of the snake
-        if (c.getPos().getX() > 35 || c.getPos().getX() < 0 || c.getPos().getY() > 35 || c.getPos().getY() < 0)
+        if (c.getPos().getX() > 40 || c.getPos().getX() < 0 || c.getPos().getY() > 20 || c.getPos().getY() < 0)
         {
             return true;
         }
