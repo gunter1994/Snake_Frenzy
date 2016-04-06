@@ -164,18 +164,19 @@ public class MainGame {
             }
         });
 
-        Button quit = new Button("Quit");
-        quit.setOnAction(new EventHandler<ActionEvent>() {
+        Button mainMenu = new Button("Main Menu");
+        mainMenu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 stage.close();
                 primaryStage.close();
+                Main.showMainMenu();
             }
         });
 
         HBox layout = new HBox(10);
         layout.setStyle("-fx-background-color: white; -fx-padding: 20;");
-        layout.getChildren().addAll(play, quit);
+        layout.getChildren().addAll(play, mainMenu);
         stage.setScene(new Scene(layout));
         stage.show();
     }

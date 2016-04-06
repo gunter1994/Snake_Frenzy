@@ -7,19 +7,22 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import java.io.IOException;
 
 public class Main extends Application {
+    static Stage primaryStage;
+    Stage selectGameStage;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-
+        this.primaryStage = primaryStage;
         GridPane gridPane = new GridPane();
         VBox vBox = new VBox(15);
 
         //Create buttons
-        Button btn1 = new Button("Single Player"); Button btn2 = new Button("Local Multiplayer");
-        Button btn3 = new Button("High Scores"); Button btn4 = new Button("Settings");
+        Button btn1 = new Button("Single Player");
+        Button btn2 = new Button("Local Multiplayer");
+        Button btn3 = new Button("High Scores");
+        Button btn4 = new Button("Settings");
         vBox.getChildren().addAll(btn1,btn2,btn3,btn4);
 
         //add and position buttons
@@ -36,32 +39,38 @@ public class Main extends Application {
         primaryStage.setTitle("Main Menu");
         primaryStage.setScene(new Scene(gridPane, 350, 350));
         primaryStage.show();
-
     }
 
     /*determines the next step after a game mode is chosen
     differs for single player multiplayer and high scores*/
     public void next(String option) {
+        selectGameStage.close();
 
         if(option.equals("Single Player")) {
             GameSetup.preGameLobby();
         }
-        if(option.equals("Multiplayer")) {
+        else if(option.equals("Multiplayer")) {
             GameSetup.preGameLobby();
         }
-        if(option.equals("High Scores")) {}
+        else if(option.equals("High Scores")) {
+            //insert high scores tableView here
+        }
+        else {}
     }
 
     public void back(){
-
+        selectGameStage.close();
+        showMainMenu();
     }
 
     //game selection for single player, multiplayer and high scores
     public void gameSelection(String option) {
-        Stage primaryStage = new Stage();
+        primaryStage.hide();
+        selectGameStage = new Stage();
         BorderPane borderPane = new BorderPane();
-        Button back = new Button("back"); Button next = new Button("next");
-        back.setOnAction(e -> primaryStage.close());
+        Button back = new Button("Back");
+        Button next = new Button("Next");
+        back.setOnAction(e -> back());
 
         next.setOnAction(e -> next(option));
 
@@ -85,12 +94,16 @@ public class Main extends Application {
         borderPane.setBottom(vBox2);
 
         Scene gameSelection = new Scene(borderPane,400,350); //(width, height)
-        primaryStage.setScene(gameSelection);
-        primaryStage.show();
+        selectGameStage.setTitle("Select Game");
+        selectGameStage.setScene(gameSelection);
+        selectGameStage.show();
     }
 
     public void Settings(){}
 
+    public static void showMainMenu(){
+        primaryStage.show();
+    }
     public static void main(String[] args) {
         launch(args);
     }

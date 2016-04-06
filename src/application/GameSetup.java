@@ -10,17 +10,20 @@ public class GameSetup {
 
     public static String custom = "None/Green";
 
-    private static void handleNewGame() {
+    private static void handleNewGame(Stage preGameStage) {
+        preGameStage.close();
         MainGame m = new MainGame();
         try{
             Stage primaryStage = new Stage();
             m.start(primaryStage);
-        }catch(Exception e){System.err.println();}
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     //window for choosing name and snake design before starting game
     public static void preGameLobby() {
-        Stage primaryStage = new Stage();
+        Stage preGameStage = new Stage();
         GridPane grid = new GridPane();
         BorderPane borderPane = new BorderPane();
         VBox vBox1 = new VBox(), vBox2 = new VBox();
@@ -42,15 +45,16 @@ public class GameSetup {
         borderPane.setCenter(vBox1);
 
         Button start = new Button("Start Game");
-        start.setOnAction(e -> handleNewGame());
+        start.setOnAction(e -> handleNewGame(preGameStage));
 
         vBox2.getChildren().addAll(snakePreview(grid), start);
         vBox2.setAlignment(Pos.CENTER);
         borderPane.setBottom(vBox2);
 
         Scene pregameLobby = new Scene(borderPane,400,350); //(width, height)
-        primaryStage.setScene(pregameLobby);
-        primaryStage.show();
+        preGameStage.setTitle("Customize Snake");
+        preGameStage.setScene(pregameLobby);
+        preGameStage.show();
 
     }
 
