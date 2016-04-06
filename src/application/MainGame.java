@@ -112,7 +112,7 @@ public class MainGame {
         storedDir = 4;
         score = 0;
         Position p = new Position(15,18);
-        Snake s = new Snake(HomeController.custom, p);
+        Snake s = new Snake(GameSetup.custom, p);
         s.drawSnake(grid);
         newFood(s);
 

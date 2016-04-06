@@ -30,7 +30,7 @@ public class Server {
         try{
             server.requestHandler();
         }catch(IOException e){
-            System.err.prinln("Error");
+            System.err.println("Error");
             e.printStackTrace();
         }
     }
