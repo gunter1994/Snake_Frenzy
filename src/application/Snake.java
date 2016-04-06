@@ -5,9 +5,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import java.io.File;
 
-/**
- * Created by gunter on 3/20/16.
- */
 public class Snake {
     public SnakePart head;
     public SnakePart tail;

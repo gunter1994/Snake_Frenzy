@@ -1,10 +1,5 @@
 package application;
 
-import javafx.scene.image.*;
-
-/**
- * Created by gunter on 3/20/16.
- */
 public class SnakePart {
     private int orientation;
     private Position pos;

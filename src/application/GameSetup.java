@@ -1,29 +1,12 @@
 package application;
 
-import javafx.animation.Timeline;
-import javafx.collections.MapChangeListener;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import sun.awt.image.GifImageDecoder;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
-/**
- * Created by samantha on 23/03/16.
- */
 public class GameSetup {
-
-    GridPane grid = new GridPane();
-    Stage stage;
 
     public static String custom = "None/Green";
 
@@ -48,12 +31,11 @@ public class GameSetup {
         textField.setMaxSize(100,10);
 
         ComboBox<String> colours = new ComboBox<>();
+        colours.setPromptText("Colour");
         colours.getItems().addAll("Blue","Red", "Yellow", "Green", "Orange", "Purple");
         ComboBox<String> patterns = new ComboBox<>();
+        patterns.setPromptText("Pattern");
         patterns.getItems().addAll("None","Spotted","Striped");
-
-        colours.setOnAction(e -> System.out.println(patterns.getSelectionModel().getSelectedItem() + "/" + colours.getSelectionModel().getSelectedItem()));
-        patterns.setOnAction(e -> custom = patterns.getSelectionModel().getSelectedItem() + "/" + colours.getSelectionModel().getSelectedItem());
 
         vBox1.getChildren().addAll(textField,colours,patterns);
         vBox1.setAlignment(Pos.CENTER);
@@ -73,14 +55,10 @@ public class GameSetup {
     }
 
     public static GridPane snakePreview(GridPane grid) {
-
-        Button start = new Button("Start Game");
-
         for (int i = 0; i < 5; i++) {
             RowConstraints row = new RowConstraints(20);
             grid.getRowConstraints().add(row);
         }
-        //grid.getChildren().add(start);
         grid.setAlignment(Pos.CENTER);
         Position p = new Position(0,0);
         Snake s = new Snake(custom, p);
