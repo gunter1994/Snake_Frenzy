@@ -41,39 +41,12 @@ public class Main extends Application {
         method and performs the correct action */
         btn1.setOnAction(e -> gameSelection(btn1.getText()));
         btn2.setOnAction(e -> gameSelection(btn2.getText()));
-        btn3.setOnAction(e -> gameSelection(btn3.getText()));
+        btn3.setOnAction(e -> new HighScoresWindow());
         btn4.setOnAction(e -> Settings());
 
         primaryStage.setTitle("Main Menu");
         primaryStage.setScene(new Scene(vBox, 350, 350));
         primaryStage.show();
-    }
-
-    /*determines the next step after a game mode is chosen
-    differs for single player multiplayer and high scores*/
-    public void next(String option, ComboBox<String> playerNum) {
-        selectGameStage.close();
-
-        if(option.equals("Single Player")) {
-            Stage stage = new Stage();
-            Scene scene = new Scene(GameSetup.setupWindow(), 350, 350);
-            stage.setScene(scene);
-            stage.show();
-        }
-        else if(option.equals("Local Multiplayer")) {
-            String[] s = playerNum.getSelectionModel().getSelectedItem().toString().split(" ");
-            int num = Integer.parseInt(s[0]);
-
-        }
-        else if(option.equals("High Scores")) {
-            //insert high scores tableView here
-        }
-        else {}
-    }
-
-    public void back(){
-        selectGameStage.close();
-        showMainMenu();
     }
 
     //game selection window for single player, multiplayer and high scores
@@ -120,10 +93,36 @@ public class Main extends Application {
         textArea.setEditable(false);
         borderPane.setBottom(vBox2);
 
-        Scene gameSelection = new Scene(borderPane,400,350); //(width, height)
+        Scene gameSelectionScene = new Scene(borderPane,400,350); //(width, height)
         selectGameStage.setTitle("Select Game");
-        selectGameStage.setScene(gameSelection);
+        selectGameStage.setScene(gameSelectionScene);
         selectGameStage.show();
+    }
+
+    /*determines the next step after a game mode is chosen
+    differs for single player multiplayer and high scores*/
+    public void next(String option, ComboBox<String> playerNum) {
+        selectGameStage.close();
+        if(option.equals("Single Player")) {
+            Stage stage = new Stage();
+            Scene scene = new Scene(GameSetup.setupWindow(), 350, 350);
+            stage.setScene(scene);
+            stage.show();
+        }
+        else if(option.equals("Local Multiplayer")) {
+            String[] s = playerNum.getSelectionModel().getSelectedItem().toString().split(" ");
+            int num = Integer.parseInt(s[0]);
+
+        }
+        else if(option.equals("High Scores")) {
+            //insert high scores tableView here
+        }
+        else {}
+    }
+
+    public void back(){
+        selectGameStage.close();
+        showMainMenu();
     }
 
     public void Settings() {}

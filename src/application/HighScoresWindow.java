@@ -16,16 +16,16 @@ public class HighScoresWindow {
     public static Stage primaryStage;
     public TableView<HighScore> highScoreTable;
 
-    public void Highscores(){
+    public HighScoresWindow(){
 
-
+        primaryStage = new Stage();
         primaryStage.setTitle("SnakeScores");
 
         try {
             highScoreTable = new TableView<>();
             highScoreTable.setItems(DataSource.getAllHighScores());
         } catch(IOException e){
-            e.printStackTrace();
+            System.err.println("Cannot connect to server");
         }
 
         TableColumn<HighScore, String> highColumn;
