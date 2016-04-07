@@ -3,10 +3,11 @@ package application;
 import java.io.*;
 import java.net.Socket;
 
-public class scorePrinter implements Runnable{
+// prints player name and score to a CSV file when socket connects
+public class scoreHandler implements Runnable{
     private Socket socket;
 
-    public scorePrinter(Socket socket){
+    public scoreHandler(Socket socket){
         this.socket = socket;
     }
 
@@ -15,9 +16,11 @@ public class scorePrinter implements Runnable{
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     socket.getInputStream()));
 
-            String[] score = in.readLine().split(" ");
+            // playerScore[0] is name playerScore[1] is score
+            // appends to
+            String[] playerScore = in.readLine().split(" ");
             FileWriter out = new FileWriter("highScores.csv", true);
-            out.append(score[0] + ", " + score[1] + "\n");
+            out.append(playerScore[0] + ", " + playerScore[1] + "\n");
 
             out.close();
             in.close();

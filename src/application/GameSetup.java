@@ -12,6 +12,8 @@ public class GameSetup {
     public static Stage stage;
     public static String playerName;
 
+    // closes the gameSetup window, updates the snake (in case player doesn't click update)
+    // then starts the game
     private static void handleNewGame(String pattern, String colour, String name) {
         stage.close();
         updateSnake(pattern, colour, name);
@@ -40,23 +42,24 @@ public class GameSetup {
         Label patternLabel = new Label("Pattern:");
         Label colourLabel = new Label("Colour:");
 
-        //Player Name
+        //Player Name field
         TextField nameField = new TextField();
         nameField.setPromptText("Enter Player Name");
         nameField.setMaxSize(150,10);
 
-        //Colour Selection
+        //Colour Selection field
         ComboBox<String> colours = new ComboBox<>();
         colours.setValue("Green");
         colours.getItems().addAll("Blue","Red", "Yellow", "Green", "Orange", "Purple");
         hBox1.getChildren().addAll(colourLabel, colours);
 
-        //Pattern Selection
+        //Pattern Selection field
         ComboBox<String> patterns = new ComboBox<>();
         patterns.setValue("None");
         patterns.getItems().addAll("None","Spotted","Striped");
         hBox2.getChildren().addAll(patternLabel, patterns);
 
+        // button to update the snake preview
         Button update = new Button("Update");
         update.setOnAction(e -> updateSnake(grid, vBox2, patterns.getValue(), colours.getValue(), nameField.getText()));
 
@@ -64,6 +67,7 @@ public class GameSetup {
         vBox1.setAlignment(Pos.CENTER);
         borderPane.setCenter(vBox1);
 
+        // closes window, updates snake, starts the game
         Button start = new Button("Start Game");
         start.setOnAction(e -> handleNewGame(patterns.getValue(), colours.getValue(), nameField.getText()));
 
@@ -87,6 +91,7 @@ public class GameSetup {
         HBox hBox1 = new HBox();
         hBox1.setSpacing(50);
 
+        // creates snake selection display for specified number of players
         if(players == 1) {
             hBox1.getChildren().add(borderPane1);
             scene = new Scene(hBox1, 350, 350);
@@ -109,6 +114,7 @@ public class GameSetup {
         stage.show();
     }
 
+    // preview of the player's customized snake
     public static GridPane snakePreview(GridPane grid) {
         for (int i = 0; i < 5; i++) {
             RowConstraints row = new RowConstraints(20);
@@ -125,6 +131,7 @@ public class GameSetup {
         return playerName;
     }
 
+    // updates the snake preview and name
     public static void updateSnake(GridPane grid, VBox vbox, String pattern, String colour, String name){
         custom = pattern + "/" + colour;
 
@@ -138,6 +145,7 @@ public class GameSetup {
         }
     }
 
+    // updates the snake and name (not preview
     public static void updateSnake(String pattern, String colour, String name){
         custom = pattern + "/" + colour;
 
