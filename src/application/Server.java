@@ -16,12 +16,12 @@ public class Server {
     }
 
     public void requestHandler() throws IOException{
-        System.out.println("Snake Server Listening..");
+        System.out.println("High Score Server Listening..");
 
         while(true){
             Socket clientSocket = serverSocket.accept();
-            Thread snakeThread = new Thread(new HandleRequests(clientSocket));
-            snakeThread.start();
+            Thread handlerThread = new Thread(new HandleRequests(clientSocket));
+            handlerThread.start();
         }
     }
 
