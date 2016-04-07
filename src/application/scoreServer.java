@@ -24,7 +24,7 @@ public class scoreServer {
 
         while(true){
             Socket clientSocket = serverSocket.accept();
-            Thread handlerThread = new Thread(new scoreHandler(clientSocket));
+            Thread handlerThread = new Thread(new RequestHandler(clientSocket));
             handlerThread.start();
         }
     }
