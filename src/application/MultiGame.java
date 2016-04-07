@@ -3,39 +3,35 @@ package application;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Orientation;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Random;
 
-public class MainGame {
+public class MultiGame {
     Stage primaryStage;
     Scene scene;
     GamePlayer player1;
     GamePlayer player2;
     GamePlayer player3;
     GamePlayer player4;
+    int numAlive;
 
-    public MainGame() {
+    public MultiGame(Player p1, Player p2, Player p3, Player p4) {
+        //make basic stage
         primaryStage = new Stage();
         HBox hbox = new HBox();
         VBox v1 = new VBox();
@@ -43,86 +39,127 @@ public class MainGame {
 
         scene = new Scene(hbox, Color.WHITE);
 
-        //preset playernames for now
+        //set controls for players
         KeyCode[] keys1 = {KeyCode.RIGHT, KeyCode.DOWN, KeyCode.LEFT, KeyCode.UP};
-        player1 = new GamePlayer(keys1, "Hunter");
+        player1 = new GamePlayer(keys1);
         KeyCode[] keys2 = {KeyCode.D, KeyCode.S, KeyCode.A, KeyCode.W};
-        player2 = new GamePlayer(keys2, "Nathaniel");
+        player2 = new GamePlayer(keys2);
         KeyCode[] keys3 = {KeyCode.NUMPAD6, KeyCode.NUMPAD5, KeyCode.NUMPAD4, KeyCode.NUMPAD8};
-        player3 = new GamePlayer(keys3, "Sam");
+        player3 = new GamePlayer(keys3);
         KeyCode[] keys4 = {KeyCode.L, KeyCode.K, KeyCode.J, KeyCode.I};
-        player4 = new GamePlayer(keys4, "Adam");
+        player4 = new GamePlayer(keys4);
 
+        //add players to the in game players
+        player1.setPlayer(p1);
+        player2.setPlayer(p2);
+        player3.setPlayer(p3);
+        player4.setPlayer(p4);
+        /*
+        //setup all 4 players displays
         VBox layout1 = new VBox();
         VBox layout2 = new VBox();
         VBox layout3 = new VBox();
         VBox layout4 = new VBox();
+
 
         layout1.setStyle("-fx-border-color: black;");
         layout2.setStyle("-fx-border-color: black;");
         layout3.setStyle("-fx-border-color: black;");
         layout4.setStyle("-fx-border-color: black;");
 
-        layout1.getChildren().addAll(player1.getScoreText(), player1.getGrid());
-        layout2.getChildren().addAll(player2.getScoreText(), player2.getGrid());
-        layout3.getChildren().addAll(player3.getScoreText(), player3.getGrid());
-        layout4.getChildren().addAll(player4.getScoreText(), player4.getGrid());
+        layout1.getChildren().addAll(player1.getRoot());
+        layout2.getChildren().addAll(player2.getRoot());
+        layout3.getChildren().addAll(player3.getRoot());
+        layout4.getChildren().addAll(player4.getRoot());*/
 
-        v1.getChildren().addAll(layout1, layout2);
-        v2.getChildren().addAll(layout3, layout4);
+        v1.getChildren().addAll(player1.getRoot(), player3.getRoot());
+        v2.getChildren().addAll(player2.getRoot(), player4.getRoot());
         hbox.getChildren().addAll(v1,v2);
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Snake Frenzy");
         primaryStage.show();
 
-        player1.start();
-        player2.start();
-        player3.start();
-        player4.start();
+        //makes program an fx application thread
+        Platform.runLater(player1);
+        Platform.runLater(player2);
+        Platform.runLater(player3);
+        Platform.runLater(player4);
+
+        numAlive = 4;
     }
 
-    public void done() {
-        primaryStage.close();
+    public void doneCheck() {
+        numAlive--;
+        //if less than 2 players are alive, it ends the game
+        if (numAlive < 2){
+            String winner;
+            //primaryStage.close();
+            if (player1.getAlive()){
+                winner = player1.getPlayer().getUsername();
+                player1.getTimeline().stop();
+            }
+            else if (player2.getAlive()){
+                winner = player2.getPlayer().getUsername();
+                player2.getTimeline().stop();
+            }
+            else if (player3.getAlive()){
+                winner = player3.getPlayer().getUsername();
+                player3.getTimeline().stop();
+            }
+            else if (player4.getAlive()){
+                winner = player4.getPlayer().getUsername();
+                player4.getTimeline().stop();
+            }
+            else {
+                winner = "no one";
+            }
+            //prints the winner
+            Text text = new Text(winner + " wins!");
+            Stage popup = new Stage();
+            BorderPane layout = new BorderPane();
+            layout.setCenter(text);
+            popup.setTitle("GAME OVER");
+            Scene popScene = new Scene(layout);
+            popup.setScene(popScene);
+            popup.show();
+        }
     }
 
     private class GamePlayer extends Thread {
-        private GridPane grid;
+        private Group root;
         private Timeline timeline;
         private boolean alive;
         private Snake s;
         private int dir;
         private int storedDir;
-        private Position food;
+        private ImageView foodPic;
         private boolean moved;
         private int score;
         private Text scoreText;
-        private String name;
+        private Player player;
+        private Rectangle rect;
 
-        public GamePlayer(KeyCode[] keys, String n){
-            name = n;
+        public GamePlayer(KeyCode[] keys){
+            //sets up all parameters for game
+            foodPic = new ImageView(new Image(new File("snake_art/food.png").toURI().toString()));
             alive = true;
             timeline = new Timeline();
             moved = false;
             score = 0;
-            grid = new GridPane();
-            grid.setStyle("-fx-background-color: palegreen");
-            grid.setPrefSize(820,420);
-            scoreText = new Text("Score: " + score);
-            for (int i = 0; i < 40; i++) {
-                ColumnConstraints column = new ColumnConstraints(20);
-                grid.getColumnConstraints().add(column);
-            }
+            //sets up the players gameScreen
+            root = new Group();
+            rect = new Rectangle(0, 0, 820, 420);
+            rect.setFill(Color.WHITE);
+            Rectangle wall = new Rectangle(-20, -20, 860,460); //so that the snake can move off screen when it dies
+            wall.setFill(Color.DARKGRAY);
+            scoreText = new Text(-5, -5, "Score: " + score);
+            root.getChildren().addAll(wall, rect, scoreText);
 
-            for (int i = 0; i < 20; i++) {
-                RowConstraints row = new RowConstraints(20);
-                grid.getRowConstraints().add(row);
-            }
+            s = new Snake(HomeController.custom, 17, 10);
+            s.drawSnake(root);
 
-            Position p = new Position(17,10);
-            s = new Snake(HomeController.custom, p);
-            s.drawSnake(grid);
-
+            //adds keyboard controls
             scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
                 if(key.getCode()==keys[0]) {
                     if ((dir == 3 || dir == 1) && !moved) {
@@ -174,8 +211,8 @@ public class MainGame {
             });
         }
 
-        public GridPane getGrid() {
-            return grid;
+        public Group getRoot() {
+            return root;
         }
 
         public boolean getAlive() {
@@ -186,90 +223,104 @@ public class MainGame {
             return scoreText;
         }
 
-        public String getPName() {
-            return name;
+        public Player getPlayer() {
+            return player;
+        }
+
+        public void setPlayer(Player p) {
+            player = p;
+        }
+
+        public Timeline getTimeline() {
+            return timeline;
         }
 
         public void run() {
+            //creates snake and sets up score/directions
             dir = 0;
             storedDir = 4;
             score = 0;
             newFood(s);
 
+            //makes game run until stopped
             timeline.setCycleCount(Timeline.INDEFINITE);
 
-            KeyValue keyValueX = new KeyValue(grid.scaleXProperty(), 1);
-            KeyValue keyValueY = new KeyValue(grid.scaleYProperty(), 1);
+            //sets up keyframes to normal properties
+            KeyValue keyValueX = new KeyValue(root.scaleXProperty(), 1);
+            KeyValue keyValueY = new KeyValue(root.scaleYProperty(), 1);
+            //sets each movement to 100 duration
             Duration duration = Duration.millis(100);
 
             EventHandler onFinished = new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent t) {
+                    //if the snake collided, end game for player
                     if (s.checkCollision()) {
                         timeline.stop();
-                        gameOver(grid);
+                        gameOver();
                     }
-                    if (storedDir != 4 && dir == s.tail.getOrientation()) {
-                        s.move(grid, storedDir);
+                    //uses stored dir if necessary for smoother movement
+                    else if (storedDir != 4 && dir == s.tail.getImage().getRotate()/90) {
+                        s.move(root, storedDir);
                         dir = storedDir;
                         storedDir = 4;
-                    } else {
-                        s.move(grid, dir);
+                    } else { //move as normal
+                        s.move(root, dir);
                     }
-                    checkFood(grid, s);
+                    //checks if the snake ate the food
+                    checkFood();
                     moved = false;
                 }
             };
 
+            //create keyframe to do event when frame finishes (every 100 millies
             KeyFrame keyFrame = new KeyFrame(duration, onFinished, keyValueX, keyValueY);
-            //add the keyframe to the timeline
             timeline.getKeyFrames().add(keyFrame);
+            //start game
             timeline.play();
         }
 
-        public void gameOver(GridPane grid) {
+        //end game for player
+        public void gameOver() {
             alive = false;
-            grid.setStyle("-fx-background-color: gray");
+            rect.setFill(Color.GRAY);
             timeline.stop();
+            doneCheck();
         }
 
-        private void checkFood(GridPane grid, Snake s) {
-            if (food.equals(s.tail.getPos())) {
+        //check if the snake ate the food
+        private void checkFood() {
+            if (foodPic.getX() == s.tail.getImage().getX() && foodPic.getY() == s.tail.getImage().getY()) {
                 s.grow += 3;
+                root.getChildren().remove(foodPic); //deletes the food if eaten
                 newFood(s);
                 score++;
                 scoreText.setText("Score: " + score);
             }
-            placeFood(grid);
         }
 
+        //creates a new food
         private void newFood(Snake s) {
+            Platform.setImplicitExit(false);
             Random rand = new Random();
             int x = 0;
             int y = 0;
             boolean available = false;
-            while (!available) {
+            while (!available) { //makes sure the snake isn't in the way of the new food
                 available = true;
                 x = rand.nextInt(40);
                 y = rand.nextInt(20);
-                food = new Position(x, y);
                 SnakePart c = s.head;
                 while (c != null) {
-                    if (food.equals(c.getPos())) {
+                    if (x == c.getImage().getX() && y == c.getImage().getY()) {
                         available = false;
                         break;
                     }
                     c = c.getNext();
                 }
             }
-            food.setX(x);
-            food.setY(y);
-        }
-
-        private void placeFood(GridPane grid) {
-            Image foodPic = new Image(new File("snake_art/food.png").toURI().toString());
-            ImageView foodView = new ImageView();
-            foodView.setImage(foodPic);
-            grid.add(foodView, food.getX(), food.getY());
+            foodPic.setX(x*20);
+            foodPic.setY(y*20);
+            root.getChildren().add(foodPic); //adds the food to the screen
         }
     }
 }

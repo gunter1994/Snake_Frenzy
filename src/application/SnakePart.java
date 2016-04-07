@@ -6,26 +6,21 @@ import javafx.scene.image.*;
  * Created by gunter on 3/20/16.
  */
 public class SnakePart {
-    private int orientation;
-    private Position pos;
     private SnakePart next = null;
+    private ImageView image;
+    private double cleanup;
 
     public SnakePart() {
-        this.pos = new Position(0,0);
+        this.image = new ImageView();
+        this.image.setX(0);
+        this.image.setY(0);
     }
 
-    public SnakePart(Position p) {
-        this.pos = p;
-        this.orientation = 0;
-    }
-
-    public void setPos(Position p) {
-        this.pos = p;
-    }
-
-    public Position getPos() {
-        Position p = new Position(this.pos.getX(), this.pos.getY());
-        return p;
+    public SnakePart(double x, double y) {
+        this.cleanup = -1;
+        this.image = new ImageView();
+        this.image.setX(x);
+        this.image.setY(y);
     }
 
     public void setNext(SnakePart s) {
@@ -36,11 +31,19 @@ public class SnakePart {
         return this.next;
     }
 
-    public void setOrientation(int o) {
-        this.orientation = o;
+    public void setImage(ImageView i) {
+        this.image = i;
     }
 
-    public int getOrientation() {
-        return this.orientation;
+    public ImageView getImage() {
+        return this.image;
+    }
+
+    public void setCleanup(double c) {
+        this.cleanup = c;
+    }
+
+    public double getCleanup() {
+        return this.cleanup;
     }
 }
