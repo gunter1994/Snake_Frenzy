@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
+public class scoreServer {
     private ServerSocket serverSocket;
 
-    public Server(int port){
+    public scoreServer(int port){
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e){
@@ -26,7 +26,7 @@ public class Server {
     }
 
     public static void main(String[] args){
-        Server server = new Server(8080);
+        scoreServer server = new scoreServer(8080);
         try{
             server.requestHandler();
         }catch(IOException e){
