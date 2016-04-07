@@ -1,8 +1,10 @@
 package application;
 
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.io.IOException;
 
 
 public class HighScoresWindow {
+    public BorderPane layout;
     public static Stage primaryStage;
     public TableView<HighScore> highScoreTable;
 
@@ -30,13 +33,17 @@ public class HighScoresWindow {
 
         TableColumn<HighScore, String> highColumn;
         highColumn = new TableColumn<>("HighScoresWindow");
-        highColumn.setMinWidth(200);
+        highColumn.setMinWidth(350);
         highColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
 
-        //highScoreTable.getColumns().add(highColumn);
+        highScoreTable.getColumns().add(highColumn);
 
+        layout = new BorderPane();
+        layout.setCenter(highScoreTable);
 
-        //primaryStage.set
+        Scene scene = new Scene(layout, 350, 350);
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
 }
