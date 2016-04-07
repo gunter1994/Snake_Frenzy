@@ -1,6 +1,7 @@
 package application;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -41,7 +42,7 @@ public class Main extends Application {
         method and performs the correct action */
         btn1.setOnAction(e -> gameSelection(btn1.getText()));
         btn2.setOnAction(e -> gameSelection(btn2.getText()));
-        btn3.setOnAction(e -> new HighScoresWindow());
+        btn3.addEventHandler(ActionEvent.ACTION, (e) -> {primaryStage.hide(); new HighScoresWindow();});
         btn4.setOnAction(e -> Settings());
 
         primaryStage.setTitle("Main Menu");
