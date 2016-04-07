@@ -17,6 +17,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.Random;
 
 public class MainGame {
@@ -154,6 +157,16 @@ public class MainGame {
         Stage stage = new Stage();
         System.out.println("Final score: " + score);
         stage.setTitle("Game Over");
+
+        try {
+            Socket socket = new Socket("localhost", 8080);
+            PrintWriter out = new PrintWriter(socket.getOutputStream());
+
+            out.println(GameSetup.getName() + " " + score);
+            out.close();
+        } catch(IOException e){
+            e.printStackTrace();
+        }
 
         Button play = new Button("Play Again");
         play.setOnAction(new EventHandler<ActionEvent>() {

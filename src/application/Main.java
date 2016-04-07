@@ -10,10 +10,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+//creates the main menu window
 public class Main extends Application {
     static Stage primaryStage;
     Stage selectGameStage;
-    static ComboBox<String> playerNum = null;
+    static ComboBox<String> playerNum;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -21,6 +22,7 @@ public class Main extends Application {
         VBox vBox = new VBox(15);
         vBox.setStyle("-fx-background-color: lightgray");
 
+        // snake picture for above the menu button
         Image img = new Image("CartoonSnake.png");
         ImageView iv = new ImageView(img);
         iv.setFitWidth(125); iv.setFitHeight(125);
@@ -71,11 +73,12 @@ public class Main extends Application {
         showMainMenu();
     }
 
-    //game selection for single player, multiplayer and high scores
+    //game selection window for single player, multiplayer and high scores
     public void gameSelection(String option) {
         primaryStage.hide();
         selectGameStage = new Stage();
 
+        // creates back and next buttons
         BorderPane borderPane = new BorderPane();
         Button back = new Button("Back");
         back.setOnAction(e -> back());
@@ -91,6 +94,7 @@ public class Main extends Application {
 
         if (option.equals("Local Multiplayer")) {
 
+            // adds box for number of players
             playerNum = new ComboBox<>();
             playerNum.setValue("2 Player");
             playerNum.getItems().addAll("2 Player", "3 Player", "4 Player");
