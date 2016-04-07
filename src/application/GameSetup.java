@@ -56,7 +56,7 @@ public class GameSetup {
         hBox2.getChildren().addAll(pattern, patterns);
 
         Button update = new Button("Update");
-        update.setOnAction(e -> updateSnake(patterns.getValue(), colours.getValue()));
+        update.setOnAction(e -> updateSnake(grid, vBox2, patterns.getValue(), colours.getValue()));
 
         vBox1.getChildren().addAll(textField,hBox1,hBox2, update);
         vBox1.setAlignment(Pos.CENTER);
@@ -119,7 +119,10 @@ public class GameSetup {
         return grid;
     }
 
-    public static void updateSnake(String selectedPattern, String selectedColour){
+    public static void updateSnake(GridPane grid, VBox vbox, String selectedPattern, String selectedColour){
         custom = selectedPattern + "/" + selectedColour;
+
+        grid = new GridPane();
+        vbox.getChildren().set(0, snakePreview(grid));
     }
 }
