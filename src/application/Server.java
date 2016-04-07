@@ -20,7 +20,7 @@ public class Server {
 
         while(true){
             Socket clientSocket = serverSocket.accept();
-            Thread handlerThread = new Thread(new HandleRequests(clientSocket));
+            Thread handlerThread = new Thread(new scorePrinter(clientSocket));
             handlerThread.start();
         }
     }
