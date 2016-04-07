@@ -1,6 +1,5 @@
 package application;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -10,11 +9,12 @@ import javafx.stage.Stage;
 public class GameSetup {
 
     public static String custom = "None/Green";
+    public static Stage stage;
+    public static String playerName;
 
-    public static Stage stage = null;
-
-    private static void handleNewGame() {
+    private static void handleNewGame(String pattern, String colour, String name) {
         stage.close();
+        updateSnake(pattern, colour, name);
         MainGame m = new MainGame();
         try{
             Stage primaryStage = new Stage();
@@ -24,7 +24,7 @@ public class GameSetup {
         }
     }
 
-    //window for choosing name and snake design before starting game
+    //window for choosing playerName and snake design before starting game
     public static BorderPane preGameLobby() {
 
         GridPane grid = new GridPane();
@@ -37,35 +37,35 @@ public class GameSetup {
         hBox2.setSpacing(5);
         vBox1.setSpacing(20);
 
-        Label pattern = new Label("Pattern:");
-        Label colour = new Label("Colour:");
+        Label patternLabel = new Label("Pattern:");
+        Label colourLabel = new Label("Colour:");
 
         //Player Name
-        TextField textField = new TextField();
-        textField.setPromptText("Enter Player Name");
-        textField.setMaxSize(150,10);
+        TextField nameField = new TextField();
+        nameField.setPromptText("Enter Player Name");
+        nameField.setMaxSize(150,10);
 
         //Colour Selection
         ComboBox<String> colours = new ComboBox<>();
         colours.setValue("Green");
         colours.getItems().addAll("Blue","Red", "Yellow", "Green", "Orange", "Purple");
-        hBox1.getChildren().addAll(colour, colours);
+        hBox1.getChildren().addAll(colourLabel, colours);
 
         //Pattern Selection
         ComboBox<String> patterns = new ComboBox<>();
         patterns.setValue("None");
         patterns.getItems().addAll("None","Spotted","Striped");
-        hBox2.getChildren().addAll(pattern, patterns);
+        hBox2.getChildren().addAll(patternLabel, patterns);
 
         Button update = new Button("Update");
-        update.setOnAction(e -> updateSnake(grid, vBox2, patterns.getValue(), colours.getValue()));
+        update.setOnAction(e -> updateSnake(grid, vBox2, patterns.getValue(), colours.getValue(), nameField.getText()));
 
-        vBox1.getChildren().addAll(textField,hBox1,hBox2, update);
+        vBox1.getChildren().addAll(nameField,hBox1,hBox2, update);
         vBox1.setAlignment(Pos.CENTER);
         borderPane.setCenter(vBox1);
 
         Button start = new Button("Start Game");
-        start.setOnAction(e -> handleNewGame());
+        start.setOnAction(e -> handleNewGame(patterns.getValue(), colours.getValue(), nameField.getText()));
 
         vBox2.getChildren().addAll(snakePreview(grid), start, new Region());
         vBox2.setAlignment(Pos.TOP_CENTER);
@@ -121,10 +121,30 @@ public class GameSetup {
         return grid;
     }
 
-    public static void updateSnake(GridPane grid, VBox vbox, String selectedPattern, String selectedColour){
-        custom = selectedPattern + "/" + selectedColour;
+    public static String getName(){
+        return playerName;
+    }
+
+    public static void updateSnake(GridPane grid, VBox vbox, String pattern, String colour, String name){
+        custom = pattern + "/" + colour;
 
         grid = new GridPane();
         vbox.getChildren().set(0, snakePreview(grid));
+
+        if (name.equals("")){
+            playerName = "NoName";
+        } else {
+            playerName = name;
+        }
+    }
+
+    public static void updateSnake(String pattern, String colour, String name){
+        custom = pattern + "/" + colour;
+
+        if (name.equals("")){
+            playerName = "NoName";
+        } else {
+            playerName = name;
+        }
     }
 }
