@@ -64,7 +64,7 @@ public class GameSetup {
 
         Button start = new Button("Start Game");
         start.setOnAction(e -> handleNewGame());
-        
+
         vBox2.getChildren().addAll(snakePreview(grid), start, new Region());
         vBox2.setAlignment(Pos.TOP_CENTER);
         borderPane.setBottom(vBox2);
