@@ -1,6 +1,5 @@
 package application;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -42,7 +41,10 @@ public class GameSetup {
         patterns.setPromptText("Pattern");
         patterns.getItems().addAll("None","Spotted","Striped");
 
-        vBox1.getChildren().addAll(textField,colours,patterns);
+        Button update = new Button("Update");
+        update.setOnAction(e -> updateSnake(patterns.getValue(), colours.getValue()));
+
+        vBox1.getChildren().addAll(textField,colours,patterns, update);
         vBox1.setAlignment(Pos.CENTER);
         borderPane.setCenter(vBox1);
 
@@ -59,10 +61,12 @@ public class GameSetup {
     //sets snake customization for all players in here
     public static void Players(int players) {
         stage = new Stage();
-        Scene scene = null;
+        Scene scene;
 
-        BorderPane borderPane1 = preGameLobby(); BorderPane borderPane2 = preGameLobby();
-        BorderPane borderPane3 = preGameLobby(); BorderPane borderPane4 = preGameLobby();
+        BorderPane borderPane1 = preGameLobby();
+        BorderPane borderPane2 = preGameLobby();
+        BorderPane borderPane3 = preGameLobby();
+        BorderPane borderPane4 = preGameLobby();
 
         HBox hBox1 = new HBox();
         hBox1.setSpacing(50);
@@ -101,4 +105,7 @@ public class GameSetup {
         return grid;
     }
 
+    public static void updateSnake(String selectedPattern, String selectedColour){
+        custom = selectedPattern + "/" + selectedColour;
+    }
 }
