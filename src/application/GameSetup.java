@@ -1,5 +1,6 @@
 package application;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -28,31 +29,44 @@ public class GameSetup {
         GridPane grid = new GridPane();
         BorderPane borderPane = new BorderPane();
         VBox vBox1 = new VBox(), vBox2 = new VBox();
+        HBox hBox1 = new HBox(), hBox2 = new HBox();
+
+        hBox1.setSpacing(5);
+        hBox2.setSpacing(5);
         vBox1.setSpacing(20);
 
+        Label pattern = new Label("Pattern:");
+        Label colour = new Label("Colour:");
+
+        //Player Name
         TextField textField = new TextField();
         textField.setPromptText("Enter Player Name");
-        textField.setMaxSize(100,10);
+        textField.setMaxSize(150,10);
 
+        //Colour Selection
         ComboBox<String> colours = new ComboBox<>();
-        colours.setPromptText("Colour");
+        colours.setValue("Green");
         colours.getItems().addAll("Blue","Red", "Yellow", "Green", "Orange", "Purple");
+        hBox1.getChildren().addAll(colour, colours);
+
+        //Pattern Selection
         ComboBox<String> patterns = new ComboBox<>();
-        patterns.setPromptText("Pattern");
+        patterns.setValue("None");
         patterns.getItems().addAll("None","Spotted","Striped");
+        hBox2.getChildren().addAll(pattern, patterns);
 
         Button update = new Button("Update");
         update.setOnAction(e -> updateSnake(patterns.getValue(), colours.getValue()));
 
-        vBox1.getChildren().addAll(textField,colours,patterns, update);
+        vBox1.getChildren().addAll(textField,hBox1,hBox2, update);
         vBox1.setAlignment(Pos.CENTER);
         borderPane.setCenter(vBox1);
 
         Button start = new Button("Start Game");
         start.setOnAction(e -> handleNewGame());
-
-        vBox2.getChildren().addAll(snakePreview(grid), start);
-        vBox2.setAlignment(Pos.CENTER);
+        
+        vBox2.getChildren().addAll(snakePreview(grid), start, new Region());
+        vBox2.setAlignment(Pos.TOP_CENTER);
         borderPane.setBottom(vBox2);
 
         return borderPane;
