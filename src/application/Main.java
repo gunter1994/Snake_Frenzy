@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     static Stage primaryStage;
     Stage selectGameStage;
+    static ComboBox<String> playerNum = null;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -43,14 +44,16 @@ public class Main extends Application {
 
     /*determines the next step after a game mode is chosen
     differs for single player multiplayer and high scores*/
-    public void next(String option) {
+    public void next(String option, ComboBox<String> playerNum) {
         selectGameStage.close();
 
         if(option.equals("Single Player")) {
-            GameSetup.preGameLobby();
+            GameSetup.Players(1);
         }
-        else if(option.equals("Multiplayer")) {
-            GameSetup.preGameLobby();
+        else if(option.equals("Local Multiplayer")) {
+            String[] s = playerNum.getSelectionModel().getSelectedItem().toString().split(" ");
+            int num = Integer.parseInt(s[0]);
+            GameSetup.Players(num);
         }
         else if(option.equals("High Scores")) {
             //insert high scores tableView here
@@ -67,25 +70,37 @@ public class Main extends Application {
     public void gameSelection(String option) {
         primaryStage.hide();
         selectGameStage = new Stage();
+
         BorderPane borderPane = new BorderPane();
         Button back = new Button("Back");
-        Button next = new Button("Next");
         back.setOnAction(e -> back());
+        Button next = new Button("Next");
+        next.setOnAction(e -> next(option, playerNum));
 
-        next.setOnAction(e -> next(option));
+        ComboBox<String> gameModes = new ComboBox();
+        gameModes.setPromptText("Game Mode");
+        gameModes.getItems().addAll("Classic", "Another Mode");
 
-        ComboBox<String> comboBox = new ComboBox();
-        comboBox.setPromptText("Choose a Game Mode");
-        comboBox.getItems().addAll("Classic", "Another Mode");
+        VBox vBox1 = new VBox(), vBox2 = new VBox(); HBox hBox1 = new HBox(), hBox2 = new HBox();
+        hBox1.getChildren().addAll(back, next); hBox2.getChildren().add(gameModes);
 
-        VBox vBox1 = new VBox(), vBox2 = new VBox(); HBox hBox1 = new HBox(), hbox2 = new HBox();
-        hBox1.getChildren().addAll(back, next); hbox2.getChildren().add(comboBox);
-        vBox1.getChildren().addAll(hBox1, hbox2);
+        if (option.equals("Local Multiplayer")) {
+
+            playerNum = new ComboBox<>();
+            playerNum.setPromptText("Players");
+            playerNum.getItems().addAll("2 Player", "3 Player", "4 Player");
+            HBox hBox3 = new HBox();
+            hBox3.getChildren().add(playerNum);
+            hBox3.setPadding(new Insets(15,0,0,0));
+            hBox3.setAlignment(Pos.CENTER);
+            vBox1.getChildren().addAll(hBox1, hBox2, hBox3);
+        }
+        else { vBox1.getChildren().addAll(hBox1, hBox2); }
 
         hBox1.setAlignment(Pos.CENTER);
         hBox1.setSpacing(15); //set space between buttons
-        hBox1.setPadding(new Insets(75,0,15,0)); //Insets(top,right,bottom,left)
-        hbox2.setAlignment(Pos.CENTER);
+        hBox1.setPadding(new Insets(50,0,15,0)); //Insets(top,right,bottom,left)
+        hBox2.setAlignment(Pos.CENTER);
 
         borderPane.setCenter(vBox1);
         TextArea textArea = new TextArea();
@@ -99,11 +114,10 @@ public class Main extends Application {
         selectGameStage.show();
     }
 
-    public void Settings(){}
+    public void Settings() {}
 
-    public static void showMainMenu(){
-        primaryStage.show();
-    }
+    public static void showMainMenu() {primaryStage.show();}
+
     public static void main(String[] args) {
         launch(args);
     }

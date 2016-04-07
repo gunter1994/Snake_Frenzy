@@ -1,5 +1,6 @@
 package application;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -9,9 +10,10 @@ import javafx.stage.Stage;
 public class GameSetup {
 
     public static String custom = "None/Green";
+    public static Stage stage = null;
 
-    private static void handleNewGame(Stage preGameStage) {
-        preGameStage.close();
+    private static void handleNewGame() {
+        stage.close();
         MainGame m = new MainGame();
         try{
             Stage primaryStage = new Stage();
@@ -22,8 +24,8 @@ public class GameSetup {
     }
 
     //window for choosing name and snake design before starting game
-    public static void preGameLobby() {
-        Stage preGameStage = new Stage();
+    public static BorderPane preGameLobby() {
+
         GridPane grid = new GridPane();
         BorderPane borderPane = new BorderPane();
         VBox vBox1 = new VBox(), vBox2 = new VBox();
@@ -45,17 +47,46 @@ public class GameSetup {
         borderPane.setCenter(vBox1);
 
         Button start = new Button("Start Game");
-        start.setOnAction(e -> handleNewGame(preGameStage));
+        start.setOnAction(e -> handleNewGame());
 
         vBox2.getChildren().addAll(snakePreview(grid), start);
         vBox2.setAlignment(Pos.CENTER);
         borderPane.setBottom(vBox2);
 
-        Scene pregameLobby = new Scene(borderPane,400,350); //(width, height)
-        preGameStage.setTitle("Customize Snake");
-        preGameStage.setScene(pregameLobby);
-        preGameStage.show();
+        return borderPane;
+    }
 
+    //sets snake customization for all players in here
+    public static void Players(int players) {
+        stage = new Stage();
+        Scene scene = null;
+
+        BorderPane borderPane1 = preGameLobby(); BorderPane borderPane2 = preGameLobby();
+        BorderPane borderPane3 = preGameLobby(); BorderPane borderPane4 = preGameLobby();
+
+        HBox hBox1 = new HBox();
+        hBox1.setSpacing(50);
+
+        if(players == 1) {
+            hBox1.getChildren().add(borderPane1);
+            scene = new Scene(hBox1, 350, 350);
+        }
+        else if (players == 2) {
+            hBox1.getChildren().addAll(borderPane1, borderPane2);
+            scene = new Scene(hBox1, 400, 350);
+        }
+        else if (players == 3) {
+            hBox1.getChildren().addAll(borderPane1, borderPane2, borderPane3);
+            scene = new Scene(hBox1, 500, 350);
+        }
+        else {
+            hBox1.getChildren().addAll(borderPane1, borderPane2, borderPane3, borderPane4);
+            scene = new Scene(hBox1, 600, 350);
+        }
+
+        hBox1.setAlignment(Pos.CENTER);
+        stage.setScene(scene);
+        stage.show();
     }
 
     public static GridPane snakePreview(GridPane grid) {
