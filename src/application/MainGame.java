@@ -165,7 +165,7 @@ public class MainGame {
             out.println(GameSetup.getName() + " " + score);
             out.close();
         } catch(IOException e){
-            e.printStackTrace();
+            System.err.println("Cannot connect to server");
         }
 
         Button play = new Button("Play Again");
