@@ -3,238 +3,239 @@ package application;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.Random;
 
 public class MainGame {
+    Stage primaryStage;
     Scene scene;
-    private int dir;
-    private int storedDir;
-    private Position food;
-    private boolean moved;
-    private int score;
+    GamePlayer player1;
 
-    public MainGame() {
-        this.dir = 0;
-        this.food = new Position(0,0);
-        this.moved = false;
-        this.storedDir = 4;
-    }
+    public MainGame(Player p1) {
+        //make basic stage
+        primaryStage = new Stage();
 
-    public void start(Stage primaryStage) throws Exception {
-        Group root = new Group();
+        VBox layout = new VBox();
 
-        GridPane grid = new GridPane();
-        for (int i = 0; i < 36; i++) {
-            ColumnConstraints column = new ColumnConstraints(20);
-            grid.getColumnConstraints().add(column);
-        }
+        scene = new Scene(layout, Color.WHITE);
 
-        for (int i = 0; i < 36; i++) {
-            RowConstraints row = new RowConstraints(20);
-            grid.getRowConstraints().add(row);
-        }
+        //set controls for players
+        player1 = new GamePlayer();
 
-        root.getChildren().add(grid);
-        scene = new Scene(root, Color.WHITE);
+        //add players to the in game players
+        player1.setPlayer(p1);
+
+        layout.getChildren().add(player1.getRoot()); //have to do this to avoid errors with control setup
+
         primaryStage.setScene(scene);
         primaryStage.setTitle("Snake Frenzy");
         primaryStage.show();
 
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.RIGHT || key.getCode()==KeyCode.D) {
-                if ((dir == 3 || dir == 1) && !moved) {
-                    dir = 0;
-                    moved = true;
-                }
-                else if (dir != 2 && moved)
-                {
-                    storedDir = 0;
-                }
-            }
-        });
-
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.DOWN || key.getCode()==KeyCode.S) {
-                if ((dir == 0 || dir == 2) && !moved) {
-                    dir = 1;
-                    moved = true;
-                }
-                else if (dir != 3 && moved)
-                {
-                    storedDir = 1;
-                }
-            }
-        });
-
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.LEFT || key.getCode()==KeyCode.A) {
-                if ((dir == 3 || dir == 1) && !moved) {
-                    dir = 2;
-                    moved = true;
-                }
-                else if (dir != 0 && moved){
-                    storedDir = 2;
-                }
-            }
-        });
-
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.UP || key.getCode()==KeyCode.W) {
-                if ((dir == 0 || dir == 2) && !moved) {
-                    dir = 3;
-                    moved = true;
-                }
-                else if (dir != 1 && moved){
-                    storedDir = 3;
-                }
-            }
-        });
-
-        play(grid, primaryStage);
+        player1.run();
     }
 
-    private void play(GridPane grid, Stage primaryStage){
-        dir = 0;
-        storedDir = 4;
-        score = 0;
-        Position p = new Position(15,18);
-        Snake s = new Snake(GameSetup.custom, p);
-        s.drawSnake(grid);
-        newFood(s);
+    private class GamePlayer {
+        private Group root;
+        private Timeline timeline;
+        private boolean alive;
+        private Snake s;
+        private int dir;
+        private int storedDir;
+        private ImageView foodPic;
+        private boolean moved;
+        private int score;
+        private Text scoreText;
+        private Player player;
+        private Rectangle rect;
 
-        Timeline timeline = new Timeline();
-        timeline.setCycleCount(Timeline.INDEFINITE);
+        public GamePlayer() {
+            //sets up all parameters for game
+            foodPic = new ImageView(new Image(new File("snake_art/food.png").toURI().toString()));
+            alive = true;
+            timeline = new Timeline();
+            moved = false;
+            score = 0;
+            //sets up the players gameScreen
+            root = new Group();
+            rect = new Rectangle(0, 0, 820, 420);
+            rect.setFill(Color.WHITE);
+            Rectangle wall = new Rectangle(-20, -20, 860, 460); //so that the snake can move off screen when it dies
+            wall.setFill(Color.DARKGRAY);
+            scoreText = new Text(-5, -5, "Score: " + score);
+            root.getChildren().addAll(wall, rect, scoreText);
 
-        KeyValue keyValueX = new KeyValue(grid.scaleXProperty(), 1);
-        KeyValue keyValueY = new KeyValue(grid.scaleYProperty(), 1);
-        Duration duration = Duration.millis(100);
-        EventHandler onFinished = new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                if (s.checkCollision())
-                {
-                    timeline.stop();
-                    gameOver(grid, primaryStage);
+            //adds keyboard controls
+            scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+                if (key.getCode() == KeyCode.RIGHT || key.getCode() == KeyCode.D) {
+                    if ((dir == 3 || dir == 1) && !moved) {
+                        dir = 0;
+                        moved = true;
+                    } else if (dir != 2 && moved) {
+                        storedDir = 0;
+                    }
                 }
-                if (storedDir != 4 && dir == s.tail.getOrientation())
-                {
-                    s.move(grid, storedDir);
-                    dir = storedDir;
-                    storedDir = 4;
+            });
+
+            scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+                if (key.getCode() == KeyCode.DOWN || key.getCode() == KeyCode.S) {
+                    if ((dir == 0 || dir == 2) && !moved) {
+                        dir = 1;
+                        moved = true;
+                    } else if (dir != 3 && moved) {
+                        storedDir = 1;
+                    }
                 }
-                else {
-                    s.move(grid, dir);
+            });
+
+            scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+                if (key.getCode() == KeyCode.LEFT || key.getCode() == KeyCode.A) {
+                    if ((dir == 3 || dir == 1) && !moved) {
+                        dir = 2;
+                        moved = true;
+                    } else if (dir != 0 && moved) {
+                        storedDir = 2;
+                    }
                 }
-                checkFood(grid, s);
-                moved = false;
-            }
-        };
-        KeyFrame keyFrame = new KeyFrame(duration, onFinished , keyValueX, keyValueY);
-        //add the keyframe to the timeline
-        timeline.getKeyFrames().add(keyFrame);
+            });
 
-        timeline.play();
-    }
-
-    private void gameOver(GridPane grid, Stage primaryStage)
-    {
-        Stage stage = new Stage();
-        System.out.println("Final score: " + score);
-        stage.setTitle("Game Over");
-
-        try {
-            Socket socket = new Socket("localhost", 8080);
-            PrintWriter out = new PrintWriter(socket.getOutputStream());
-
-            out.println(GameSetup.getName() + " " + score);
-            out.close();
-        } catch(IOException e){
-            System.err.println("Cannot connect to server");
+            scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+                if (key.getCode() == KeyCode.UP || key.getCode() == KeyCode.W) {
+                    if ((dir == 0 || dir == 2) && !moved) {
+                        dir = 3;
+                        moved = true;
+                    } else if (dir != 1 && moved) {
+                        storedDir = 3;
+                    }
+                }
+            });
         }
 
-        Button play = new Button("Play Again");
-        play.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                stage.close();
-                play(grid, primaryStage);
-            }
-        });
+        public Group getRoot() {
+            return root;
+        }
 
-        Button mainMenu = new Button("Main Menu");
-        mainMenu.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                stage.close();
-                primaryStage.close();
-                Main.showMainMenu();
-            }
-        });
+        public boolean getAlive() {
+            return alive;
+        }
 
-        HBox layout = new HBox(10);
-        layout.setStyle("-fx-background-color: white; -fx-padding: 20;");
-        layout.getChildren().addAll(play, mainMenu);
-        stage.setScene(new Scene(layout));
-        stage.show();
-    }
+        public Text getScoreText() {
+            return scoreText;
+        }
 
-    private void checkFood(GridPane grid, Snake s)
-    {
-        if (food.equals(s.tail.getPos()))
-        {
-            s.grow += 3;
+        public Player getPlayer() {
+            return player;
+        }
+
+        public void setPlayer(Player p) {
+            player = p;
+        }
+
+        public Timeline getTimeline() {
+            return timeline;
+        }
+
+        public void run() {
+            //creates snake and sets up score/directions
+            dir = 0;
+            storedDir = 4;
+            score = 0;
+            s = new Snake(player.getCustom(), 17, 10);
+            s.drawSnake(root);
             newFood(s);
-            score++;
-        }
-        placeFood(grid);
-    }
 
-    private void newFood(Snake s)
-    {
-        Random rand = new Random();
-        int x = 0;
-        int y = 0;
-        boolean available = false;
-        while (!available) {
-            available = true;
-            x = rand.nextInt(36);
-            y = rand.nextInt(36);
-            food = new Position(x, y);
-            SnakePart c = s.head;
-            while (c != null) {
-                if (food.equals(c.getPos())) {
-                    available = false;
-                    break;
+            //makes game run until stopped
+            timeline.setCycleCount(Timeline.INDEFINITE);
+
+            //sets up keyframes to normal properties
+            KeyValue keyValueX = new KeyValue(root.scaleXProperty(), 1);
+            KeyValue keyValueY = new KeyValue(root.scaleYProperty(), 1);
+            //sets each movement to 100 duration
+            Duration duration = Duration.millis(100);
+
+            EventHandler onFinished = new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent t) {
+                    //if the snake collided, end game for player
+                    if (s.checkCollision()) {
+                        timeline.stop();
+                        gameOver();
+                    }
+                    //uses stored dir if necessary for smoother movement
+                    else if (storedDir != 4 && dir == s.tail.getImage().getRotate() / 90) {
+                        s.move(root, storedDir);
+                        dir = storedDir;
+                        storedDir = 4;
+                    } else { //move as normal
+                        s.move(root, dir);
+                    }
+                    //checks if the snake ate the food
+                    checkFood();
+                    moved = false;
                 }
-                c = c.getNext();
+            };
+
+            //create keyframe to do event when frame finishes (every 100 millies
+            KeyFrame keyFrame = new KeyFrame(duration, onFinished, keyValueX, keyValueY);
+            timeline.getKeyFrames().add(keyFrame);
+            //start game
+            timeline.play();
+        }
+
+        //end game for player
+        public void gameOver() {
+            alive = false;
+            rect.setFill(Color.GRAY);
+            timeline.stop();
+        }
+
+        //check if the snake ate the food
+        private void checkFood() {
+            if (foodPic.getX() == s.tail.getImage().getX() && foodPic.getY() == s.tail.getImage().getY()) {
+                s.grow += 3;
+                root.getChildren().remove(foodPic); //deletes the food if eaten
+                newFood(s);
+                score++;
+                scoreText.setText("Score: " + score);
             }
         }
-        food.setX(x);
-        food.setY(y);
-    }
 
-    private void placeFood(GridPane grid)
-    {
-        Image foodPic = new Image(new File("snake_art/food.png").toURI().toString());
-        ImageView foodView = new ImageView();
-        foodView.setImage(foodPic);
-        grid.add(foodView, food.getX(), food.getY());
+        //creates a new food
+        private void newFood(Snake s) {
+            Platform.setImplicitExit(false);
+            Random rand = new Random();
+            int x = 0;
+            int y = 0;
+            boolean available = false;
+            while (!available) { //makes sure the snake isn't in the way of the new food
+                available = true;
+                x = rand.nextInt(40);
+                y = rand.nextInt(20);
+                SnakePart c = s.head;
+                while (c != null) {
+                    if (x == c.getImage().getX() && y == c.getImage().getY()) {
+                        available = false;
+                        break;
+                    }
+                    c = c.getNext();
+                }
+            }
+            foodPic.setX(x * 20);
+            foodPic.setY(y * 20);
+            root.getChildren().add(foodPic); //adds the food to the screen
+        }
     }
-
 }

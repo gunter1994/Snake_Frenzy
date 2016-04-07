@@ -1,10 +1,12 @@
 package application;
 
+import javafx.scene.Group;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import java.io.File;
 
+/**
+ * Created by gunter on 3/20/16.
+ */
 public class Snake {
     public SnakePart head;
     public SnakePart tail;
@@ -18,139 +20,144 @@ public class Snake {
         return this.pic;
     }
 
-    public Snake(String pic, Position p) {
+    public Snake(String pic, int x, int y) {
         this.setPic(pic);
-        SnakePart c = new SnakePart(p);
+        SnakePart c = new SnakePart(x*20, y*20);
         head = c;
         for (int i = 1; i < 5; i++) {
-            Position p2 = new Position(p.getX()+i, p.getY());
-            c.setNext(new SnakePart(p2));
+            c.setNext(new SnakePart(x*20 + i*20, y*20));
             c = c.getNext();
         }
         tail = c;
     }
 
-    public void drawSnake(GridPane grid)
+    public void drawSnake(Group root)
     {
+        //draws the snake to the screen
         SnakePart c = head;
-        ImageView[] view = new ImageView[1296]; //largest possible snake
-        for (int i = 0; i < 1296; i++)
-        {
-            view[i] = new ImageView();
-        }
-        int j = 0;
         while (c != null) {
-            Position p = c.getPos();
-            Image im;
-            int cornerOri = 0;
+            //checks what image to use
             if (c == head)
             {
-                im =(new Image(new File("snake_art/" + this.getPic() + "/tail.png").toURI().toString()));
+                c.getImage().setImage((new Image(new File("snake_art/" + this.getPic() + "/tail.png").toURI().toString())));
             }
             else if (c == tail)
             {
-                im = (new Image(new File("snake_art/" + this.getPic() + "/head.png").toURI().toString()));
+                c.getImage().setImage((new Image(new File("snake_art/" + this.getPic() + "/head.png").toURI().toString())));
             }
             else
             {
-                if (c.getNext().getOrientation() == c.getOrientation()) {
-                    im = (new Image(new File("snake_art/" + this.getPic() + "/body.png").toURI().toString()));
-                }
-                else
-                {
-                    //0 = right up and down left 1 = down right 2 and left up 2 = left down and up right 3 = up left and right down
-                    if ((c.getOrientation() == 0 && c.getNext().getOrientation() == 3) || (c.getOrientation() == 1 && c.getNext().getOrientation() == 2)) {
-                        cornerOri = 0;
-                    }
-                    else if ((c.getOrientation() == 1 && c.getNext().getOrientation() == 0) || (c.getOrientation() == 2 && c.getNext().getOrientation() == 3)) {
-                        cornerOri = 1;
-                    }
-                    else if ((c.getOrientation() == 2 && c.getNext().getOrientation() == 1) || (c.getOrientation() == 3 && c.getNext().getOrientation() == 0)) {
-                        cornerOri = 2;
-                    }
-                    else if ((c.getOrientation() == 3 && c.getNext().getOrientation() == 2) || (c.getOrientation() == 0 && c.getNext().getOrientation() == 1)) {
-                        cornerOri = 3;
-                    }
-                    im = (new Image(new File("snake_art/" + this.getPic() + "/corner.png").toURI().toString()));
-                }
+                c.getImage().setImage(new Image(new File("snake_art/" + this.getPic() + "/body.png").toURI().toString()));
             }
-            view[j].setImage(im);
-            //special case for corner tiles
-            if (!c.equals(tail) && !c.equals(head) && (c.getNext().getOrientation() != c.getOrientation())){
-                view[j].setRotate(90 * cornerOri);
-            }
-            //normal case
-            else {
-                view[j].setRotate(90 * c.getOrientation());
-            }
-            grid.add(view[j], p.getX(), p.getY());
+            root.getChildren().add(c.getImage()); //adds the imageview to the screen
             c = c.getNext();
-            j++;
         }
     }
 
-    public void move(GridPane grid, int d)
+    public void move(Group root, int d)
     {
-        SnakePart c = head;
-        //tail needs different orientation than others
-        if (grow == 0) //grows snake if needed
-        {
-            c.setPos(c.getNext().getPos());
-            c.setOrientation(c.getNext().getNext().getOrientation());
-            c = c.getNext();
-        }
-        else //adds a new joint where the tail would move too, and doesn't move tail
-        {
-            grow--;
-            SnakePart temp = new SnakePart(c.getNext().getPos());
-            temp.setOrientation(c.getNext().getOrientation());
-            temp.setNext(c.getNext());
-            c.setNext(temp);
-            c = c.getNext();
-            c = c.getNext();
-        }
-        while (c != tail) {
-            c.setPos(c.getNext().getPos());
-            c.setOrientation(c.getNext().getOrientation());
-            c = c.getNext();
-        }
-        Position p = c.getPos();
-        if (d == 0) {
-            p.setX(p.getX()+1);
-            c.setPos(p);
-            c.setOrientation(0);
-        }
-        else if (d == 1) {
-            p.setY(p.getY()+1);
-            c.setPos(p);
-            c.setOrientation(1);
-        }
-        else if (d == 2) {
-            p.setX(p.getX()-1);
-            c.setPos(p);
-            c.setOrientation(2);
-        }
-        else if (d == 3) {
-            p.setY((p.getY()-1));
-            c.setPos(p);
-            c.setOrientation(3);
-        }
+        //only moves if not colliding
         if (!this.checkCollision()) {
-        grid.getChildren().clear();
-            this.drawSnake(grid);
+            //first clean up all the corners
+            SnakePart deCorn = head;
+            deCorn = deCorn.getNext();
+            while (deCorn !=tail) {
+                if (deCorn.getCleanup() != -1) {
+                    deCorn.getImage().setRotate(deCorn.getCleanup());
+                    deCorn.getImage().setImage(new Image(new File("snake_art/" + this.getPic() + "/body.png").toURI().toString()));
+                    deCorn.setCleanup(-1);
+                }
+                deCorn = deCorn.getNext();
+            }
+            SnakePart c = head;
+            //tail can't be a corner, so needs to be seperate
+            if (grow == 0) //checks to see if it needs to grow
+            {
+                c.getImage().setX(c.getNext().getImage().getX());
+                c.getImage().setY(c.getNext().getImage().getY());
+                if (c.getNext().getNext().getCleanup() == -1) {
+                    c.getImage().setRotate(c.getNext().getImage().getRotate());
+                }
+                else {
+                    c.getImage().setRotate(c.getNext().getCleanup());
+                    c.getNext().setCleanup(-1);
+                }
+                c = c.getNext();
+            } else //adds a new joint where the tail would move too, and doesn't move tail
+            {
+                grow--;
+                SnakePart temp = new SnakePart(c.getNext().getImage().getX(), c.getNext().getImage().getY());
+                temp.getImage().setImage(c.getNext().getImage().getImage());
+                temp.getImage().setRotate(head.getImage().getRotate());
+                temp.setCleanup(c.getNext().getCleanup());
+                temp.setNext(c.getNext());
+                c.setNext(temp);
+                c = c.getNext();
+                root.getChildren().add(c.getImage());
+            }
+            //make sure new direction is updated before cornering
+            if (d == 0) {
+                tail.getImage().setRotate(0.0);
+            } else if (d == 1) {
+                tail.getImage().setRotate(90.0);
+            } else if (d == 2) {
+                tail.getImage().setRotate(180.0);
+            } else if (d == 3) {
+                tail.getImage().setRotate(270.0);
+            }
+            //body procedure
+            while (c != tail) {
+                c.getImage().setX(c.getNext().getImage().getX());
+                c.getImage().setY(c.getNext().getImage().getY());
+                if (c.getImage().getRotate() != c.getNext().getImage().getRotate()) {
+                    int cornerOri; //checks all possible corners
+                    if        ((c.getImage().getRotate() == 0.0 && c.getNext().getImage().getRotate() == 270.0)
+                            || (c.getImage().getRotate() == 90.0 && c.getNext().getImage().getRotate() == 180.0)) {
+                        cornerOri = 0;
+                    }
+                    else if   ((c.getImage().getRotate() == 90.0 && c.getNext().getImage().getRotate() == 0.0)
+                            || (c.getImage().getRotate() == 180.0 && c.getNext().getImage().getRotate() == 270.0)) {
+                        cornerOri = 1;
+                    }
+                    else if   ((c.getImage().getRotate() == 180.0 && c.getNext().getImage().getRotate() == 90.0)
+                            || (c.getImage().getRotate() == 270.0 && c.getNext().getImage().getRotate() == 0.0)) {
+                        cornerOri = 2;
+                    }
+                    else {
+                        cornerOri = 3;
+                    }
+                    c.getImage().setImage(new Image(new File("snake_art/" + this.getPic() + "/corner.png").toURI().toString()));
+                    c.getImage().setRotate(90.0 * cornerOri);
+                    c.setCleanup(c.getNext().getImage().getRotate());
+                }
+                else { //otherwise
+                    c.getImage().setRotate(c.getNext().getImage().getRotate());
+                }
+                c = c.getNext();
+            } //move head
+            if (d == 0) {
+                tail.getImage().setX(tail.getImage().getX() + 20);
+            } else if (d == 1) {
+                tail.getImage().setY(tail.getImage().getY() + 20);
+            } else if (d == 2) {
+                tail.getImage().setX(tail.getImage().getX() - 20);
+            } else if (d == 3) {
+                tail.getImage().setY(tail.getImage().getY() - 20);
+            }
         }
     }
 
     public boolean checkCollision() {
         SnakePart c = tail; //actually the head of the snake
-        if (c.getPos().getX() > 35 || c.getPos().getX() < 0 || c.getPos().getY() > 35 || c.getPos().getY() < 0)
+        //checks if snake is out of bounds
+        if (c.getImage().getX() > 40*20 || c.getImage().getX() < 0 || c.getImage().getY() > 20*20 || c.getImage().getY() < 0)
         {
             return true;
         }
-        SnakePart temp = head;
+        SnakePart temp = head; //checks if snake is colliding with itself
         while (temp.getNext().getNext() != tail)
         {
-            if (temp.getPos().equals(c.getPos()))
+            if (temp.getImage().getX() == c.getImage().getX() && temp.getImage().getY() == (c.getImage().getY()))
             {
                 return true;
             }

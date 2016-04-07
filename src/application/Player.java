@@ -5,14 +5,30 @@ import java.io.*;
 
 public class Player {
 
-    String username;
+    private String username;
     int highscore;
     File newFile = null;
+    private String custom;
 
     public Player() {
 
     }
 
+    public void setCustom(String c) {
+        this.custom = c;
+    }
+
+    public String getCustom() {
+        return this.custom;
+    }
+
+    public void setUsername(String u) {
+        this.username = u;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
     /*public void HighScore(){
         File newFile = new File("Highscore.csv");
         if (newFile.exists())

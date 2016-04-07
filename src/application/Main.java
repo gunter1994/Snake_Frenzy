@@ -55,12 +55,15 @@ public class Main extends Application {
         selectGameStage.close();
 
         if(option.equals("Single Player")) {
-            GameSetup.Players(1);
+            Stage stage = new Stage();
+            Scene scene = new Scene(GameSetup.setupWindow(), 350, 350);
+            stage.setScene(scene);
+            stage.show();
         }
         else if(option.equals("Local Multiplayer")) {
             String[] s = playerNum.getSelectionModel().getSelectedItem().toString().split(" ");
             int num = Integer.parseInt(s[0]);
-            GameSetup.Players(num);
+
         }
         else if(option.equals("High Scores")) {
             //insert high scores tableView here
