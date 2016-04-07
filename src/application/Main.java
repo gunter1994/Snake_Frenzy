@@ -5,6 +5,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -16,19 +18,22 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         this.primaryStage = primaryStage;
-        GridPane gridPane = new GridPane();
         VBox vBox = new VBox(15);
+        vBox.setStyle("-fx-background-color: lightgray");
+
+        Image img = new Image("CartoonSnake.png");
+        ImageView iv = new ImageView(img);
+        iv.setFitWidth(125); iv.setFitHeight(125);
+        iv.setPreserveRatio(true);
+
 
         //Create buttons
         Button btn1 = new Button("Single Player");
         Button btn2 = new Button("Local Multiplayer");
         Button btn3 = new Button("High Scores");
         Button btn4 = new Button("Settings");
-        vBox.getChildren().addAll(btn1,btn2,btn3,btn4);
-
-        //add and position buttons
-        gridPane.getChildren().add(vBox);
-        gridPane.setAlignment(Pos.CENTER);
+        vBox.getChildren().addAll(iv, btn1,btn2,btn3,btn4);
+        vBox.setAlignment(Pos.CENTER);
 
         /*Passes either Single Player, Multiplayer or High Scores to the gameSelection
         method and performs the correct action */
@@ -38,7 +43,7 @@ public class Main extends Application {
         btn4.setOnAction(e -> Settings());
 
         primaryStage.setTitle("Main Menu");
-        primaryStage.setScene(new Scene(gridPane, 350, 350));
+        primaryStage.setScene(new Scene(vBox, 350, 350));
         primaryStage.show();
     }
 
@@ -87,7 +92,7 @@ public class Main extends Application {
         if (option.equals("Local Multiplayer")) {
 
             playerNum = new ComboBox<>();
-            playerNum.setPromptText("Players");
+            playerNum.setValue("2 Player");
             playerNum.getItems().addAll("2 Player", "3 Player", "4 Player");
             HBox hBox3 = new HBox();
             hBox3.getChildren().add(playerNum);

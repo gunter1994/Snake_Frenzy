@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 public class GameSetup {
 
     public static String custom = "None/Green";
+
     public static Stage stage = null;
 
     private static void handleNewGame() {
@@ -28,6 +29,7 @@ public class GameSetup {
 
         GridPane grid = new GridPane();
         BorderPane borderPane = new BorderPane();
+
         VBox vBox1 = new VBox(), vBox2 = new VBox();
         HBox hBox1 = new HBox(), hBox2 = new HBox();
 
@@ -91,15 +93,15 @@ public class GameSetup {
         }
         else if (players == 2) {
             hBox1.getChildren().addAll(borderPane1, borderPane2);
-            scene = new Scene(hBox1, 400, 350);
+            scene = new Scene(hBox1, 450, 400);
         }
         else if (players == 3) {
             hBox1.getChildren().addAll(borderPane1, borderPane2, borderPane3);
-            scene = new Scene(hBox1, 500, 350);
+            scene = new Scene(hBox1, 650, 400);
         }
         else {
             hBox1.getChildren().addAll(borderPane1, borderPane2, borderPane3, borderPane4);
-            scene = new Scene(hBox1, 600, 350);
+            scene = new Scene(hBox1, 850, 450);
         }
 
         hBox1.setAlignment(Pos.CENTER);
