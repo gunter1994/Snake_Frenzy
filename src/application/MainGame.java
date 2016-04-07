@@ -169,6 +169,9 @@ public class MainGame {
 
             EventHandler onFinished = new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent t) {
+                    if (checkFood()) {
+                        newFood(s);
+                    }
                     //if the snake collided, end game for player
                     if (s.checkCollision()) {
                         timeline.stop();
@@ -203,14 +206,15 @@ public class MainGame {
         }
 
         //check if the snake ate the food
-        private void checkFood() {
+        private boolean checkFood() {
             if (foodPic.getX() == s.tail.getImage().getX() && foodPic.getY() == s.tail.getImage().getY()) {
                 s.grow += 3;
                 root.getChildren().remove(foodPic); //deletes the food if eaten
-                newFood(s);
                 score++;
                 scoreText.setText("Score: " + score);
+                return true;
             }
+            return false;
         }
 
         //creates a new food

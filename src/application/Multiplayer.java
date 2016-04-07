@@ -61,7 +61,7 @@ public class Multiplayer {
         VBox layout3 = new VBox();
         VBox layout4 = new VBox();
 
-        /*
+
         layout1.setStyle("-fx-border-color: black;");
         layout2.setStyle("-fx-border-color: black;");
         layout3.setStyle("-fx-border-color: black;");
@@ -70,10 +70,10 @@ public class Multiplayer {
         layout1.getChildren().addAll(player1.getRoot());
         layout2.getChildren().addAll(player2.getRoot());
         layout3.getChildren().addAll(player3.getRoot());
-        layout4.getChildren().addAll(player4.getRoot());*/
+        layout4.getChildren().addAll(player4.getRoot());
 
-        v1.getChildren().addAll(player1.getRoot(), player3.getRoot());
-        v2.getChildren().addAll(player2.getRoot(), player4.getRoot());
+        v1.getChildren().addAll(layout1, layout3);
+        v2.getChildren().addAll(layout2, layout4);
         hbox.getChildren().addAll(v1,v2);
 
         primaryStage.setScene(scene);
@@ -252,6 +252,9 @@ public class Multiplayer {
 
             EventHandler onFinished = new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent t) {
+                    if (checkFood()) {
+                        newFood(s);
+                    }
                     //if the snake collided, end game for player
                     if (s.checkCollision()) {
                         timeline.stop();
@@ -287,14 +290,16 @@ public class Multiplayer {
         }
 
         //check if the snake ate the food
-        private void checkFood() {
+        //check if the snake ate the food
+        private boolean checkFood() {
             if (foodPic.getX() == s.tail.getImage().getX() && foodPic.getY() == s.tail.getImage().getY()) {
                 s.grow += 3;
                 root.getChildren().remove(foodPic); //deletes the food if eaten
-                newFood(s);
                 score++;
                 scoreText.setText("Score: " + score);
+                return true;
             }
+            return false;
         }
 
         //creates a new food
@@ -317,8 +322,8 @@ public class Multiplayer {
                     c = c.getNext();
                 }
             }
-            foodPic.setX(x*20);
-            foodPic.setY(y*20);
+            foodPic.setX(x * 20);
+            foodPic.setY(y * 20);
             root.getChildren().add(foodPic); //adds the food to the screen
         }
     }
