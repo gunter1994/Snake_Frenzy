@@ -24,12 +24,13 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Random;
 
-public class MainGame {
+// this is creates and runs the actual game
+class MainGame {
     private Stage primaryStage;
     private Scene scene;
     private GamePlayer player1;
 
-    public MainGame(Player p1) {
+    MainGame(Player p1) {
         //make basic stage
         primaryStage = new Stage();
         VBox layout = new VBox();
@@ -52,7 +53,6 @@ public class MainGame {
     private class GamePlayer {
         private Group root;
         private Timeline timeline;
-        private boolean alive;
         private boolean paused = false;
         private Snake s;
         private int dir;
@@ -64,10 +64,9 @@ public class MainGame {
         private Player player;
         private Rectangle rect;
 
-        public GamePlayer() {
+        GamePlayer() {
             //sets up all parameters for game
             foodPic = new ImageView(new Image(new File("snake_art/food.png").toURI().toString()));
-            alive = true;
             timeline = new Timeline();
             moved = false;
             score = 0;
@@ -142,31 +141,15 @@ public class MainGame {
             });
         }
 
-        public Group getRoot() {
+        Group getRoot() {
             return root;
         }
 
-        public boolean getAlive() {
-            return alive;
-        }
-
-        public Text getScoreText() {
-            return scoreText;
-        }
-
-        public Player getPlayer() {
-            return player;
-        }
-
-        public void setPlayer(Player p) {
+        void setPlayer(Player p) {
             player = p;
         }
 
-        public Timeline getTimeline() {
-            return timeline;
-        }
-
-        public void run() {
+        void run() {
             //creates snake and sets up score/directions
             dir = 0;
             storedDir = 4;
@@ -214,11 +197,11 @@ public class MainGame {
         }
 
         //end game for player
-        public void gameOver() {
-            alive = false;
+        private void gameOver() {
             rect.setFill(Color.GRAY);
             timeline.stop();
 
+            // sends name and score to the high score server
             try {
                 Socket socket = new Socket("localhost", 8080);
                 PrintWriter out = new PrintWriter(socket.getOutputStream());
@@ -229,6 +212,8 @@ public class MainGame {
                 System.err.println("Cannot connect to server");
             }
 
+
+            // creates Game Over popup window
             Stage stage = new Stage();
             stage.setTitle("Game Over");
 
@@ -252,9 +237,17 @@ public class MainGame {
                 }
             });
 
-            HBox layout = new HBox(10);
+            Button quitGame = new Button("Quit");
+            quitGame.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    System.exit(0);
+                }
+            });
+
+            HBox layout = new HBox(15);
             layout.setStyle("-fx-background-color: white; -fx-padding: 20;");
-            layout.getChildren().addAll(play, mainMenu);
+            layout.getChildren().addAll(play, mainMenu, quitGame);
             stage.setScene(new Scene(layout));
             stage.show();
         }
@@ -270,7 +263,7 @@ public class MainGame {
             }
         }
 
-        //creates a new food
+        //creates a new randomly located food not on top of the snake
         private void newFood(Snake s) {
             Random rand = new Random();
             int x = 0;
@@ -290,9 +283,10 @@ public class MainGame {
                     c = c.getNext();
                 }
             }
+            //sets food location then displays it
             foodPic.setX(x);
             foodPic.setY(y);
-            root.getChildren().add(foodPic); //adds the food to the screen
+            root.getChildren().add(foodPic);
         }
     }
 }

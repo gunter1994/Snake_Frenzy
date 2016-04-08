@@ -31,22 +31,25 @@ public class Main extends Application {
 
 
         //Create buttons
-        Button btn1 = new Button("Single Player");
-        Button btn2 = new Button("Local Multiplayer");
-        Button btn3 = new Button("High Scores");
-        Button btn4 = new Button("Settings");
-        vBox.getChildren().addAll(iv, btn1,btn2,btn3,btn4);
+        Button onePlayerBtn = new Button("Single Player");
+        Button multiPlayerButton = new Button("Local Multiplayer");
+        Button highScoresButton = new Button("High Scores");
+        Button settingsButton = new Button("Settings");
+        Button quitGame = new Button ("Quit");
+
+        vBox.getChildren().addAll(iv, onePlayerBtn,multiPlayerButton,highScoresButton,settingsButton,quitGame);
         vBox.setAlignment(Pos.CENTER);
 
         /*Passes either Single Player, Multiplayer or High Scores to the gameSelection
         method and performs the correct action */
-        btn1.setOnAction(e -> gameSelection(btn1.getText()));
-        btn2.setOnAction(e -> gameSelection(btn2.getText()));
-        btn3.addEventHandler(ActionEvent.ACTION, (e) -> {primaryStage.hide(); new HighScoresWindow();});
-        btn4.setOnAction(e -> Settings());
+        onePlayerBtn.setOnAction(e -> gameSelection(onePlayerBtn.getText()));
+        multiPlayerButton.setOnAction(e -> gameSelection(multiPlayerButton.getText()));
+        highScoresButton.addEventHandler(ActionEvent.ACTION, (e) -> {primaryStage.hide(); new HighScoresWindow();});
+        settingsButton.setOnAction(e -> Settings());
+        quitGame.setOnAction(e -> System.exit(0));
 
         primaryStage.setTitle("Main Menu");
-        primaryStage.setScene(new Scene(vBox, 350, 350));
+        primaryStage.setScene(new Scene(vBox, 350, 400));
         primaryStage.show();
     }
 
@@ -101,7 +104,7 @@ public class Main extends Application {
     }
 
     /*determines the next step after a game mode is chosen
-    differs for single player multiplayer and high scores*/
+    differs for single player multiplayer*/
     private void next(String option, ComboBox<String> playerNum) {
         selectGameStage.close();
 
@@ -114,6 +117,7 @@ public class Main extends Application {
         }
     }
 
+    // returns to main menu
     private void back(){
         selectGameStage.close();
         showMainMenu();
