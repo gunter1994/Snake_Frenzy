@@ -106,15 +106,7 @@ public class Main extends Application {
         selectGameStage.close();
 
         if(option.equals("Single Player")) {
-            Stage setupStage = new Stage();
-            BorderPane layout = new BorderPane();
-            Scene scene = new Scene(layout, 350, 200);
-            GameSetup window = new GameSetup(scene);
-            layout.getChildren().add(window.getRoot());
-
-            setupStage.setTitle("Game Setup");
-            setupStage.setScene(scene);
-            setupStage.show();
+            new GameSetup();
         }
         else if(option.equals("Local Multiplayer")) {
             String[] s = playerNum.getSelectionModel().getSelectedItem().toString().split(" ");

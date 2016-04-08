@@ -7,11 +7,15 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
+
+import static java.awt.SystemColor.window;
 
 public class GameSetup {
 
     private Player player;
     private Group root;
+    private Stage stage;
     private int pattern;
     private int colour;
 
@@ -21,15 +25,18 @@ public class GameSetup {
 
     private void newGame(String pattern, String colour, String name) {
         setSnake(pattern, colour, name);
+        stage.close();
         new MainGame(this.player);
     }
 
     //sets snake customization for all players in here
-    public GameSetup(Scene scene) {
+    public GameSetup() {
+        BorderPane layout = new BorderPane();
+        Scene scene = new Scene(layout, 350, 200);
 
+        this.stage = new Stage();
         this.player = new Player();
         this.player.setCustom("None/Green");
-
         this.root = new Group();
 
         String[] patterns = {"Striped","Spotted","None"};
@@ -81,6 +88,12 @@ public class GameSetup {
                 updateSnake(s, colours[this.colour], patterns[this.pattern], nameField.getText());
             }
         });
+
+
+        layout.getChildren().add(this.root);
+        stage.setTitle("Game Setup");
+        stage.setScene(scene);
+        stage.show();
     }
 
     // preview of the player's customized snake

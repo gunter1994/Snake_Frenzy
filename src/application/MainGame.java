@@ -33,9 +33,7 @@ public class MainGame {
     public MainGame(Player p1) {
         //make basic stage
         primaryStage = new Stage();
-
         VBox layout = new VBox();
-
         scene = new Scene(layout, Color.WHITE);
 
         //set controls for players
@@ -45,7 +43,6 @@ public class MainGame {
         player1.setPlayer(p1);
 
         layout.getChildren().add(player1.getRoot()); //have to do this to avoid errors with control setup
-
         primaryStage.setScene(scene);
         primaryStage.setTitle("Snake Frenzy");
         primaryStage.show();
@@ -74,6 +71,7 @@ public class MainGame {
             timeline = new Timeline();
             moved = false;
             score = 0;
+
             //sets up the players gameScreen
             root = new Group();
             rect = new Rectangle(0, 0, 820, 420);
@@ -168,6 +166,7 @@ public class MainGame {
             //sets up keyframes to normal properties
             KeyValue keyValueX = new KeyValue(root.scaleXProperty(), 1);
             KeyValue keyValueY = new KeyValue(root.scaleYProperty(), 1);
+
             //sets each movement to 100 duration
             Duration duration = Duration.millis(100);
 
@@ -230,7 +229,6 @@ public class MainGame {
                 @Override
                 public void handle(ActionEvent event) {
                     stage.close();
-                    scene.getWindow().hide();
                     primaryStage.close();
                     new MainGame(player);
                 }
@@ -241,7 +239,6 @@ public class MainGame {
                 @Override
                 public void handle(ActionEvent event) {
                     stage.close();
-                    scene.getWindow().hide();
                     primaryStage.close();
                     Main.showMainMenu();
                 }
@@ -265,7 +262,6 @@ public class MainGame {
 
         //creates a new food
         private void newFood(Snake s) {
-            Platform.setImplicitExit(false);
             Random rand = new Random();
             int x = 0;
             int y = 0;
