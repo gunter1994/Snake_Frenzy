@@ -1,6 +1,7 @@
 package application;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -41,7 +42,7 @@ public class Main extends Application {
         method and performs the correct action */
         btn1.setOnAction(e -> gameSelection(btn1.getText()));
         btn2.setOnAction(e -> gameSelection(btn2.getText()));
-        btn3.setOnAction(e -> gameSelection(btn3.getText()));
+        btn3.addEventHandler(ActionEvent.ACTION, (e) -> {primaryStage.hide(); new HighScoresWindow();});
         btn4.setOnAction(e -> Settings());
 
         primaryStage.setTitle("Main Menu");
@@ -49,6 +50,7 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+<<<<<<< HEAD
     /*determines the next step after a game mode is chosen
     differs for single player multiplayer and high scores*/
     public void next(String option, ComboBox<String> playerNum) {
@@ -79,6 +81,8 @@ public class Main extends Application {
         showMainMenu();
     }
 
+=======
+>>>>>>> a43aff0d34d4498715b2e221e1ff1d4527f2b29f
     //game selection window for single player, multiplayer and high scores
     public void gameSelection(String option) {
         primaryStage.hide();
@@ -123,10 +127,36 @@ public class Main extends Application {
         textArea.setEditable(false);
         borderPane.setBottom(vBox2);
 
-        Scene gameSelection = new Scene(borderPane,400,350); //(width, height)
+        Scene gameSelectionScene = new Scene(borderPane,400,350); //(width, height)
         selectGameStage.setTitle("Select Game");
-        selectGameStage.setScene(gameSelection);
+        selectGameStage.setScene(gameSelectionScene);
         selectGameStage.show();
+    }
+
+    /*determines the next step after a game mode is chosen
+    differs for single player multiplayer and high scores*/
+    public void next(String option, ComboBox<String> playerNum) {
+        selectGameStage.close();
+        if(option.equals("Single Player")) {
+            Stage stage = new Stage();
+            Scene scene = new Scene(GameSetup.setupWindow(), 350, 350);
+            stage.setScene(scene);
+            stage.show();
+        }
+        else if(option.equals("Local Multiplayer")) {
+            String[] s = playerNum.getSelectionModel().getSelectedItem().toString().split(" ");
+            int num = Integer.parseInt(s[0]);
+
+        }
+        else if(option.equals("High Scores")) {
+            //insert high scores tableView here
+        }
+        else {}
+    }
+
+    public void back(){
+        selectGameStage.close();
+        showMainMenu();
     }
 
     public void Settings() {}
