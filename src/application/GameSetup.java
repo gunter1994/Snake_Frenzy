@@ -41,8 +41,8 @@ public class GameSetup {
 
         String[] patterns = {"Striped","Spotted","None"};
         String[] colours = {"Blue", "Red", "Yellow", "Green", "Orange", "Purple"};
-        this.pattern = 0;
-        this.colour = 0;
+        this.pattern = 2;
+        this.colour = 3;
 
         Button start = new Button("Start Game");
         TextField nameField = new TextField();
@@ -61,30 +61,34 @@ public class GameSetup {
         Snake s = new Snake(this.player.getCustom(), 6, 7);
         updateSnake(s, "None", "Green", "");
 
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+        nameField.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode() == KeyCode.LEFT) {
                 cycleColour(true);
+                System.out.println(colours[this.colour]);
                 updateSnake(s, colours[this.colour], patterns[this.pattern], nameField.getText());
             }
         });
 
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+        nameField.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode() == KeyCode.RIGHT) {
                 cycleColour(false);
+                System.out.println(colours[this.colour]);
                 updateSnake(s, colours[this.colour], patterns[this.pattern], nameField.getText());
             }
         });
 
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+        nameField.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode() == KeyCode.DOWN) {
                 cyclePattern(true);
+                System.out.println(patterns[this.pattern]);
                 updateSnake(s, colours[this.colour], patterns[this.pattern], nameField.getText());
             }
         });
 
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+        nameField.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode() == KeyCode.UP) {
                 cyclePattern(false);
+                System.out.println(patterns[this.pattern]);
                 updateSnake(s, colours[this.colour], patterns[this.pattern], nameField.getText());
             }
         });
@@ -108,18 +112,18 @@ public class GameSetup {
         if (name.equals("")){
             this.player.setUsername("NoName");
         } else {
-            this.player.setUsername(name);
+            this.player.setUsername(name.replaceAll("\\s", ""));
         }
     }
 
-    // updates the snake and name (not preview
+    // updates the snake and name (not preview)
     public void setSnake(String pattern, String colour, String name){
         this.player.setCustom(pattern + "/" + colour);
 
         if (name.equals("")){
             this.player.setUsername("NoName");
         } else {
-            this.player.setUsername(name);
+            this.player.setUsername(name.replaceAll("\\s", ""));
         }
     }
 

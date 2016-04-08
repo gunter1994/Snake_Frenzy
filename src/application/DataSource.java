@@ -15,11 +15,11 @@ public class DataSource {
         Socket socket = new Socket("localhost", 8080);
         ObservableList<HighScore> highScoreList = FXCollections.observableArrayList();
 
+        //send "get"
+        //socket receives score
         PrintWriter out = new PrintWriter(socket.getOutputStream());
         out.println("GET");
         out.flush();
-        //send "get"
-        //socket receives score
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String[] score;
         String temp;

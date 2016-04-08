@@ -188,13 +188,6 @@ public class MainGame {
 
             EventHandler onFinished = new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent t) {
-                    if (checkFood()) {
-                        s.grow += 3;
-                        root.getChildren().remove(foodPic); //deletes the food if eaten
-                        score++;
-                        scoreText.setText("Score: " + score);
-                        newFood(s);
-                    }
                     //if the snake collided, end game for player
                     if (s.checkCollision()) {
                         timeline.stop();
@@ -214,7 +207,7 @@ public class MainGame {
                 }
             };
 
-            //create keyframe to do event when frame finishes (every 100 millies
+            //create keyframe to do event when frame finishes (every 100 millis)
             KeyFrame keyFrame = new KeyFrame(duration, onFinished, keyValueX, keyValueY);
             timeline.getKeyFrames().add(keyFrame);
             //start game
@@ -231,7 +224,7 @@ public class MainGame {
                 Socket socket = new Socket("localhost", 8080);
                 PrintWriter out = new PrintWriter(socket.getOutputStream());
 
-                out.println("ADD," + player.getUsername() + "," + score + "\n");
+                out.println("ADD," + player.getUsername() + "," + score);
                 out.close();
             } catch(IOException e){
                 System.err.println("Cannot connect to server");
@@ -268,12 +261,14 @@ public class MainGame {
         }
 
         //check if the snake ate the food
-        private boolean checkFood() {
+        private void checkFood() {
             if (foodPic.getX() == s.tail.getImage().getX() && foodPic.getY() == s.tail.getImage().getY()) {
                 root.getChildren().remove(foodPic); //deletes the food if eaten
-                return true;
+                s.grow += 3;
+                score++;
+                scoreText.setText("Score: " + score);
+                newFood(s);
             }
-            return false;
         }
 
         //creates a new food
@@ -284,9 +279,10 @@ public class MainGame {
             boolean available = false;
             while (!available) { //makes sure the snake isn't in the way of the new food
                 available = true;
-                x = rand.nextInt(40);
-                y = rand.nextInt(20);
+                x = rand.nextInt(40)*20;
+                y = rand.nextInt(20)*20;
                 SnakePart c = s.head;
+
                 while (c != null) {
                     if (x == c.getImage().getX() && y == c.getImage().getY()) {
                         available = false;
@@ -295,8 +291,8 @@ public class MainGame {
                     c = c.getNext();
                 }
             }
-            foodPic.setX(x * 20);
-            foodPic.setY(y * 20);
+            foodPic.setX(x);
+            foodPic.setY(y);
             root.getChildren().add(foodPic); //adds the food to the screen
         }
     }
