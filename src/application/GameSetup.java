@@ -59,37 +59,33 @@ public class GameSetup {
         this.root.getChildren().addAll(vBox);
 
         Snake s = new Snake(this.player.getCustom(), 6, 7);
-        updateSnake(s, "None", "Green", "");
+        updateSnake(s, "None", "Green");
 
         nameField.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode() == KeyCode.LEFT) {
                 cycleColour(true);
-                System.out.println(colours[this.colour]);
-                updateSnake(s, colours[this.colour], patterns[this.pattern], nameField.getText());
+                updateSnake(s, patterns[this.pattern], colours[this.colour]);
             }
         });
 
         nameField.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode() == KeyCode.RIGHT) {
                 cycleColour(false);
-                System.out.println(colours[this.colour]);
-                updateSnake(s, colours[this.colour], patterns[this.pattern], nameField.getText());
+                updateSnake(s, patterns[this.pattern], colours[this.colour]);
             }
         });
 
         nameField.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode() == KeyCode.DOWN) {
                 cyclePattern(true);
-                System.out.println(patterns[this.pattern]);
-                updateSnake(s, colours[this.colour], patterns[this.pattern], nameField.getText());
+                updateSnake(s, patterns[this.pattern], colours[this.colour]);
             }
         });
 
         nameField.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode() == KeyCode.UP) {
                 cyclePattern(false);
-                System.out.println(patterns[this.pattern]);
-                updateSnake(s, colours[this.colour], patterns[this.pattern], nameField.getText());
+                updateSnake(s, patterns[this.pattern], colours[this.colour]);
             }
         });
 
@@ -103,17 +99,14 @@ public class GameSetup {
     // preview of the player's customized snake
 
     // updates the snake preview and name
-    private void updateSnake(Snake s, String pattern, String colour, String name){
-        this.player.setCustom(pattern + "/" + colour);
+    private void updateSnake(Snake s, String pattern, String colour){
 
+        // sets player's selected colour/pattern
+        // then changes the picture folder in snake object
+        this.player.setCustom(pattern + "/" + colour);
+        s.setPic(player.getCustom());
         s.clearSnake(this.root);
         s.drawSnake(this.root);
-
-        if (name.equals("")){
-            this.player.setUsername("NoName");
-        } else {
-            this.player.setUsername(name.replaceAll("\\s", ""));
-        }
     }
 
     // updates the snake and name (not preview)
