@@ -13,9 +13,9 @@ import javafx.stage.Stage;
 
 //creates the main menu window
 public class Main extends Application {
-    static Stage primaryStage;
-    Stage selectGameStage;
-    static ComboBox<String> playerNum;
+    private static Stage primaryStage;
+    private Stage selectGameStage;
+    private static ComboBox<String> playerNum;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -51,7 +51,7 @@ public class Main extends Application {
     }
 
     //game selection window for single player, multiplayer and high scores
-    public void gameSelection(String option) {
+    private void gameSelection(String option) {
         primaryStage.hide();
         selectGameStage = new Stage();
 
@@ -102,7 +102,7 @@ public class Main extends Application {
 
     /*determines the next step after a game mode is chosen
     differs for single player multiplayer and high scores*/
-    public void next(String option, ComboBox<String> playerNum) {
+    private void next(String option, ComboBox<String> playerNum) {
         selectGameStage.close();
 
         if(option.equals("Single Player")) {
@@ -110,6 +110,7 @@ public class Main extends Application {
             BorderPane layout = new BorderPane();
             Scene scene = new Scene(layout, 350, 200);
             GameSetup window = new GameSetup(scene);
+            stage.setTitle("Game Setup");
             layout.getChildren().add(window.getRoot());
             stage.setScene(scene);
             stage.show();
@@ -117,22 +118,17 @@ public class Main extends Application {
         else if(option.equals("Local Multiplayer")) {
             String[] s = playerNum.getSelectionModel().getSelectedItem().toString().split(" ");
             int num = Integer.parseInt(s[0]);
-
         }
-        else if(option.equals("High Scores")) {
-            //insert high scores tableView here
-        }
-        else {}
     }
 
-    public void back(){
+    private void back(){
         selectGameStage.close();
         showMainMenu();
     }
 
-    public void Settings() {}
+    private void Settings() {}
 
-    public static void showMainMenu() {primaryStage.show();}
+    private static void showMainMenu() {primaryStage.show();}
 
     public static void main(String[] args) {
         launch(args);

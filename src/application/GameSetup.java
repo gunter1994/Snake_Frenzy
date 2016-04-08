@@ -16,15 +16,13 @@ public class GameSetup {
     private int pattern;
     private int colour;
 
-    // closes the gameSetup window, updates the snake (in case player doesn't click update)
-    // then starts the game
     public Group getRoot() {
         return this.root;
     }
 
     private void newGame(String pattern, String colour, String name) {
         setSnake(pattern, colour, name);
-        MainGame m = new MainGame(this.player);
+        new MainGame(this.player);
     }
 
     //sets snake customization for all players in here

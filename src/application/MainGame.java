@@ -19,12 +19,15 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.Random;
 
 public class MainGame {
-    Stage primaryStage;
-    Scene scene;
-    GamePlayer player1;
+    private Stage primaryStage;
+    private Scene scene;
+    private GamePlayer player1;
 
     public MainGame(Player p1) {
         //make basic stage
@@ -170,6 +173,10 @@ public class MainGame {
             EventHandler onFinished = new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent t) {
                     if (checkFood()) {
+                        s.grow += 3;
+                        root.getChildren().remove(foodPic); //deletes the food if eaten
+                        score++;
+                        scoreText.setText("Score: " + score);
                         newFood(s);
                     }
                     //if the snake collided, end game for player
@@ -203,15 +210,22 @@ public class MainGame {
             alive = false;
             rect.setFill(Color.GRAY);
             timeline.stop();
+
+            try {
+                Socket socket = new Socket("localhost", 8080);
+                PrintWriter out = new PrintWriter(socket.getOutputStream());
+
+                out.println("ADD," + player.getUsername() + "," + score + "\n");
+                out.close();
+            } catch(IOException e){
+                System.err.println("Cannot connect to server");
+            }
         }
 
         //check if the snake ate the food
         private boolean checkFood() {
             if (foodPic.getX() == s.tail.getImage().getX() && foodPic.getY() == s.tail.getImage().getY()) {
-                s.grow += 1;
                 root.getChildren().remove(foodPic); //deletes the food if eaten
-                score++;
-                scoreText.setText("Score: " + score);
                 return true;
             }
             return false;

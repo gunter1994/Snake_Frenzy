@@ -9,9 +9,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-/**
- * Created by adam on 07/04/16.
- */
+
 public class DataSource {
     public static ObservableList<HighScore> getAllHighScores() throws IOException {
         Socket socket = new Socket("localhost", 8080);
@@ -27,7 +25,6 @@ public class DataSource {
         String temp;
 
         while ((temp = in.readLine()) != null){
-            System.out.println(temp);
             score = temp.split(",");
             highScoreList.add(new HighScore(score[0], Integer.parseInt(score[1])));
         }

@@ -17,7 +17,7 @@ public class RequestHandler implements Runnable{
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     socket.getInputStream()));
 
-            String[] input = in.readLine().split(" ");
+            String[] input = in.readLine().split(",");
 
             // runs function based on command received
             if (input[0].equals("GET")){
@@ -31,11 +31,11 @@ public class RequestHandler implements Runnable{
                 out.flush();
                 out.close();
                 csvIn.close();
-            } else {  //                     ADD input.equals("RECEIVE") SO THAT A PLAYERNAME "GET" WON'T BREAK IT
+            } else if (input[0].equals("ADD")){
                 // input[0] is name input[1] is score
                 // appends to CSV file
                 FileWriter out = new FileWriter("highScores.csv", true);
-                out.append(input[0] + ", " + input[1] + "\n");
+                out.append(input[1] + "," + input[2] + "\n");
 
                 out.close();
                 in.close();

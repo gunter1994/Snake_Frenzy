@@ -9,15 +9,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-/**
- * Created by adam on 07/04/16.
- */
-
 
 public class HighScoresWindow {
-    public BorderPane layout;
-    public static Stage primaryStage;
-    public TableView<HighScore> highScoreTable;
+    private BorderPane layout;
+    private static Stage primaryStage;
+    private TableView<HighScore> highScoreTable;
 
     public HighScoresWindow(){
 
@@ -40,9 +36,11 @@ public class HighScoresWindow {
         scoreColumn = new TableColumn<>("Score");
         scoreColumn.setMinWidth(173);
         scoreColumn.setCellValueFactory(new PropertyValueFactory<>("Score"));
+        scoreColumn.setSortType(TableColumn.SortType.DESCENDING); //sets sort order to descending
 
         highScoreTable.getColumns().add(nameColumn);
         highScoreTable.getColumns().add(scoreColumn);
+        highScoreTable.getSortOrder().add(scoreColumn); // sorts table by high scores
 
         layout = new BorderPane();
         layout.setCenter(highScoreTable);
