@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -220,6 +221,37 @@ public class MainGame {
             } catch(IOException e){
                 System.err.println("Cannot connect to server");
             }
+
+            Stage stage = new Stage();
+            stage.setTitle("Game Over");
+
+            Button play = new Button("Play Again");
+            play.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    stage.close();
+                    scene.getWindow().hide();
+                    primaryStage.close();
+                    new MainGame(player);
+                }
+            });
+
+            Button mainMenu = new Button("Main Menu");
+            mainMenu.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    stage.close();
+                    scene.getWindow().hide();
+                    primaryStage.close();
+                    Main.showMainMenu();
+                }
+            });
+
+            HBox layout = new HBox(10);
+            layout.setStyle("-fx-background-color: white; -fx-padding: 20;");
+            layout.getChildren().addAll(play, mainMenu);
+            stage.setScene(new Scene(layout));
+            stage.show();
         }
 
         //check if the snake ate the food

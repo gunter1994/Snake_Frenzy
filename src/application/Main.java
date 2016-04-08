@@ -106,14 +106,15 @@ public class Main extends Application {
         selectGameStage.close();
 
         if(option.equals("Single Player")) {
-            Stage stage = new Stage();
+            Stage setupStage = new Stage();
             BorderPane layout = new BorderPane();
             Scene scene = new Scene(layout, 350, 200);
             GameSetup window = new GameSetup(scene);
-            stage.setTitle("Game Setup");
             layout.getChildren().add(window.getRoot());
-            stage.setScene(scene);
-            stage.show();
+
+            setupStage.setTitle("Game Setup");
+            setupStage.setScene(scene);
+            setupStage.show();
         }
         else if(option.equals("Local Multiplayer")) {
             String[] s = playerNum.getSelectionModel().getSelectedItem().toString().split(" ");
@@ -128,7 +129,7 @@ public class Main extends Application {
 
     private void Settings() {}
 
-    private static void showMainMenu() {primaryStage.show();}
+    public static void showMainMenu() {primaryStage.show();}
 
     public static void main(String[] args) {
         launch(args);
