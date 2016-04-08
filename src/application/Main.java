@@ -50,39 +50,6 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-<<<<<<< HEAD
-    /*determines the next step after a game mode is chosen
-    differs for single player multiplayer and high scores*/
-    public void next(String option, ComboBox<String> playerNum) {
-        selectGameStage.close();
-
-        if(option.equals("Single Player")) {
-            Stage stage = new Stage();
-            BorderPane layout = new BorderPane();
-            Scene scene = new Scene(layout, 350, 200);
-            GameSetup window = new GameSetup(scene);
-            layout.getChildren().add(window.getRoot());
-            stage.setScene(scene);
-            stage.show();
-        }
-        else if(option.equals("Local Multiplayer")) {
-            String[] s = playerNum.getSelectionModel().getSelectedItem().toString().split(" ");
-            int num = Integer.parseInt(s[0]);
-
-        }
-        else if(option.equals("High Scores")) {
-            //insert high scores tableView here
-        }
-        else {}
-    }
-
-    public void back(){
-        selectGameStage.close();
-        showMainMenu();
-    }
-
-=======
->>>>>>> a43aff0d34d4498715b2e221e1ff1d4527f2b29f
     //game selection window for single player, multiplayer and high scores
     public void gameSelection(String option) {
         primaryStage.hide();
@@ -137,9 +104,13 @@ public class Main extends Application {
     differs for single player multiplayer and high scores*/
     public void next(String option, ComboBox<String> playerNum) {
         selectGameStage.close();
+
         if(option.equals("Single Player")) {
             Stage stage = new Stage();
-            Scene scene = new Scene(GameSetup.setupWindow(), 350, 350);
+            BorderPane layout = new BorderPane();
+            Scene scene = new Scene(layout, 350, 200);
+            GameSetup window = new GameSetup(scene);
+            layout.getChildren().add(window.getRoot());
             stage.setScene(scene);
             stage.show();
         }
