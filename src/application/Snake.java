@@ -31,6 +31,14 @@ public class Snake {
         tail = c;
     }
 
+    public void clearSnake(Group root) {
+        SnakePart c = head;
+        while (c != null) {
+            root.getChildren().remove(c.getImage()); //removes the image from root
+            c = c.getNext();
+        }
+    }
+
     public void drawSnake(Group root)
     {
         //draws the snake to the screen

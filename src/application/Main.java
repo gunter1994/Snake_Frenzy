@@ -56,7 +56,10 @@ public class Main extends Application {
 
         if(option.equals("Single Player")) {
             Stage stage = new Stage();
-            Scene scene = new Scene(GameSetup.setupWindow(), 350, 350);
+            BorderPane layout = new BorderPane();
+            Scene scene = new Scene(layout, 350, 200);
+            GameSetup window = new GameSetup(scene);
+            layout.getChildren().add(window.getRoot());
             stage.setScene(scene);
             stage.show();
         }

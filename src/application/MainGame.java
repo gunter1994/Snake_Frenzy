@@ -208,7 +208,7 @@ public class MainGame {
         //check if the snake ate the food
         private boolean checkFood() {
             if (foodPic.getX() == s.tail.getImage().getX() && foodPic.getY() == s.tail.getImage().getY()) {
-                s.grow += 3;
+                s.grow += 1;
                 root.getChildren().remove(foodPic); //deletes the food if eaten
                 score++;
                 scoreText.setText("Score: " + score);
