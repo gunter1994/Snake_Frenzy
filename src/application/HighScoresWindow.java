@@ -31,12 +31,18 @@ public class HighScoresWindow {
             System.err.println("Cannot connect to server");
         }
 
-        TableColumn<HighScore, String> highColumn;
-        highColumn = new TableColumn<>("HighScoresWindow");
-        highColumn.setMinWidth(350);
-        highColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        TableColumn<HighScore, String> nameColumn;
+        nameColumn = new TableColumn<>("Name");
+        nameColumn.setMinWidth(175);
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
 
-        highScoreTable.getColumns().add(highColumn);
+        TableColumn<HighScore, Integer> scoreColumn;
+        scoreColumn = new TableColumn<>("Score");
+        scoreColumn.setMinWidth(173);
+        scoreColumn.setCellValueFactory(new PropertyValueFactory<>("Score"));
+
+        highScoreTable.getColumns().add(nameColumn);
+        highScoreTable.getColumns().add(scoreColumn);
 
         layout = new BorderPane();
         layout.setCenter(highScoreTable);

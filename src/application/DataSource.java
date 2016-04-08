@@ -18,18 +18,21 @@ public class DataSource {
         ObservableList<HighScore> highScoreList = FXCollections.observableArrayList();
 
         PrintWriter out = new PrintWriter(socket.getOutputStream());
-        out.println("Get");
+        out.println("GET");
         out.flush();
         //send "get"
         //socket receives score
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String[] score;
+        String temp;
 
-        while ((score = in.readLine().split(",")) !=null){
+        while ((temp = in.readLine()) != null){
+            System.out.println(temp);
+            score = temp.split(",");
             highScoreList.add(new HighScore(score[0], Integer.parseInt(score[1])));
         }
 
-    return null;
+        return highScoreList;
     }
 
 }
