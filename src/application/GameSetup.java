@@ -35,7 +35,7 @@ public class GameSetup {
     //sets snake customization for all players in here
     public GameSetup() {
         BorderPane layout = new BorderPane();
-        Scene scene = new Scene(layout, 350, 280);
+        Scene scene = new Scene(layout, 350, 300);
 
         this.stage = new Stage();
         this.player = new Player();
@@ -53,10 +53,11 @@ public class GameSetup {
         nameField.setAlignment(Pos.CENTER);
         nameField.setMaxWidth(150);
 
-        Label label = new Label("Use the ↑ ↓ arrow keys to adjust the snake pattern \nand the ← → arrow keys to adjust the snake colour");
-        label.setTextFill(Color.RED);
+        Label controlLabel = new Label("Use the ↑ ↓ arrow keys to adjust the snake pattern \n" +
+                "and the ← → arrow keys to adjust the snake colour");
+        controlLabel.setTextFill(Color.RED);
 
-        VBox vBox = new VBox(namePrompt, nameField, start, label);
+        VBox vBox = new VBox(namePrompt, nameField, start, controlLabel);
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(20);
         vBox.setPrefSize(350, 250);
@@ -117,7 +118,7 @@ public class GameSetup {
     }
 
     // updates the snake and name (not preview)
-    public void setSnake(String pattern, String colour, String name){
+    private void setSnake(String pattern, String colour, String name){
         this.player.setCustom(pattern + "/" + colour);
 
         if (name.equals("")){
