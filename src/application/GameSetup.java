@@ -1,14 +1,17 @@
 package application;
 
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import static java.awt.Color.RED;
 import static java.awt.SystemColor.window;
 
 public class GameSetup {
@@ -32,7 +35,7 @@ public class GameSetup {
     //sets snake customization for all players in here
     public GameSetup() {
         BorderPane layout = new BorderPane();
-        Scene scene = new Scene(layout, 350, 200);
+        Scene scene = new Scene(layout, 350, 250);
 
         this.stage = new Stage();
         this.player = new Player();
@@ -45,20 +48,24 @@ public class GameSetup {
         this.colour = 3;
 
         Button start = new Button("Start Game");
+        Label namePrompt = new Label("Enter Name:");
         TextField nameField = new TextField();
-        nameField.setPromptText("Enter Name");
-        nameField.setMaxWidth(200);
+        nameField.setAlignment(Pos.CENTER);
+        nameField.setMaxWidth(150);
 
-        VBox vBox = new VBox(nameField,start);
+        Label label = new Label("Use the ↑ ↓ arrow keys to adjust the snake pattern \nand the ← → arrow keys to adjust the snake colour");
+        label.setTextFill(Color.RED);
+
+        VBox vBox = new VBox(namePrompt, nameField, start, label);
         vBox.setAlignment(Pos.CENTER);
-        vBox.setSpacing(30);
-        vBox.setPrefSize(350, 150);
+        vBox.setSpacing(15);
+        vBox.setPrefSize(350, 250);
 
         start.setOnAction(e -> newGame(patterns[this.pattern], colours[this.colour], nameField.getText()));
 
         this.root.getChildren().addAll(vBox);
 
-        Snake s = new Snake(this.player.getCustom(), 6, 7);
+        Snake s = new Snake(this.player.getCustom(), 6, 11); //Snake(design, hor. pos, ver pos) in pane
         updateSnake(s, "None", "Green");
 
         nameField.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
