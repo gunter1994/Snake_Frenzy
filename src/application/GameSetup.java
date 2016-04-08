@@ -35,7 +35,7 @@ public class GameSetup {
     //sets snake customization for all players in here
     public GameSetup() {
         BorderPane layout = new BorderPane();
-        Scene scene = new Scene(layout, 350, 250);
+        Scene scene = new Scene(layout, 350, 280);
 
         this.stage = new Stage();
         this.player = new Player();
@@ -58,7 +58,7 @@ public class GameSetup {
 
         VBox vBox = new VBox(namePrompt, nameField, start, label);
         vBox.setAlignment(Pos.CENTER);
-        vBox.setSpacing(15);
+        vBox.setSpacing(20);
         vBox.setPrefSize(350, 250);
 
         start.setOnAction(e -> newGame(patterns[this.pattern], colours[this.colour], nameField.getText()));
