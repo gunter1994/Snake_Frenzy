@@ -54,6 +54,7 @@ public class MainGame {
         private Group root;
         private Timeline timeline;
         private boolean alive;
+        private boolean paused = false;
         private Snake s;
         private int dir;
         private int storedDir;
@@ -122,6 +123,21 @@ public class MainGame {
                         moved = true;
                     } else if (dir != 1 && moved) {
                         storedDir = 3;
+                    }
+                }
+            });
+
+            scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+                if (key.getCode() == KeyCode.ESCAPE) {
+                    if (paused) {
+                        timeline.play();
+                        paused = false;
+                        rect.setFill(Color.WHITE);
+                    }
+                    else {
+                        timeline.pause();
+                        paused = true;
+                        rect.setFill(Color.GRAY);
                     }
                 }
             });
