@@ -1,5 +1,6 @@
 package application;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -19,8 +20,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Random;
 
@@ -210,6 +214,15 @@ class MainGame {
                 out.close();
             } catch(IOException e){
                 System.err.println("Cannot connect to server");
+            } finally{
+                try {
+                    FileWriter out = new FileWriter("localScores.csv", true);
+                    out.append(player.getUsername() + "," + score + "\n");
+
+                    out.close();
+                }catch(IOException e){
+                    System.err.println("something fucked up real good");
+                }
             }
 
 
