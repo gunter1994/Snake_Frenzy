@@ -32,7 +32,6 @@ public class DataSource {
 
             return highScoreList;
         } catch(IOException e){
-            System.out.println("Nothing");
             ObservableList<HighScore> localScoreList = FXCollections.observableArrayList();
             BufferedReader read = new BufferedReader(new FileReader("localScores.csv"));
             String[] lscore;
