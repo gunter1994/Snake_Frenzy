@@ -5,8 +5,9 @@ This is the repository for our "snake frenzy" project
 * Title: Snake Frenzy
 
 ####Project Description:
-	For our project we are making the game snake. We plan to include a login, multiplayer for competitive play, 
-	single player for casual play, high scores, possibly multiple modified versions of the game etc. 
+	For our project we are making the game snake. We plan to include multiplayer for competitive play, 
+	single player for casual play, possibly multiple modified versions of the game, snake
+	customization and username input for high scores.
 
 ####Project Requirements:
 * GUI
