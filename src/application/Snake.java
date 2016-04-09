@@ -4,23 +4,16 @@ import javafx.scene.Group;
 import javafx.scene.image.Image;
 import java.io.File;
 
-/**
- * Created by gunter on 3/20/16.
- */
-public class Snake {
-    public SnakePart head;
-    public SnakePart tail;
-    public int grow;
+class Snake {
+    SnakePart head; // head of the link list, tail of the snake
+    SnakePart tail; // tail of the link list, head of the snake
+    int grow;
     private String pic;
-    public void setPic(String i) {
+    void setPic(String i) {
         this.pic = i;
     }
 
-    public String getPic() {
-        return this.pic;
-    }
-
-    public Snake(String pic, int x, int y) {
+    Snake(String pic, int x, int y) {
         this.setPic(pic);
         SnakePart c = new SnakePart(x*20, y*20);
         head = c;
@@ -31,7 +24,8 @@ public class Snake {
         tail = c;
     }
 
-    public void clearSnake(Group root) {
+    // clears the snake picture from the window
+    void clearSnake(Group root) {
         SnakePart c = head;
         while (c != null) {
             root.getChildren().remove(c.getImage()); //removes the image from root
@@ -39,7 +33,8 @@ public class Snake {
         }
     }
 
-    public void drawSnake(Group root)
+    // draws the snake from tail to head
+    void drawSnake(Group root)
     {
         //draws the snake to the screen
         SnakePart c = head;
@@ -47,22 +42,22 @@ public class Snake {
             //checks what image to use
             if (c == head)
             {
-                c.getImage().setImage((new Image(new File("snake_art/" + this.getPic() + "/tail.png").toURI().toString())));
+                c.getImage().setImage((new Image(new File("snake_art/" + pic + "/tail.png").toURI().toString())));
             }
             else if (c == tail)
             {
-                c.getImage().setImage((new Image(new File("snake_art/" + this.getPic() + "/head.png").toURI().toString())));
+                c.getImage().setImage((new Image(new File("snake_art/" + pic + "/head.png").toURI().toString())));
             }
             else
             {
-                c.getImage().setImage(new Image(new File("snake_art/" + this.getPic() + "/body.png").toURI().toString()));
+                c.getImage().setImage(new Image(new File("snake_art/" + pic + "/body.png").toURI().toString()));
             }
             root.getChildren().add(c.getImage()); //adds the imageview to the screen
             c = c.getNext();
         }
     }
 
-    public void move(Group root, int d)
+    void move(Group root, int d)
     {
         //only moves if not colliding
         if (!this.checkCollision()) {
@@ -72,7 +67,7 @@ public class Snake {
             while (deCorn !=tail) {
                 if (deCorn.getCleanup() != -1) {
                     deCorn.getImage().setRotate(deCorn.getCleanup());
-                    deCorn.getImage().setImage(new Image(new File("snake_art/" + this.getPic() + "/body.png").toURI().toString()));
+                    deCorn.getImage().setImage(new Image(new File("snake_art/" + pic + "/body.png").toURI().toString()));
                     deCorn.setCleanup(-1);
                 }
                 deCorn = deCorn.getNext();
@@ -113,7 +108,8 @@ public class Snake {
             } else if (d == 3) {
                 tail.getImage().setRotate(270.0);
             }
-            //body procedure
+
+            // moves the body of the snake and sets the rotation
             while (c != tail) {
                 c.getImage().setX(c.getNext().getImage().getX());
                 c.getImage().setY(c.getNext().getImage().getY());
@@ -134,15 +130,17 @@ public class Snake {
                     else {
                         cornerOri = 3;
                     }
-                    c.getImage().setImage(new Image(new File("snake_art/" + this.getPic() + "/corner.png").toURI().toString()));
+
+                    // sets the picture to a corner picture
+                    c.getImage().setImage(new Image(new File("snake_art/" + pic + "/corner.png").toURI().toString()));
                     c.getImage().setRotate(90.0 * cornerOri);
                     c.setCleanup(c.getNext().getImage().getRotate());
                 }
-                else { //otherwise
+                else {
                     c.getImage().setRotate(c.getNext().getImage().getRotate());
                 }
                 c = c.getNext();
-            } //move head
+            } //move head of the snake
             if (d == 0) {
                 tail.getImage().setX(tail.getImage().getX() + 20);
             } else if (d == 1) {
@@ -155,14 +153,17 @@ public class Snake {
         }
     }
 
-    public boolean checkCollision() {
+
+    boolean checkCollision() {
         SnakePart c = tail; //actually the head of the snake
         //checks if snake is out of bounds
         if (c.getImage().getX() > 40*20 || c.getImage().getX() < 0 || c.getImage().getY() > 20*20 || c.getImage().getY() < 0)
         {
             return true;
         }
-        SnakePart temp = head; //checks if snake is colliding with itself
+
+        //checks if snake is colliding with itself
+        SnakePart temp = head;
         while (temp.getNext().getNext() != tail)
         {
             if (temp.getImage().getX() == c.getImage().getX() && temp.getImage().getY() == (c.getImage().getY()))

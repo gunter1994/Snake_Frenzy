@@ -72,6 +72,8 @@ class MainGame {
             moved = false;
             score = 0;
 
+            // gets high score from local high score file
+            // to print in the top corner of game
             try {
                 BufferedReader br = new BufferedReader(new FileReader("localScores.csv"));
                 int high = -1;
@@ -141,6 +143,7 @@ class MainGame {
                 }
             });
 
+            // pauses or unpauses the game
             scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
                 if (key.getCode() == KeyCode.ESCAPE) {
                     if (paused) {
@@ -283,6 +286,13 @@ class MainGame {
                 root.getChildren().remove(foodPic); //deletes the food if eaten
                 s.grow += 3;
                 score++;
+
+                // updates the high score if the score is greater
+                if (score > highScore) {
+                    highScore = score;
+                    highScoreText.setText("Highscore: " + highScore);
+                }
+
                 scoreText.setText("Score: " + score);
                 newFood(s);
             }

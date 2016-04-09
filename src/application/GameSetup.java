@@ -1,7 +1,6 @@
 package application;
 
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -11,20 +10,14 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import static java.awt.Color.RED;
-import static java.awt.SystemColor.window;
 
-public class GameSetup {
+class GameSetup {
 
     private Player player;
     private Group root;
     private Stage stage;
     private int pattern;
     private int colour;
-
-    public Group getRoot() {
-        return this.root;
-    }
 
     private void newGame(String pattern, String colour, String name) {
         setSnake(pattern, colour, name);
@@ -33,7 +26,7 @@ public class GameSetup {
     }
 
     //sets snake customization for all players in here
-    public GameSetup() {
+    GameSetup() {
         BorderPane layout = new BorderPane();
         Scene scene = new Scene(layout, 350, 300);
 
@@ -66,30 +59,30 @@ public class GameSetup {
 
         this.root.getChildren().addAll(vBox);
 
-        Snake s = new Snake(this.player.getCustom(), 6, 11); //Snake(design, hor. pos, ver pos) in pane
+        //creates default coloured snake
+        Snake s = new Snake(this.player.getCustom(), 6, 11);
         updateSnake(s, "None", "Green");
 
+
+        // adds buttons to change snake colours and patterns
         nameField.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode() == KeyCode.LEFT) {
                 cycleColour(true);
                 updateSnake(s, patterns[this.pattern], colours[this.colour]);
             }
         });
-
         nameField.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode() == KeyCode.RIGHT) {
                 cycleColour(false);
                 updateSnake(s, patterns[this.pattern], colours[this.colour]);
             }
         });
-
         nameField.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode() == KeyCode.DOWN) {
                 cyclePattern(true);
                 updateSnake(s, patterns[this.pattern], colours[this.colour]);
             }
         });
-
         nameField.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode() == KeyCode.UP) {
                 cyclePattern(false);
@@ -103,6 +96,8 @@ public class GameSetup {
         stage.setScene(scene);
         stage.show();
     }
+
+
 
     // preview of the player's customized snake
 
@@ -128,6 +123,7 @@ public class GameSetup {
         }
     }
 
+    // cycles through the pattern to change it
     private void cyclePattern(boolean t) {
         if (t) {
             this.pattern--;
@@ -142,6 +138,7 @@ public class GameSetup {
         }
     }
 
+    // cycles through the colour to change it
     private void cycleColour(boolean t) {
         if (t) {
             this.colour--;
