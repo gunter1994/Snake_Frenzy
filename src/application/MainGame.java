@@ -1,6 +1,5 @@
 package application;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -19,12 +18,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.ServerSocket;
+
+import java.io.*;
 import java.net.Socket;
 import java.util.Random;
 
@@ -64,7 +59,9 @@ class MainGame {
         private ImageView foodPic;
         private boolean moved;
         private int score;
+        private int highScore;
         private Text scoreText;
+        private Text highScoreText;
         private Player player;
         private Rectangle rect;
 
@@ -75,14 +72,29 @@ class MainGame {
             moved = false;
             score = 0;
 
+            try {
+                BufferedReader br = new BufferedReader(new FileReader("localScores.csv"));
+                int high = -1;
+                String line;
+                while ((line = br.readLine()) != null){
+                    int temp = Integer.parseInt(line.split(",")[1]);
+                    if (temp > high)
+                        high = temp;
+                }
+                highScore = high;
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+
             //sets up the players gameScreen
             root = new Group();
             rect = new Rectangle(0, 0, 820, 420);
             rect.setFill(Color.WHITE);
             Rectangle wall = new Rectangle(-20, -20, 860, 460); //so that the snake can move off screen when it dies
             wall.setFill(Color.DARKGRAY);
-            scoreText = new Text(-5, -5, "Score: " + score);
-            root.getChildren().addAll(wall, rect, scoreText);
+            scoreText = new Text(0, -5, "Score: " + score);
+            highScoreText = new Text(725, -5, "High Score: " + highScore);
+            root.getChildren().addAll(wall, rect, scoreText, highScoreText);
 
             //adds keyboard controls
             scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
