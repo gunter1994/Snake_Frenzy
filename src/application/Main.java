@@ -10,18 +10,21 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import static java.awt.SystemColor.text;
+import java.net.URL;
 
 //creates the main menu window
 public class Main extends Application {
     private static Stage primaryStage;
     private Stage selectGameStage;
     private static ComboBox<String> playerNum;
+    public static MediaPlayer mp;
+    public static Color sceneColour;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -29,17 +32,23 @@ public class Main extends Application {
         VBox vBox = new VBox(15);
         vBox.setStyle("-fx-background-color: lightgreen");
 
+        //sets up music
+        //the music works when its in the application package, I don't know how it works if it's outside though
+        URL resource = getClass().getResource("Radioactive(8-Bit).mp3");
+        Media media = new Media(resource.toString());
+        mp = new MediaPlayer(media);
+        mp.play();
+
         // snake picture for above the menu button
         Image img = new Image("CartoonSnake.png");
-        ImageView imgview = new ImageView(img);
-        imgview.setFitWidth(125); imgview.setFitHeight(125);
-        imgview.setPreserveRatio(true);
+        ImageView imgView = new ImageView(img);
+        imgView.setFitWidth(125); imgView.setFitHeight(125);
+        imgView.setPreserveRatio(true);
 
         Text title = new Text("SNAKE");
         title.setFill(Color.GREEN);
         //set custom ttf or otf font
         title.setFont(Font.loadFont("file:resources/fonts/snake.ttf", 75));
-
 
         //Create buttons
         Button onePlayerBtn = new Button("Single Player");
@@ -48,11 +57,10 @@ public class Main extends Application {
         Button settingsButton = new Button("Settings");
         Button quitGame = new Button ("Quit");
 
-        vBox.getChildren().addAll(title, imgview, onePlayerBtn,multiPlayerButton,highScoresButton,settingsButton,quitGame);
+        vBox.getChildren().addAll(title, imgView, onePlayerBtn,multiPlayerButton,highScoresButton,settingsButton,quitGame);
         vBox.setAlignment(Pos.CENTER);
 
-        /*Passes either Single Player, Multiplayer or High Scores to the gameSelection
-        method and performs the correct action */
+        //Sets up the action for each button press in the main window
         onePlayerBtn.setOnAction(e -> gameSelection(onePlayerBtn.getText()));
         multiPlayerButton.setOnAction(e -> gameSelection(multiPlayerButton.getText()));
         highScoresButton.addEventHandler(ActionEvent.ACTION, (e) -> {primaryStage.hide(); new HighScoresWindow();});
@@ -170,12 +178,25 @@ public class Main extends Application {
     }
 
     // returns to main menu
-    private void back(){
+    private void back() {
         selectGameStage.close();
         showMainMenu();
     }
 
-    private void Settings() {}
+    private void Settings() {
+
+        Stage settings = new Stage();
+        Button mute = new Button("Mute Sound");
+        mute.setOnAction(e-> mp.setMute(true));
+        VBox vBox = new VBox();
+        vBox.setAlignment(Pos.CENTER);
+        vBox.getChildren().addAll(mute);
+
+        settings.setScene(new Scene(vBox, 300,300));
+        settings.show();
+
+
+    }
 
     static void showMainMenu() {primaryStage.show();}
 

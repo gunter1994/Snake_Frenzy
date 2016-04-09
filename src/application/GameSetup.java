@@ -102,7 +102,7 @@ class GameSetup {
     // preview of the player's customized snake
 
     // updates the snake preview and name
-    private void updateSnake(Snake s, String pattern, String colour){
+    private void updateSnake(Snake s, String pattern, String colour) {
 
         // sets player's selected colour/pattern
         // then changes the picture folder in snake object
@@ -113,7 +113,7 @@ class GameSetup {
     }
 
     // updates the snake and name (not preview)
-    private void setSnake(String pattern, String colour, String name){
+    private void setSnake(String pattern, String colour, String name) {
         this.player.setCustom(pattern + "/" + colour);
 
         if (name.equals("")){
