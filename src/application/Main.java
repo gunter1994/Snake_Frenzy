@@ -82,37 +82,42 @@ public class Main extends Application {
 
         //Create strings for the rules of each game mode
         String classicRules = "Use 'wasd' or the arrow keys to maneuver your snake and eat objects to collect points." +
+                " ESC Button is used to pause. " +
                 " As your snake eats objects your snake will grow in length. Make sure not to bump into the walls" +
                 " or yourself or else it is game over!";
 
         String speedRules = "Use 'wasd' or the arrow keys to maneuver your snake and eat objects to collect points." +
+                " ESC Button is used to pause. " +
                 " Beware though! Your snake will move faster than normal, so make sure you can make those quick turns" +
                 " without bumping into anything, or else it os game over!";
 
-        String timedRules =  "";
+        String timedRules =  "Use 'wasd' or the arrow keys to maneuver your snake and eat objects to collect points." +
+                " ESC Button is used to pause. " +
+                "Hope you know how to play this because Sam didn't write it out";
 
-        String obstaclerRules = "";
+        String obstaclerRules = "Use 'wasd' or the arrow keys to maneuver your snake and eat objects to collect points." +
+                " ESC Button is used to pause. " +
+                "This one you'll have to figure out yourself because sam didn't explain";
 
         TextArea textArea = new TextArea();
         textArea.setWrapText(true);
         textArea.setStyle("-fx-font-size: 15px");
 
         gameModes.setOnAction(new EventHandler<ActionEvent>() {
-            String mode = "Classic Snake";
             @Override public void handle(ActionEvent e) {
+                String mode = gameModes.getValue();
                 if(mode.equals("Classic Snake")) {
                     textArea.clear();
                     textArea.appendText(classicRules);
-                }
-                if(mode.equals("Speed Snake")) {
+                }else if(mode.equals("Speed Snake")) {
                     textArea.clear();
                     textArea.appendText(speedRules);
-                }
-                if(mode.equals("Timed Snake")) {
-
-                }
-                if(mode.equals("Obstacle Snake")) {
-
+                }else if(mode.equals("Timed Snake")) {
+                    textArea.clear();
+                    textArea.appendText(timedRules);
+                }else if(mode.equals("Obstacle Snake")) {
+                    textArea.clear();
+                    textArea.appendText(obstaclerRules);
                 }
             }
         });
@@ -172,7 +177,7 @@ public class Main extends Application {
 
     private void Settings() {}
 
-    public static void showMainMenu() {primaryStage.show();}
+    static void showMainMenu() {primaryStage.show();}
 
     public static void main(String[] args) {
         launch(args);
