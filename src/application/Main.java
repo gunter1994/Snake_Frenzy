@@ -34,9 +34,10 @@ public class Main extends Application {
 
         //sets up music
         //the music works when its in the application package, I don't know how it works if it's outside though
-        URL resource = getClass().getResource("Radioactive(8-Bit).mp3");
+        URL resource = getClass().getResource("loop.mp3");
         Media media = new Media(resource.toString());
         mp = new MediaPlayer(media);
+        mp.setCycleCount(MediaPlayer.INDEFINITE);
         mp.play();
 
         // snake picture for above the menu button
