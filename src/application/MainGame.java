@@ -91,6 +91,8 @@ class MainGame {
                         high = temp;
                 }
                 highScore = high;
+            } catch (FileNotFoundException e) {
+                highScore = 0;
             } catch (IOException e){
                 e.printStackTrace();
             }
