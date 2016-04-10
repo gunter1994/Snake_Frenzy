@@ -16,6 +16,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.io.File;
 import java.net.URL;
 
 //creates the main menu window
@@ -23,7 +25,7 @@ public class Main extends Application {
     private static Stage primaryStage;
     private Stage selectGameStage;
     private static ComboBox<String> playerNum;
-    public static MediaPlayer mp;
+    private Audio music;
     public static Color sceneColour;
 
     @Override
@@ -33,12 +35,8 @@ public class Main extends Application {
         vBox.setStyle("-fx-background-color: lightgreen");
 
         //sets up music
-        //the music works when its in the application package, I don't know how it works if it's outside though
-        URL resource = getClass().getResource("loop.mp3");
-        Media media = new Media(resource.toString());
-        mp = new MediaPlayer(media);
-        mp.setCycleCount(MediaPlayer.INDEFINITE);
-        mp.play();
+        music = new Audio();
+        music.startGame();
 
         // snake picture for above the menu button
         Image img = new Image("CartoonSnake.png");
@@ -188,7 +186,14 @@ public class Main extends Application {
 
         Stage settings = new Stage();
         Button mute = new Button("Mute Sound");
-        mute.setOnAction(e-> mp.setMute(true));
+        mute.setOnAction(e-> {
+            music.muteSong();
+            if (mute.getText().equals("Mute Sound")) {
+                mute.setText("UnMute Sound");
+            } else {
+                mute.setText("Mute Sound");
+            }
+        });
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.CENTER);
         vBox.getChildren().addAll(mute);
