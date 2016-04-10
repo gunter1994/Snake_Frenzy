@@ -28,6 +28,7 @@ class MainGame {
     private Stage primaryStage;
     private Scene scene;
     private GamePlayer player1;
+    private Audio song;
 
     MainGame(Player p1) {
         //make basic stage
@@ -45,6 +46,13 @@ class MainGame {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Snake Frenzy");
         primaryStage.show();
+
+        /*
+        if(p1.getUsername().equalsIgnoreCase("shrek")){
+            //song = new Audio();
+            //song.startGameFile("shreksong.mp3");
+            //player1.run();
+        }else{ player1.run();}*/
 
         player1.run();
     }
@@ -219,6 +227,7 @@ class MainGame {
         private void gameOver() {
             rect.setFill(Color.GRAY);
             timeline.stop();
+
 
             // sends name and score to the high score server
             try {

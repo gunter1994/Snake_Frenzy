@@ -5,6 +5,8 @@ package application;
  */
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+
+import java.io.IOException;
 import java.net.URL;
 
 public class Audio {
@@ -17,6 +19,22 @@ public class Audio {
         Media m = new Media(resource.toString());
         MediaPlayer player = new MediaPlayer(m);
         player.play();
+    }
+
+    public void startGameFile(String fileName) {
+        URL resource1 = getClass().getResource("/audio/" + fileName);
+        Media intro = new Media(resource1.toString());
+        Media loop = new Media(resource1.toString());
+        introPlayer = new MediaPlayer(intro);
+        introPlayer.play();
+        introPlayer.setOnEndOfMedia(new Runnable() {
+            @Override
+            public void run() {
+                mainSong = new MediaPlayer(loop);
+                mainSong.setCycleCount(MediaPlayer.INDEFINITE);
+                mainSong.play();
+            }
+        });
     }
 
     public void startGame() {
@@ -49,4 +67,10 @@ public class Audio {
             introPlayer.setMute(false);
         }
     }
+
+    /*public void stopSong(){
+
+            mainSong.stop();
+            introPlayer.stop();
+    }*/
 }
