@@ -118,9 +118,9 @@ class GameSetup {
 
         if (name.equals("")){
             this.player.setUsername("NoName");
-        } else if(name.equals("Shrek")){
+        } else if(name.equalsIgnoreCase("Shrek")){
             this.player.setCustom(".shrek");
-        } else if(name.equals("Sam") || name.equals("Samus")){
+        } else if(name.equalsIgnoreCase("Sam") || name.equalsIgnoreCase("Samus")){
             this.player.setCustom(".samus");
         }
         else {
