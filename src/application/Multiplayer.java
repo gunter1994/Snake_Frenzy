@@ -24,56 +24,61 @@ import java.util.Random;
 public class Multiplayer {
     Stage primaryStage;
     Scene scene;
-    GamePlayer player1;
-    GamePlayer player2;
-    GamePlayer player3;
-    GamePlayer player4;
+    GamePlayer[] players;
     int numAlive;
 
-    public Multiplayer(Player p1, Player p2, Player p3, Player p4) {
+    public Multiplayer(Player[] ps) {
         //make basic stage
         primaryStage = new Stage();
         HBox hbox = new HBox();
         VBox v1 = new VBox();
         VBox v2 = new VBox();
+        /*VBox wins = new VBox();
+        Text[] topTable = new Text[];
+
+        for (int l = 0; l < ps.length) {
+
+        }*/
+
+        players = new GamePlayer[ps.length];
 
         scene = new Scene(hbox, Color.WHITE);
 
-        //set controls for players
+        //set controls for players, and add players to their in game counterparts
         KeyCode[] keys1 = {KeyCode.RIGHT, KeyCode.DOWN, KeyCode.LEFT, KeyCode.UP};
-        player1 = new GamePlayer(keys1);
+        players[0] = new GamePlayer(keys1);
+        players[0].setPlayer(ps[0]);
         KeyCode[] keys2 = {KeyCode.D, KeyCode.S, KeyCode.A, KeyCode.W};
-        player2 = new GamePlayer(keys2);
-        KeyCode[] keys3 = {KeyCode.NUMPAD6, KeyCode.NUMPAD5, KeyCode.NUMPAD4, KeyCode.NUMPAD8};
-        player3 = new GamePlayer(keys3);
-        KeyCode[] keys4 = {KeyCode.L, KeyCode.K, KeyCode.J, KeyCode.I};
-        player4 = new GamePlayer(keys4);
+        players[1] = new GamePlayer(keys2);
+        players[1].setPlayer(ps[1]);
 
-        //add players to the in game players
-        player1.setPlayer(p1);
-        player2.setPlayer(p2);
-        player3.setPlayer(p3);
-        player4.setPlayer(p4);
+        if (ps.length > 2) {
+            KeyCode[] keys3 = {KeyCode.NUMPAD6, KeyCode.NUMPAD5, KeyCode.NUMPAD4, KeyCode.NUMPAD8};
+            players[2] = new GamePlayer(keys3);
+            players[2].setPlayer(ps[2]);
+        } else if (ps.length > 3) {
+            KeyCode[] keys4 = {KeyCode.L, KeyCode.K, KeyCode.J, KeyCode.I};
+            players[3] = new GamePlayer(keys4);
+            players[3].setPlayer(ps[3]);
+        }
 
-        //setup all 4 players displays
-        VBox layout1 = new VBox();
-        VBox layout2 = new VBox();
-        VBox layout3 = new VBox();
-        VBox layout4 = new VBox();
+        //setup all players displays
+        VBox[] vBoxes = new VBox[ps.length];
 
+        for (int k = 0; k < vBoxes.length; k++) {
+            vBoxes[k] = new VBox();
+            vBoxes[k].setStyle("-fx-border-color: black;");
+            vBoxes[k].getChildren().addAll(players[k].getRoot());
+        }
 
-        layout1.setStyle("-fx-border-color: black;");
-        layout2.setStyle("-fx-border-color: black;");
-        layout3.setStyle("-fx-border-color: black;");
-        layout4.setStyle("-fx-border-color: black;");
-
-        layout1.getChildren().addAll(player1.getRoot());
-        layout2.getChildren().addAll(player2.getRoot());
-        layout3.getChildren().addAll(player3.getRoot());
-        layout4.getChildren().addAll(player4.getRoot());
-
-        v1.getChildren().addAll(layout1, layout3);
-        v2.getChildren().addAll(layout2, layout4);
+        v1.getChildren().add(vBoxes[0]);
+        v2.getChildren().add(vBoxes[1]);
+        if (players.length > 2) {
+            v1.getChildren().add(vBoxes[2]);
+        }
+        else if (players.length > 3){
+            v2.getChildren().add(vBoxes[3]);
+        }
         hbox.getChildren().addAll(v1,v2);
 
         primaryStage.setScene(scene);
@@ -81,38 +86,30 @@ public class Multiplayer {
         primaryStage.show();
 
         //makes program an fx application thread
-        Platform.runLater(player1);
-        Platform.runLater(player2);
-        Platform.runLater(player3);
-        Platform.runLater(player4);
+        for (int h = 0; h < players.length; h++) {
+            Platform.runLater(players[h]);
+        }
 
-        numAlive = 4;
+        numAlive = players.length;
     }
 
     public void doneCheck() {
         numAlive--;
         //if less than 2 players are alive, it ends the game
-        if (numAlive < 2){
-            String winner;
-            //primaryStage.close();
-            if (player1.getAlive()){
-                winner = player1.getPlayer().getUsername();
-                player1.getTimeline().stop();
-            }
-            else if (player2.getAlive()){
-                winner = player2.getPlayer().getUsername();
-                player2.getTimeline().stop();
-            }
-            else if (player3.getAlive()){
-                winner = player3.getPlayer().getUsername();
-                player3.getTimeline().stop();
-            }
-            else if (player4.getAlive()){
-                winner = player4.getPlayer().getUsername();
-                player4.getTimeline().stop();
-            }
-            else {
-                winner = "no one";
+        if (numAlive == 0) {
+            String winner = "";
+            int topScore = 0;
+            int current;
+            for (int i = 0; i < players.length; i++) {
+                current = players[i].getScore();
+                if (current > topScore) {
+                    topScore = current;
+                    winner = players[i].getPlayer().getUsername();
+                }
+                else if (current == topScore) {
+                    topScore = current;
+                    winner += " and " + players[i].getPlayer().getUsername();
+                }
             }
             //prints the winner
             Text text = new Text(winner + " wins!");
@@ -129,11 +126,10 @@ public class Multiplayer {
     private class GamePlayer extends Thread {
         private Group root;
         private Timeline timeline;
-        private boolean alive;
         private Snake s;
         private int dir;
         private int storedDir;
-        private ImageView foodPic;
+        private Food food;
         private boolean moved;
         private int score;
         private Text scoreText;
@@ -142,8 +138,6 @@ public class Multiplayer {
 
         public GamePlayer(KeyCode[] keys){
             //sets up all parameters for game
-            foodPic = new ImageView(new Image(new File("snake_art/food.png").toURI().toString()));
-            alive = true;
             timeline = new Timeline();
             moved = false;
             score = 0;
@@ -212,10 +206,6 @@ public class Multiplayer {
             return root;
         }
 
-        public boolean getAlive() {
-            return alive;
-        }
-
         public Text getScoreText() {
             return scoreText;
         }
@@ -232,6 +222,10 @@ public class Multiplayer {
             return timeline;
         }
 
+        public int getScore() {
+            return score;
+        }
+
         public void run() {
             //creates snake and sets up score/directions
             dir = 0;
@@ -239,7 +233,7 @@ public class Multiplayer {
             score = 0;
             s = new Snake(player.getCustom(), 17, 10);
             s.drawSnake(root);
-            newFood(s);
+            food = new Food(s, root);
 
             //makes game run until stopped
             timeline.setCycleCount(Timeline.INDEFINITE);
@@ -252,9 +246,6 @@ public class Multiplayer {
 
             EventHandler onFinished = new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent t) {
-                    if (checkFood()) {
-                        newFood(s);
-                    }
                     //if the snake collided, end game for player
                     if (s.checkCollision()) {
                         timeline.stop();
@@ -269,7 +260,11 @@ public class Multiplayer {
                         s.move(root, dir);
                     }
                     //checks if the snake ate the food
-                    checkFood();
+                    if (food.checkFood(root, s)) {
+                        s.grow += 3;
+                        score++;
+                        scoreText.setText("Score: " + score);
+                    }
                     moved = false;
                 }
             };
@@ -283,48 +278,9 @@ public class Multiplayer {
 
         //end game for player
         public void gameOver() {
-            alive = false;
             rect.setFill(Color.GRAY);
             timeline.stop();
             doneCheck();
-        }
-
-        //check if the snake ate the food
-        //check if the snake ate the food
-        private boolean checkFood() {
-            if (foodPic.getX() == s.tail.getImage().getX() && foodPic.getY() == s.tail.getImage().getY()) {
-                s.grow += 1;
-                root.getChildren().remove(foodPic); //deletes the food if eaten
-                score++;
-                scoreText.setText("Score: " + score);
-                return true;
-            }
-            return false;
-        }
-
-        //creates a new food
-        private void newFood(Snake s) {
-            Platform.setImplicitExit(false);
-            Random rand = new Random();
-            int x = 0;
-            int y = 0;
-            boolean available = false;
-            while (!available) { //makes sure the snake isn't in the way of the new food
-                available = true;
-                x = rand.nextInt(40);
-                y = rand.nextInt(20);
-                SnakePart c = s.head;
-                while (c != null) {
-                    if (x == c.getImage().getX() && y == c.getImage().getY()) {
-                        available = false;
-                        break;
-                    }
-                    c = c.getNext();
-                }
-            }
-            foodPic.setX(x * 20);
-            foodPic.setY(y * 20);
-            root.getChildren().add(foodPic); //adds the food to the screen
         }
     }
 }

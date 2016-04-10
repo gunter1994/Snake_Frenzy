@@ -171,8 +171,9 @@ public class Main extends Application {
             new GameSetup();
         }
         else if(option.equals("Local Multiplayer")) {
-            String[] s = playerNum.getSelectionModel().getSelectedItem().toString().split(" ");
+            String[] s = playerNum.getSelectionModel().getSelectedItem().split(" ");
             int num = Integer.parseInt(s[0]);
+            new MultiSetup(num);
         }
     }
 

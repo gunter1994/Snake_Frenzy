@@ -56,7 +56,7 @@ class MainGame {
         private Snake s;
         private int dir;
         private int storedDir;
-        private ImageView foodPic;
+        private Food food;
         private boolean moved;
         private int score;
         private int highScore;
@@ -67,7 +67,6 @@ class MainGame {
 
         GamePlayer() {
             //sets up all parameters for game
-            foodPic = new ImageView(new Image(new File("snake_art/food.png").toURI().toString()));
             timeline = new Timeline();
             moved = false;
             score = 0;
@@ -175,7 +174,7 @@ class MainGame {
             score = 0;
             s = new Snake(player.getCustom(), 17, 10);
             s.drawSnake(root);
-            newFood(s);
+            food = new Food(s, root);
 
             //makes game run until stopped
             timeline.setCycleCount(Timeline.INDEFINITE);
@@ -203,7 +202,18 @@ class MainGame {
                         s.move(root, dir);
                     }
                     //checks if the snake ate the food
-                    checkFood();
+                    if (food.checkFood(root, s)) {
+                        s.grow += 3;
+                        score++;
+
+                        // updates the high score if the score is greater
+                        if (score > highScore) {
+                            highScore = score;
+                            highScoreText.setText("Highscore: " + highScore);
+                        }
+
+                        scoreText.setText("Score: " + score);
+                    }
                     moved = false;
                 }
             };
@@ -278,50 +288,6 @@ class MainGame {
             layout.getChildren().addAll(play, mainMenu, quitGame);
             stage.setScene(new Scene(layout));
             stage.show();
-        }
-
-        //check if the snake ate the food
-        private void checkFood() {
-            if (foodPic.getX() == s.tail.getImage().getX() && foodPic.getY() == s.tail.getImage().getY()) {
-                root.getChildren().remove(foodPic); //deletes the food if eaten
-                s.grow += 3;
-                score++;
-
-                // updates the high score if the score is greater
-                if (score > highScore) {
-                    highScore = score;
-                    highScoreText.setText("Highscore: " + highScore);
-                }
-
-                scoreText.setText("Score: " + score);
-                newFood(s);
-            }
-        }
-
-        //creates a new randomly located food not on top of the snake
-        private void newFood(Snake s) {
-            Random rand = new Random();
-            int x = 0;
-            int y = 0;
-            boolean available = false;
-            while (!available) { //makes sure the snake isn't in the way of the new food
-                available = true;
-                x = rand.nextInt(40)*20;
-                y = rand.nextInt(20)*20;
-                SnakePart c = s.head;
-
-                while (c != null) {
-                    if (x == c.getImage().getX() && y == c.getImage().getY()) {
-                        available = false;
-                        break;
-                    }
-                    c = c.getNext();
-                }
-            }
-            //sets food location then displays it
-            foodPic.setX(x);
-            foodPic.setY(y);
-            root.getChildren().add(foodPic);
         }
     }
 }
