@@ -1,4 +1,4 @@
 .idea
 *.class
 out/
-src/localScores.csv
+localScores.csv
