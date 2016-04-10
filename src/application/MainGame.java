@@ -175,6 +175,9 @@ class MainGame {
             score = 0;
             s = new Snake(player.getCustom(), 17, 10);
             s.drawSnake(root);
+            if (player.getUsername().equalsIgnoreCase("Samus")) {
+                foodPic = new ImageView(new Image(new File("snake_art/.samus/food.png").toURI().toString()));
+            }
             newFood(s);
 
             //makes game run until stopped
