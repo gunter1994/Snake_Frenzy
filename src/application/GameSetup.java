@@ -118,9 +118,15 @@ class GameSetup {
 
         if (name.equals("")){
             this.player.setUsername("NoName");
-        } else {
+        } else if(name.equals("Shrek")){
+            this.player.setCustom(".shrek");
+        } else if(name.equals("Sam") || name.equals("Samus")){
+            this.player.setCustom(".samus");
+        }
+        else {
             this.player.setUsername(name.replaceAll("\\s", ""));
         }
+
     }
 
     // cycles through the pattern to change it
