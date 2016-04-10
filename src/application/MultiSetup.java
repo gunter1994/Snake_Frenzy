@@ -77,20 +77,22 @@ class MultiSetup {
             vBoxes[j].setSpacing(20);
             vBoxes[j].setPrefSize(350, 250);
 
-            String[] names = new String[numPlayers];
-            for (int k = 0; k < numPlayers; k++) {
-                try {
-                    names[k] = nameField[k].getText();
-                } catch(NullPointerException e) {
-                    names[k] = "";
-                }
-            }
 
             Button temp = ready[j]; //won't allow access through j
 
             ready[j].setOnAction(e -> {
                 temp.setText("Ready!");
                 temp.setStyle("-fx-background-color: green");
+
+                String[] names = new String[numPlayers];
+                for (int k = 0; k < numPlayers; k++) {
+                    try {
+                        names[k] = nameField[k].getText();
+                    } catch(NullPointerException error) {
+                        names[k] = "";
+                    }
+                }
+
                 readyChecker(ready, patterns, colours, names, players, numPlayers);
             });
 
@@ -207,9 +209,9 @@ class MultiSetup {
     private void readyChecker(Button[] ready, String[] patterns, String[] colours, String[] names, Player[] players, int numPlayers) {
         int numReady = 0;
         for (int i = 0; i < players.length; i++) {
-            if (ready[i].getText().equals("Ready!"));
-            numReady++;
-            System.out.println("test123");
+            if (ready[i].getText().equals("Ready!")) {
+                numReady++;
+            }
         }
         if (numReady == numPlayers) {
             newGame(patterns, colours, names, players);
