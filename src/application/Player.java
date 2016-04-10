@@ -8,9 +8,10 @@ class Player {
     int highscore;
     File newFile = null;
     private String custom;
+    int wins;
 
     Player() {
-
+        wins = 0;
     }
 
     void setCustom(String c) {

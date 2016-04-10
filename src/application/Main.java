@@ -85,30 +85,27 @@ public class Main extends Application {
 
         ComboBox<String> gameModes = new ComboBox();
         gameModes.setPromptText("Game Mode");
-        gameModes.getItems().addAll("Classic Snake", "Speed Snake", "Timed Snake", "Obstacle Snake");
+        gameModes.getItems().addAll("Classic Snake", "Speed Snake", "Timed Snake");
 
         //Create strings for the rules of each game mode
-        String classicRules = "Use 'wasd' or the arrow keys to maneuver your snake and eat objects to collect points." +
-                " ESC Button is used to pause. " +
-                " As your snake eats objects your snake will grow in length. Make sure not to bump into the walls" +
-                " or yourself or else it is game over!";
+        String classicRules = "Use 'wasd' or the arrow keys to maneuver your snake and eat food to collect points." +
+                " ESC button is used to pause. As your snake eats food your snake will grow in length. You have as" +
+                " much time as you want to make your way over to food. Make sure not to bump into the walls or " +
+                "yourself or else it is game over!";
 
-        String speedRules = "Use 'wasd' or the arrow keys to maneuver your snake and eat objects to collect points." +
-                " ESC Button is used to pause. " +
-                " Beware though! Your snake will move faster than normal, so make sure you can make those quick turns" +
-                " without bumping into anything, or else it os game over!";
+        String speedRules = "Using the same controls and mechanics as Classic Snake, maneuver your snake to eat " +
+                "food, grow and collect points. Again, you have as much time as you want to get to the food. " +
+                "Beware though! Your snake will move faster than normal, so make sure you can make those quick turns " +
+                "without bumping into anything, or else it is game over!";
 
-        String timedRules =  "Use 'wasd' or the arrow keys to maneuver your snake and eat objects to collect points." +
-                " ESC Button is used to pause. " +
-                "Hope you know how to play this because Sam didn't write it out";
-
-        String obstaclerRules = "Use 'wasd' or the arrow keys to maneuver your snake and eat objects to collect points." +
-                " ESC Button is used to pause. " +
-                "This one you'll have to figure out yourself because sam didn't explain";
+        String timedRules = "Using the same controls and mechanics as Classic Snake, maneuver your snake to eat " +
+                "food, grow and and collect points. For those looking for an extra challenge, these games are now " +
+                "timed. You have 2 minutes to collect as many points as you can. Make sure you get to the food on time " +
+                "though, because they won't stay there forever!";
 
         TextArea textArea = new TextArea();
         textArea.setWrapText(true);
-        textArea.setStyle("-fx-font-size: 15px");
+        textArea.setStyle("-fx-font-size: 14px");
 
         gameModes.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
@@ -122,9 +119,6 @@ public class Main extends Application {
                 }else if(mode.equals("Timed Snake")) {
                     textArea.clear();
                     textArea.appendText(timedRules);
-                }else if(mode.equals("Obstacle Snake")) {
-                    textArea.clear();
-                    textArea.appendText(obstaclerRules);
                 }
             }
         });
@@ -171,8 +165,9 @@ public class Main extends Application {
             new GameSetup();
         }
         else if(option.equals("Local Multiplayer")) {
-            String[] s = playerNum.getSelectionModel().getSelectedItem().toString().split(" ");
+            String[] s = playerNum.getSelectionModel().getSelectedItem().split(" ");
             int num = Integer.parseInt(s[0]);
+            new MultiSetup(num);
         }
     }
 
@@ -188,10 +183,10 @@ public class Main extends Application {
         Button mute = new Button("Mute Sound");
         mute.setOnAction(e-> {
             music.muteSong();
-            if (mute.getText().equals("Mute Sound")) {
-                mute.setText("UnMute Sound");
-            } else {
+            if (mute.getText().equals("Unmute Sound")) {
                 mute.setText("Mute Sound");
+            } else {
+                mute.setText("Unmute Sound");
             }
         });
         VBox vBox = new VBox();
