@@ -18,6 +18,10 @@ public class Food {
         newFood(s, root);
     }
 
+    public void changeFood(Image image) {
+        foodPic.setImage(image);
+    }
+
     //check if the snake ate the food
     public boolean checkFood(Group root, Snake s) {
         if (foodPic.getX() == s.tail.getImage().getX() && foodPic.getY() == s.tail.getImage().getY()) {
