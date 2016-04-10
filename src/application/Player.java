@@ -8,7 +8,7 @@ class Player {
     int highscore;
     File newFile = null;
     private String custom;
-    int wins;
+    private int wins;
 
     Player() {
         wins = 0;
@@ -29,4 +29,8 @@ class Player {
     String getUsername() {
         return this.username;
     }
+
+    int getWins() { return this.wins; }
+
+    void win() { wins++; }
 }

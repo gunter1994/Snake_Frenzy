@@ -33,12 +33,6 @@ public class Multiplayer {
         HBox hbox = new HBox();
         VBox v1 = new VBox();
         VBox v2 = new VBox();
-        /*VBox wins = new VBox();
-        Text[] topTable = new Text[];
-
-        for (int l = 0; l < ps.length) {
-
-        }*/
 
         players = new GamePlayer[ps.length];
 
@@ -97,22 +91,32 @@ public class Multiplayer {
         numAlive--;
         //if less than 2 players are alive, it ends the game
         if (numAlive == 0) {
-            String winner = "";
+            Player[] winners = new Player[4];
+            for (int k = 0; k < 4; k++) {
+                winners[k] = new Player();
+            }
+            int j = 1;
             int topScore = 0;
             int current;
             for (int i = 0; i < players.length; i++) {
                 current = players[i].getScore();
                 if (current > topScore) {
                     topScore = current;
-                    winner = players[i].getPlayer().getUsername();
+                    winners[0] = players[i].getPlayer();
                 }
                 else if (current == topScore) {
                     topScore = current;
-                    winner += " and " + players[i].getPlayer().getUsername();
+                    winners[j] = players[i].getPlayer();
+                    j++;
                 }
             }
             //prints the winner
-            Text text = new Text(winner + " wins!");
+            String winner = "";
+            for (int l = 0; l < j; l++) {
+                winner += winners[l].getUsername() + " ";
+                winners[l].win();
+            }
+            Text text = new Text(winner + "wins!");
             Stage popup = new Stage();
             BorderPane layout = new BorderPane();
             layout.setCenter(text);
@@ -148,7 +152,8 @@ public class Multiplayer {
             Rectangle wall = new Rectangle(-20, -20, 860,460); //so that the snake can move off screen when it dies
             wall.setFill(Color.DARKGRAY);
             scoreText = new Text(-5, -5, "Score: " + score);
-            root.getChildren().addAll(wall, rect, scoreText);
+            Text wins = new Text(725, -5, "Wins: " + player.getWins());
+            root.getChildren().addAll(wall, rect, scoreText, wins);
 
             //adds keyboard controls
             scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
