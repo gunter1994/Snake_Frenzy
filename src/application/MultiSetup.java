@@ -170,10 +170,7 @@ class MultiSetup {
         } else if(name.equalsIgnoreCase("Sam") || name.equalsIgnoreCase("Samus")){
             player.setCustom(".samus");
         }
-        else {
-            player.setUsername(name.replaceAll("\\s", ""));
-        }
-
+        player.setUsername(name.replaceAll("\\s", ""));
     }
 
     // cycles through the pattern to change it

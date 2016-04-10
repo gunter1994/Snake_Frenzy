@@ -235,6 +235,10 @@ public class Multiplayer {
             s.drawSnake(root);
             food = new Food(s, root);
 
+            if (player.getUsername().equalsIgnoreCase("Samus")) {
+                food.changeFood(new Image(new File("snake_art/.samus/food.png").toURI().toString()));
+            }
+
             //makes game run until stopped
             timeline.setCycleCount(Timeline.INDEFINITE);
 
