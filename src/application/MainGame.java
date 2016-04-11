@@ -204,6 +204,8 @@ class MainGame {
                 public void handle(ActionEvent t) {
                     //if the snake collided, end game for player
                     if (s.checkCollision()) {
+                        audio.stopSong();
+                        audio.playSound("death.mp3");
                         timeline.stop();
                         gameOver();
                     }
@@ -243,7 +245,7 @@ class MainGame {
         private void gameOver() {
             rect.setFill(Color.GRAY);
             timeline.stop();
-
+            audio.playSound("GameOver.mp3");
 
             // sends name and score to the high score server
             try {
@@ -261,10 +263,9 @@ class MainGame {
 
                     out.close();
                 }catch(IOException e){
-                    System.err.println("something fucked up real good");
+                    e.printStackTrace();
                 }
             }
-
 
             // creates Game Over popup window
             Stage stage = new Stage();

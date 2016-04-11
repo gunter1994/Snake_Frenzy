@@ -211,7 +211,7 @@ public class Main extends Application {
 
     }
 
-    static boolean getMuted(){
+    static boolean getMuted() {
         return muted;
     }
 

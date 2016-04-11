@@ -1,5 +1,6 @@
 package application;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -12,7 +13,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 
@@ -24,7 +24,7 @@ class HighScoresWindow {
     HighScoresWindow(){
 
         primaryStage = new Stage();
-        primaryStage.setTitle("SnakeScores");
+        primaryStage.setTitle("Top 20 High Scores");
 
         try {
             highScoreTable = new TableView<>();
@@ -33,14 +33,19 @@ class HighScoresWindow {
             System.err.println("Cannot connect to server");
         }
 
+        TableColumn<HighScore, Number> placeColumn;
+        placeColumn = new TableColumn("Place");
+        placeColumn.setMinWidth(25);
+        placeColumn.setCellValueFactory(column -> new ReadOnlyObjectWrapper<>(highScoreTable.getItems().indexOf(column.getValue()) + 1));
+
         TableColumn<HighScore, String> nameColumn;
         nameColumn = new TableColumn<>("Name");
-        nameColumn.setMinWidth(175);
+        nameColumn.setMinWidth(150);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
 
         TableColumn<HighScore, Integer> scoreColumn;
         scoreColumn = new TableColumn<>("Score");
-        scoreColumn.setMinWidth(173);
+        scoreColumn.setMinWidth(150);
         scoreColumn.setCellValueFactory(new PropertyValueFactory<>("Score"));
         scoreColumn.setSortType(TableColumn.SortType.DESCENDING); //sets sort order to descending
 
@@ -59,6 +64,7 @@ class HighScoresWindow {
         backButton.setPadding(new Insets(5,0,5,0)); // sets top and bottom spacing
         backButton.setAlignment(Pos.CENTER);
 
+        highScoreTable.getColumns().add(placeColumn);
         highScoreTable.getColumns().add(nameColumn);
         highScoreTable.getColumns().add(scoreColumn);
         highScoreTable.getSortOrder().add(scoreColumn); // sorts table by high scores
