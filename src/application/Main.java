@@ -185,8 +185,10 @@ public class Main extends Application {
         Button mute;
         if (!getMuted()) {
             mute = new Button("Mute Music");
+            muted = false;
         } else {
             mute = new Button("UnMute Music");
+            muted = true;
         }
 
         mute.setOnAction(e-> {

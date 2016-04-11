@@ -25,6 +25,7 @@ class MultiSetup {
             setSnake(patterns[pattern[i]], colours[colour[i]], names[i], players[i]);
         }
         stage.close();
+        audio.stopSong();
         audio.changeSong("gameLoop.mp3");
         new Multiplayer(players, audio);
     }
