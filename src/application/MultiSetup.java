@@ -26,7 +26,7 @@ class MultiSetup {
         }
         stage.close();
         audio.changeSong("gameLoop.mp3");
-        new Multiplayer(players);
+        new Multiplayer(players, audio);
     }
 
     //sets snake customization for all players in here

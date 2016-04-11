@@ -27,9 +27,11 @@ public class Multiplayer {
     Scene scene;
     GamePlayer[] players;
     int numAlive;
+    Audio audio;
 
-    public Multiplayer(Player[] ps) {
+    public Multiplayer(Player[] ps, Audio a) {
         //make basic stage
+        audio = a;
         primaryStage = new Stage();
         HBox hbox = new HBox();
         VBox v1 = new VBox();
@@ -142,7 +144,7 @@ public class Multiplayer {
                 public void handle(ActionEvent event) {
                     stage.close();
                     primaryStage.close();
-                    new Multiplayer(returningPlayers);
+                    new Multiplayer(returningPlayers, audio);
                 }
             });
 
@@ -152,6 +154,7 @@ public class Multiplayer {
                 public void handle(ActionEvent event) {
                     stage.close();
                     primaryStage.close();
+                    audio.changeSong("loop.mp3");
                     Main.showMainMenu();
                 }
             });
