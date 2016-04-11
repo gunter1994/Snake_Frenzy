@@ -27,6 +27,7 @@ class GameSetup {
             audio.changeSong("samus.mp3");
         } else if (name.equalsIgnoreCase("sonic") && !Main.getMuted()){
             audio.changeSong("sonic.mp3");
+            audio.quietSong();
         } else {
             //default song
         }

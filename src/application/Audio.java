@@ -17,6 +17,10 @@ public class Audio {
         player.play();
     }
 
+    public void quietSong() {
+        mainSong.setVolume(0.1);
+    }
+
     public void changeSong(String fileName) {
         stopSong();
         URL resource1 = getClass().getResource("/audio/" + fileName);
