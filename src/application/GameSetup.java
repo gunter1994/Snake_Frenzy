@@ -25,8 +25,10 @@ class GameSetup {
             audio.changeSong("shreksong.mp3");
         } else if (name.equalsIgnoreCase("samus") && !Main.getMuted()) {
             audio.changeSong("samus.mp3");
+        } else if (name.equalsIgnoreCase("sonic") && !Main.getMuted()){
+            audio.changeSong("sonic.mp3");
         } else {
-            //normal song
+            //default song
         }
         setSnake(pattern, colour, name);
         stage.close();
@@ -136,6 +138,8 @@ class GameSetup {
             this.player.setCustom(".shrek");
         } else if(name.equalsIgnoreCase("Sam") || name.equalsIgnoreCase("Samus")){
             this.player.setCustom(".samus");
+        } else if (name.equalsIgnoreCase("sonic")) {
+            this.player.setCustom(".sonic");
         }
 
     }

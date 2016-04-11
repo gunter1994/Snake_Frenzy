@@ -183,6 +183,8 @@ class MainGame {
 
             if (player.getUsername().equalsIgnoreCase("Samus")) {
                 food.changeFood(new Image(new File("snake_art/.samus/food.png").toURI().toString()));
+            } else if (player.getUsername().equalsIgnoreCase("sonic")) {
+                food.changeFood(new Image(new File("snake_art/.sonic/food.png").toURI().toString()));
             }
 
             //makes game run until stopped

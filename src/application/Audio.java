@@ -18,7 +18,7 @@ public class Audio {
     }
 
     public void changeSong(String fileName) {
-        introPlayer.stop();
+        stopSong();
         URL resource1 = getClass().getResource("/audio/" + fileName);
         Media loop = new Media(resource1.toString());
         mainSong = new MediaPlayer(loop);
@@ -37,6 +37,9 @@ public class Audio {
             @Override
             public void run() {
                 mainSong = new MediaPlayer(loop);
+                if (introPlayer.isMute()) {
+                    mainSong.setMute(true);
+                }
                 mainSong.setCycleCount(MediaPlayer.INDEFINITE);
                 mainSong.play();
             }
@@ -57,8 +60,10 @@ public class Audio {
         }
     }
 
-    public void stopSong(){
-        mainSong.stop();
+    public void stopSong() {
+        if (mainSong!= null) {
+            mainSong.stop();
+        }
         introPlayer.stop();
     }
 }
