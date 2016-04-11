@@ -1,12 +1,8 @@
 package application;
 
-/**
- * Created by gunter on 4/10/16.
- */
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-import java.io.IOException;
 import java.net.URL;
 
 public class Audio {

@@ -10,26 +10,29 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.net.URL;
-
 //creates the main menu window
 public class Main extends Application {
-    private static Stage primaryStage;
+    public static Stage primaryStage;
     private Stage selectGameStage;
     private static ComboBox<String> playerNum;
-    private Audio music;
-    public static Color sceneColour;
+    private static Audio music;
+    private static boolean muted;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+
+        // makes new server thread to run along with game
+        Thread scoreServer = new Thread(new scoreServer(8080));
+        scoreServer.start();
+
+        // stops server when game ends
+        primaryStage.setOnCloseRequest(e -> application.scoreServer.stopServer());
+
         this.primaryStage = primaryStage;
         VBox vBox = new VBox(15);
         vBox.setStyle("-fx-background-color: lightgreen");
@@ -180,14 +183,14 @@ public class Main extends Application {
     private void Settings() {
 
         Stage settings = new Stage();
-        Button mute = new Button("Mute Sound");
+        Button mute = new Button("Toggle Music");
+
         mute.setOnAction(e-> {
             music.muteSong();
-            if (mute.getText().equals("Unmute Sound")) {
-                mute.setText("Mute Sound");
-            } else {
-                mute.setText("Unmute Sound");
-            }
+            if (muted)
+                muted = false;
+            else
+                muted = true;
         });
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.CENTER);
@@ -196,7 +199,14 @@ public class Main extends Application {
         settings.setScene(new Scene(vBox, 300,300));
         settings.show();
 
+    }
 
+    static boolean getMuted(){
+        return muted;
+    }
+
+    static Audio getAudio(){
+        return music;
     }
 
     static void showMainMenu() {primaryStage.show();}

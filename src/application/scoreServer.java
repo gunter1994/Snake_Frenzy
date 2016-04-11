@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import static java.lang.System.exit;
+
 // server to accept the name and score
 // of player sent when their snake dies
-public class scoreServer {
+public class scoreServer implements Runnable {
     private ServerSocket serverSocket;
 
     // constructs the server
@@ -19,7 +21,7 @@ public class scoreServer {
     }
 
     // starts a new handler thread when player connects
-    public void requestHandler() throws IOException{
+    private void requestHandler() throws IOException{
         System.out.println("High Score Server Listening..");
 
         while(true){
@@ -30,13 +32,16 @@ public class scoreServer {
     }
 
     // creates server and starts handler
-    public static void main(String[] args){
-        scoreServer server = new scoreServer(8080);
+    public void run(){
         try{
-            server.requestHandler();
+            requestHandler();
         }catch(IOException e){
             System.err.println("Error");
             e.printStackTrace();
         }
+    }
+
+    public static void stopServer(){
+        exit(0);
     }
 }

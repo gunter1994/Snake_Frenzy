@@ -45,12 +45,15 @@ class MainGame {
         primaryStage.setTitle("Snake Frenzy");
         primaryStage.show();
 
-        /*
-        if(p1.getUsername().equalsIgnoreCase("shrek")){
-            //song = new Audio();
-            //song.startGameFile("shreksong.mp3");
-            //player1.run();
-        }else{ player1.run();}*/
+        if(p1.getUsername().equalsIgnoreCase("shrek") && !Main.getMuted()){
+            Main.getAudio().muteSong();
+            song = new Audio();
+            song.startGameFile("shreksong.mp3");
+        } else if (p1.getUsername().equalsIgnoreCase("samus") && !Main.getMuted()) {
+            Main.getAudio().muteSong();
+            song = new Audio();
+            song.startGameFile("samus.mp3");
+        }
 
         player1.run();
     }
@@ -165,6 +168,8 @@ class MainGame {
                     }
                 }
             });
+
+            primaryStage.setOnCloseRequest(e -> application.scoreServer.stopServer());
         }
 
         Group getRoot() {
