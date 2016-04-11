@@ -40,9 +40,9 @@ public class Multiplayer {
         scene = new Scene(hbox, Color.WHITE);
 
         //set controls for players, and add players to their in game counterparts
-        KeyCode[] keys1 = {KeyCode.RIGHT, KeyCode.DOWN, KeyCode.LEFT, KeyCode.UP};
+        KeyCode[] keys1 = {KeyCode.D, KeyCode.S, KeyCode.A, KeyCode.W};
         players[0] = new GamePlayer(keys1, ps[0]);
-        KeyCode[] keys2 = {KeyCode.D, KeyCode.S, KeyCode.A, KeyCode.W};
+        KeyCode[] keys2 = {KeyCode.RIGHT, KeyCode.DOWN, KeyCode.LEFT, KeyCode.UP};
         players[1] = new GamePlayer(keys2, ps[1]);
 
         if (ps.length > 2) {
