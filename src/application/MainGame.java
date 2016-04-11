@@ -256,14 +256,18 @@ class MainGame {
                 out.close();
             } catch(IOException e){
                 System.err.println("Cannot connect to server");
-            } finally{
                 try {
                     FileWriter out = new FileWriter("localScores.csv", true);
                     out.append(player.getUsername() + "," + score + "\n");
 
                     out.close();
+<<<<<<< HEAD
                 }catch(IOException e){
                     e.printStackTrace();
+=======
+                }catch(IOException i){
+                    i.printStackTrace();
+>>>>>>> eaae8a66afdf49fadfcb7a86e92d4d9abe4b6a7d
                 }
             }
 
