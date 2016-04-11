@@ -26,10 +26,11 @@ class MainGame {
     private Stage primaryStage;
     private Scene scene;
     private GamePlayer player1;
-    private Audio song;
+    private Audio audio;
 
-    MainGame(Player p1) {
+    MainGame(Player p1, Audio a) {
         //make basic stage
+        audio = a;
         primaryStage = new Stage();
         VBox layout = new VBox();
         scene = new Scene(layout, Color.WHITE);
@@ -44,16 +45,6 @@ class MainGame {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Snake Frenzy");
         primaryStage.show();
-
-        if(p1.getUsername().equalsIgnoreCase("shrek") && !Main.getMuted()){
-            Main.getAudio().muteSong();
-            song = new Audio();
-            song.startGameFile("shreksong.mp3");
-        } else if (p1.getUsername().equalsIgnoreCase("samus") && !Main.getMuted()) {
-            Main.getAudio().muteSong();
-            song = new Audio();
-            song.startGameFile("samus.mp3");
-        }
 
         player1.run();
     }
@@ -280,7 +271,7 @@ class MainGame {
                 public void handle(ActionEvent event) {
                     stage.close();
                     primaryStage.close();
-                    new MainGame(player);
+                    new MainGame(player, audio);
                 }
             });
 
@@ -288,6 +279,7 @@ class MainGame {
             mainMenu.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
+                    audio.stopSong();
                     stage.close();
                     primaryStage.close();
                     Main.showMainMenu();

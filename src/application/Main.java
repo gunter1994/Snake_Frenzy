@@ -38,8 +38,7 @@ public class Main extends Application {
         vBox.setStyle("-fx-background-color: lightgreen");
 
         //sets up music
-        music = new Audio();
-        music.startGame();
+        startMusic();
 
         // snake picture for above the menu button
         Image img = new Image("CartoonSnake.png");
@@ -165,7 +164,7 @@ public class Main extends Application {
         selectGameStage.close();
 
         if(option.equals("Single Player")) {
-            new GameSetup();
+            new GameSetup(music);
         }
         else if(option.equals("Local Multiplayer")) {
             String[] s = playerNum.getSelectionModel().getSelectedItem().split(" ");
@@ -183,14 +182,23 @@ public class Main extends Application {
     private void Settings() {
 
         Stage settings = new Stage();
-        Button mute = new Button("Toggle Music");
+        Button mute;
+        if (!getMuted()) {
+            mute = new Button("Mute Music");
+        } else {
+            mute = new Button("UnMute Music");
+        }
 
         mute.setOnAction(e-> {
             music.muteSong();
-            if (muted)
+            if (muted) {
                 muted = false;
-            else
+                mute.setText("Mute Music");
+            }
+            else {
                 muted = true;
+                mute.setText("UnMute Music");
+            }
         });
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.CENTER);
@@ -209,9 +217,18 @@ public class Main extends Application {
         return music;
     }
 
-    static void showMainMenu() {primaryStage.show();}
+    static void showMainMenu() {
+        primaryStage.show();
+        music = new Audio();
+        music.startGame();
+    }
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    private void startMusic() {
+        music = new Audio();
+        music.startGame();
     }
 }

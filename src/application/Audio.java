@@ -17,20 +17,13 @@ public class Audio {
         player.play();
     }
 
-    public void startGameFile(String fileName) {
+    public void changeSong(String fileName) {
+        introPlayer.stop();
         URL resource1 = getClass().getResource("/audio/" + fileName);
-        Media intro = new Media(resource1.toString());
         Media loop = new Media(resource1.toString());
-        introPlayer = new MediaPlayer(intro);
-        introPlayer.play();
-        introPlayer.setOnEndOfMedia(new Runnable() {
-            @Override
-            public void run() {
-                mainSong = new MediaPlayer(loop);
-                mainSong.setCycleCount(MediaPlayer.INDEFINITE);
-                mainSong.play();
-            }
-        });
+        mainSong = new MediaPlayer(loop);
+        mainSong.setCycleCount(MediaPlayer.INDEFINITE);
+        mainSong.play();
     }
 
     public void startGame() {
@@ -64,9 +57,8 @@ public class Audio {
         }
     }
 
-    /*public void stopSong(){
-
-            mainSong.stop();
-            introPlayer.stop();
-    }*/
+    public void stopSong(){
+        mainSong.stop();
+        introPlayer.stop();
+    }
 }

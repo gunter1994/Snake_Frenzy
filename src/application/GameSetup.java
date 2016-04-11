@@ -18,15 +18,24 @@ class GameSetup {
     private Stage stage;
     private int pattern;
     private int colour;
+    private Audio audio;
 
     private void newGame(String pattern, String colour, String name) {
+        if(name.equalsIgnoreCase("shrek") && !Main.getMuted()){
+            audio.changeSong("shreksong.mp3");
+        } else if (name.equalsIgnoreCase("samus") && !Main.getMuted()) {
+            audio.changeSong("samus.mp3");
+        } else {
+            //normal song
+        }
         setSnake(pattern, colour, name);
         stage.close();
-        new MainGame(this.player);
+        new MainGame(this.player, audio);
     }
 
     //sets snake customization for all players in here
-    GameSetup() {
+    GameSetup(Audio a) {
+        audio = a;
         BorderPane layout = new BorderPane();
         Scene scene = new Scene(layout, 350, 300);
 
