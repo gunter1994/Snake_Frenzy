@@ -182,6 +182,8 @@ class MultiSetup {
             player.setCustom(".shrek");
         } else if(name.equalsIgnoreCase("Sam") || name.equalsIgnoreCase("Samus")){
             player.setCustom(".samus");
+        } else if (name.equalsIgnoreCase("sonic")) {
+            player.setCustom(".sonic");
         }
         player.setUsername(name.replaceAll("\\s", ""));
         if (name.equals("")) {
