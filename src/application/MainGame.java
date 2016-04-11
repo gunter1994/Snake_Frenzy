@@ -254,14 +254,13 @@ class MainGame {
                 out.close();
             } catch(IOException e){
                 System.err.println("Cannot connect to server");
-            } finally{
                 try {
                     FileWriter out = new FileWriter("localScores.csv", true);
                     out.append(player.getUsername() + "," + score + "\n");
 
                     out.close();
-                }catch(IOException e){
-                    System.err.println("something fucked up real good");
+                }catch(IOException i){
+                    i.printStackTrace();
                 }
             }
 
