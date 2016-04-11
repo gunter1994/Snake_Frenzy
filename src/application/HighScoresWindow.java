@@ -1,21 +1,27 @@
 package application;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 
-public class HighScoresWindow {
+class HighScoresWindow {
     private BorderPane layout;
     private static Stage primaryStage;
     private TableView<HighScore> highScoreTable;
 
-    public HighScoresWindow(){
+    HighScoresWindow(){
 
         primaryStage = new Stage();
         primaryStage.setTitle("SnakeScores");
@@ -38,12 +44,28 @@ public class HighScoresWindow {
         scoreColumn.setCellValueFactory(new PropertyValueFactory<>("Score"));
         scoreColumn.setSortType(TableColumn.SortType.DESCENDING); //sets sort order to descending
 
+        Button back = new Button("Back");
+        back.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                primaryStage.close();
+                Main.showMainMenu();
+            }
+        });
+
+        // adds box to place the button in the centre
+        HBox backButton = new HBox();
+        backButton.getChildren().add(back);
+        backButton.setPadding(new Insets(5,0,5,0)); // sets top and bottom spacing
+        backButton.setAlignment(Pos.CENTER);
+
         highScoreTable.getColumns().add(nameColumn);
         highScoreTable.getColumns().add(scoreColumn);
         highScoreTable.getSortOrder().add(scoreColumn); // sorts table by high scores
 
         layout = new BorderPane();
         layout.setCenter(highScoreTable);
+        layout.setBottom(backButton);
 
         Scene scene = new Scene(layout, 350, 350);
         primaryStage.setScene(scene);
