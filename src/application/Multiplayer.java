@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -40,20 +41,17 @@ public class Multiplayer {
 
         //set controls for players, and add players to their in game counterparts
         KeyCode[] keys1 = {KeyCode.RIGHT, KeyCode.DOWN, KeyCode.LEFT, KeyCode.UP};
-        players[0] = new GamePlayer(keys1);
-        players[0].setPlayer(ps[0]);
+        players[0] = new GamePlayer(keys1, ps[0]);
         KeyCode[] keys2 = {KeyCode.D, KeyCode.S, KeyCode.A, KeyCode.W};
-        players[1] = new GamePlayer(keys2);
-        players[1].setPlayer(ps[1]);
+        players[1] = new GamePlayer(keys2, ps[1]);
 
         if (ps.length > 2) {
             KeyCode[] keys3 = {KeyCode.NUMPAD6, KeyCode.NUMPAD5, KeyCode.NUMPAD4, KeyCode.NUMPAD8};
-            players[2] = new GamePlayer(keys3);
-            players[2].setPlayer(ps[2]);
-        } else if (ps.length > 3) {
+            players[2] = new GamePlayer(keys3, ps[2]);
+        }
+        if (ps.length > 3) {
             KeyCode[] keys4 = {KeyCode.L, KeyCode.K, KeyCode.J, KeyCode.I};
-            players[3] = new GamePlayer(keys4);
-            players[3].setPlayer(ps[3]);
+            players[3] = new GamePlayer(keys4, ps[3]);
         }
 
         //setup all players displays
@@ -70,7 +68,7 @@ public class Multiplayer {
         if (players.length > 2) {
             v1.getChildren().add(vBoxes[2]);
         }
-        else if (players.length > 3){
+        if (players.length > 3){
             v2.getChildren().add(vBoxes[3]);
         }
         hbox.getChildren().addAll(v1,v2);
@@ -95,18 +93,21 @@ public class Multiplayer {
             for (int k = 0; k < 4; k++) {
                 winners[k] = new Player();
             }
-            int j = 1;
-            int topScore = 0;
-            int current;
+            int topScore = -1;
+            int current;//first find the top score
             for (int i = 0; i < players.length; i++) {
                 current = players[i].getScore();
                 if (current > topScore) {
                     topScore = current;
-                    winners[0] = players[i].getPlayer();
                 }
-                else if (current == topScore) {
+            }
+
+            int j = 0; //any players equal to the top score have won
+            for (int h = 0; h < players.length; h++) {
+                current = players[h].getScore();
+                if (current == topScore) {
                     topScore = current;
-                    winners[j] = players[i].getPlayer();
+                    winners[j] = players[h].getPlayer();
                     j++;
                 }
             }
@@ -114,16 +115,60 @@ public class Multiplayer {
             String winner = "";
             for (int l = 0; l < j; l++) {
                 winner += winners[l].getUsername() + " ";
+                if ((j - l) != 1) {
+                    winner += "and ";
+                }
                 winners[l].win();
             }
-            Text text = new Text(winner + "wins!");
-            Stage popup = new Stage();
-            BorderPane layout = new BorderPane();
-            layout.setCenter(text);
-            popup.setTitle("GAME OVER");
-            Scene popScene = new Scene(layout);
-            popup.setScene(popScene);
-            popup.show();
+
+            Text winText; //decide if it was a tie or clear winner
+            if (j > 1) {
+                winText = new Text(winner + "tie!");
+            }
+            else {
+                winText = new Text(winner + "wins!");
+            }
+            Stage stage = new Stage();
+            stage.setTitle("Game Over");
+
+            Player[] returningPlayers = new Player[players.length];
+            for (int k = 0; k < players.length; k++){
+                returningPlayers[k] = players[k].getPlayer();
+            }
+
+            Button play = new Button("Play Again");
+            play.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    stage.close();
+                    primaryStage.close();
+                    new Multiplayer(returningPlayers);
+                }
+            });
+
+            Button mainMenu = new Button("Main Menu");
+            mainMenu.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    stage.close();
+                    primaryStage.close();
+                    Main.showMainMenu();
+                }
+            });
+
+            Button quitGame = new Button("Quit");
+            quitGame.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    System.exit(0);
+                }
+            });
+
+            HBox layout = new HBox(15);
+            layout.setStyle("-fx-background-color: white; -fx-padding: 20;");
+            layout.getChildren().addAll(winText, play, mainMenu, quitGame);
+            stage.setScene(new Scene(layout));
+            stage.show();
         }
     }
 
@@ -140,7 +185,7 @@ public class Multiplayer {
         private Player player;
         private Rectangle rect;
 
-        public GamePlayer(KeyCode[] keys){
+        public GamePlayer(KeyCode[] keys, Player p){
             //sets up all parameters for game
             timeline = new Timeline();
             moved = false;
@@ -152,6 +197,7 @@ public class Multiplayer {
             Rectangle wall = new Rectangle(-20, -20, 860,460); //so that the snake can move off screen when it dies
             wall.setFill(Color.DARKGRAY);
             scoreText = new Text(-5, -5, "Score: " + score);
+            player = p;
             Text wins = new Text(725, -5, "Wins: " + player.getWins());
             root.getChildren().addAll(wall, rect, scoreText, wins);
 

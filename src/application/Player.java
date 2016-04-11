@@ -10,27 +10,27 @@ class Player {
     private String custom;
     private int wins;
 
-    Player() {
-        wins = 0;
-    }
+    public Player() { this.wins = 0; }
 
-    void setCustom(String c) {
+    public void setCustom(String c) {
         this.custom = c;
     }
 
-    String getCustom() {
+    public String getCustom() {
         return this.custom;
     }
 
-    void setUsername(String u) {
+    public void setUsername(String u) {
         this.username = u;
     }
 
-    String getUsername() {
+    public String getUsername() {
         return this.username;
     }
 
-    int getWins() { return this.wins; }
+    public void setWins(int w) { this.wins = w; }
 
-    void win() { wins++; }
+    public int getWins() { return this.wins; }
+
+    public void win() { wins++; }
 }
