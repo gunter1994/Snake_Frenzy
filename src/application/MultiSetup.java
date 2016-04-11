@@ -18,17 +18,20 @@ class MultiSetup {
     private Stage stage;
     private int[] pattern;
     private int[] colour;
+    private Audio audio;
 
     private void newGame(String[] patterns, String[] colours, String[] names, Player[] players) {
         for (int i = 0; i < players.length; i++) {
             setSnake(patterns[pattern[i]], colours[colour[i]], names[i], players[i]);
         }
         stage.close();
+        audio.changeSong("gameLoop.mp3");
         new Multiplayer(players);
     }
 
     //sets snake customization for all players in here
-    MultiSetup(int numPlayers) {
+    MultiSetup(int numPlayers, Audio a) {
+        audio = a;
         HBox playerBoxes = new HBox();
         Scene scene = new Scene(playerBoxes, 350*numPlayers, 300);
 

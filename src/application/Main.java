@@ -169,7 +169,7 @@ public class Main extends Application {
         else if(option.equals("Local Multiplayer")) {
             String[] s = playerNum.getSelectionModel().getSelectedItem().split(" ");
             int num = Integer.parseInt(s[0]);
-            new MultiSetup(num);
+            new MultiSetup(num, music);
         }
     }
 

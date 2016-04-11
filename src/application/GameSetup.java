@@ -29,7 +29,7 @@ class GameSetup {
             audio.changeSong("sonic.mp3");
             audio.quietSong();
         } else {
-            //default song
+            audio.changeSong("gameLoop.mp3");
         }
         setSnake(pattern, colour, name);
         stage.close();
