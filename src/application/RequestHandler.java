@@ -33,41 +33,13 @@ public class RequestHandler implements Runnable{
                 out.flush();
                 out.close();
                 csvIn.close();
-            } else if (input[0].equals("ADD")){
+            } else if (input[0].equals("ADD")) {
                 // input[0] is name input[1] is score
                 // appends to CSV file
 
-                //test to see if file has 20 top scores
-                TreeMap<String, Integer> map = new TreeMap();
-
-                BufferedReader br = new BufferedReader(new FileReader("highScores.csv"));
-                String line;
-                String[] contents;
-                int count = 0;
-                boolean scoreReplaced = false;
-
-                while((line = br.readLine()) != null) {
-                    count++;
-                    contents = line.split(",");
-                    int key = Integer.parseInt(contents[1]);
-                    map.put(contents[0], key);
-                }
-                int min = Collections.min(map.values());
-
-                if (count >= 20) {
-                    while((line = br.readLine()) != null && !scoreReplaced) {
-                        line.contains("," + min);
-                        line.replace(line, input[1] + "," + input[2] + "\n");
-                        scoreReplaced = true;
-                    }
-                }
-
-
-
-//                FileWriter out = new FileWriter("highScores.csv", true);
-//                out.append(input[1] + "," + input[2] + "\n");
-
-                //out.close();
+                FileWriter out = new FileWriter("highScores.csv", true);
+                out.append(input[1] + "," + input[2] + "\n");
+                out.close();
                 in.close();
             }
         } catch(IOException e){

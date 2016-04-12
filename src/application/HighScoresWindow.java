@@ -49,6 +49,10 @@ class HighScoresWindow {
         scoreColumn.setCellValueFactory(new PropertyValueFactory<>("Score"));
         scoreColumn.setSortType(TableColumn.SortType.DESCENDING); //sets sort order to descending
 
+//        int size = highScoreTable.getItems().size();
+//        highScoreTable.getItems().sorted();
+//        if(size > 20) { highScoreTable.getItems().remove(20, size); }
+
         Button back = new Button("Back");
         back.setOnAction(new EventHandler<ActionEvent>() {
             @Override

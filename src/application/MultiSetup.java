@@ -164,8 +164,6 @@ class MultiSetup {
         stage.show();
     }
 
-
-
     // preview of the player's customized snake
 
     // updates the snake preview and name

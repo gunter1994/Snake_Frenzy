@@ -87,7 +87,7 @@ public class Main extends Application {
 
         ComboBox<String> gameModes = new ComboBox();
         gameModes.setPromptText("Game Mode");
-        gameModes.getItems().addAll("Classic Snake", "Speed Snake", "Timed Snake");
+        gameModes.getItems().addAll("Classic Snake");
 
         //Create strings for the rules of each game mode
         String classicRules = "Use 'wasd' or the arrow keys to maneuver your snake and eat food to collect points." +
@@ -95,19 +95,9 @@ public class Main extends Application {
                 " much time as you want to make your way over to food. Make sure not to bump into the walls or " +
                 "yourself or else it is game over!";
 
-        String speedRules = "Using the same controls and mechanics as Classic Snake, maneuver your snake to eat " +
-                "food, grow and collect points. Again, you have as much time as you want to get to the food. " +
-                "Beware though! Your snake will move faster than normal, so make sure you can make those quick turns " +
-                "without bumping into anything, or else it is game over!";
-
-        String timedRules = "Using the same controls and mechanics as Classic Snake, maneuver your snake to eat " +
-                "food, grow and and collect points. For those looking for an extra challenge, these games are now " +
-                "timed. You have 2 minutes to collect as many points as you can. Make sure you get to the food on time " +
-                "though, because they won't stay there forever!";
-
         TextArea textArea = new TextArea();
         textArea.setWrapText(true);
-        textArea.setStyle("-fx-font-size: 14px");
+        textArea.setStyle("-fx-font-size: 15px");
 
         gameModes.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
@@ -115,12 +105,6 @@ public class Main extends Application {
                 if(mode.equals("Classic Snake")) {
                     textArea.clear();
                     textArea.appendText(classicRules);
-                }else if(mode.equals("Speed Snake")) {
-                    textArea.clear();
-                    textArea.appendText(speedRules);
-                }else if(mode.equals("Timed Snake")) {
-                    textArea.clear();
-                    textArea.appendText(timedRules);
                 }
             }
         });
@@ -152,7 +136,7 @@ public class Main extends Application {
         textArea.setEditable(false);
         borderPane.setBottom(vBox2);
 
-        Scene gameSelectionScene = new Scene(borderPane,350,300); //(width, height)
+        Scene gameSelectionScene = new Scene(borderPane,350,350); //(width, height)
         selectGameStage.setTitle("Select Game");
         selectGameStage.setScene(gameSelectionScene);
         selectGameStage.show();
