@@ -15,7 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-
+// creates window to display high scores (from server)
 class HighScoresWindow {
     private BorderPane layout;
     private static Stage primaryStage;
@@ -26,12 +26,16 @@ class HighScoresWindow {
         primaryStage = new Stage();
         primaryStage.setTitle("Top 20 High Scores");
 
+        // adds data from server through DataSource method
         try {
             highScoreTable = new TableView<>();
             highScoreTable.setItems(DataSource.getAllHighScores());
         } catch(IOException e){
             System.err.println("Cannot connect to server");
         }
+
+        // terminates the program when game is over
+        primaryStage.setOnCloseRequest(e -> System.exit(0));
 
         TableColumn<HighScore, Number> placeColumn;
         placeColumn = new TableColumn("Place");
@@ -49,10 +53,8 @@ class HighScoresWindow {
         scoreColumn.setCellValueFactory(new PropertyValueFactory<>("Score"));
         scoreColumn.setSortType(TableColumn.SortType.DESCENDING); //sets sort order to descending
 
-//        int size = highScoreTable.getItems().size();
-//        highScoreTable.getItems().sorted();
-//        if(size > 20) { highScoreTable.getItems().remove(20, size); }
 
+        // button to return to main menu
         Button back = new Button("Back");
         back.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -78,7 +80,7 @@ class HighScoresWindow {
         layout.setCenter(highScoreTable);
         layout.setBottom(backButton);
 
-        Scene scene = new Scene(layout, 350, 350);
+        Scene scene = new Scene(layout, 360, 350);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
