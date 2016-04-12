@@ -70,4 +70,8 @@ public class Audio {
         }
         introPlayer.stop();
     }
+
+    void playMain() {
+        mainSong.play();
+    }
 }

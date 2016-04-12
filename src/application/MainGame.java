@@ -172,6 +172,7 @@ class MainGame {
         }
 
         void run() {
+            audio.playMain();
             //creates snake and sets up score/directions
             dir = 0;
             storedDir = 4;
