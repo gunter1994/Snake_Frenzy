@@ -263,8 +263,8 @@ class MainGame {
     
                     out.close();
 
-                }catch(IOException i){
-                    i.printStackTrace();
+                }catch(IOException e){
+                    e.printStackTrace();
                 }
             }
 

@@ -54,6 +54,7 @@ class HighScoresWindow {
             @Override
             public void handle(ActionEvent event) {
                 primaryStage.close();
+                Main.endMusic();
                 Main.showMainMenu();
             }
         });

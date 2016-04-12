@@ -176,6 +176,7 @@ public class Main extends Application {
     // returns to main menu
     private void back() {
         selectGameStage.close();
+        endMusic();
         showMainMenu();
     }
 
@@ -232,5 +233,8 @@ public class Main extends Application {
     private void startMusic() {
         music = new Audio();
         music.startGame();
+    }
+    static void endMusic(){
+        music.stopSong();
     }
 }
