@@ -256,15 +256,16 @@ class MainGame {
                 out.close();
             } catch(IOException e) {
                 System.err.println("Cannot connect to server");
-            }
-            try {
-                FileWriter out = new FileWriter("localScores.csv", true);
-                out.append(player.getUsername() + "," + score + "\n");
+            } finally {
+                try {
+                    FileWriter out = new FileWriter("localScores.csv", true);
+                    out.append(player.getUsername() + "," + score + "\n");
+    
+                    out.close();
 
-                out.close();
-
-            }catch(IOException e1){
-                e1.printStackTrace();
+                }catch(IOException i){
+                    i.printStackTrace();
+                }
             }
 
             // creates Game Over popup window
