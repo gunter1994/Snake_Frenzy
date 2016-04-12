@@ -182,7 +182,7 @@ class MainGame {
             food = new Food(s, root);
 
             if (player.getUsername().equalsIgnoreCase("Samus")) {
-                food.changeFood(new Image(new File("snake_art/.samus/food.png").toURI().toString()));
+                food.changeFood(new Image(new File("resources/snake_art/.samus/food.png").toURI().toString()));
             }
 
             //makes game run until stopped
@@ -196,7 +196,7 @@ class MainGame {
             Duration duration = Duration.millis(100);
 
             if (player.getUsername().equalsIgnoreCase("sonic")) {
-                food.changeFood(new Image(new File("snake_art/.sonic/food.png").toURI().toString()));
+                food.changeFood(new Image(new File("resources/snake_art/.sonic/food.png").toURI().toString()));
                 duration = Duration.millis(50);
             }
 
@@ -254,21 +254,17 @@ class MainGame {
 
                 out.println("ADD," + player.getUsername() + "," + score);
                 out.close();
-            } catch(IOException e){
+            } catch(IOException e) {
                 System.err.println("Cannot connect to server");
-                try {
-                    FileWriter out = new FileWriter("localScores.csv", true);
-                    out.append(player.getUsername() + "," + score + "\n");
+            }
+            try {
+                FileWriter out = new FileWriter("localScores.csv", true);
+                out.append(player.getUsername() + "," + score + "\n");
 
-                    out.close();
-<<<<<<< HEAD
-                }catch(IOException e){
-                    e.printStackTrace();
-=======
-                }catch(IOException i){
-                    i.printStackTrace();
->>>>>>> eaae8a66afdf49fadfcb7a86e92d4d9abe4b6a7d
-                }
+                out.close();
+
+            }catch(IOException e1){
+                e1.printStackTrace();
             }
 
             // creates Game Over popup window

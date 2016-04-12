@@ -290,7 +290,7 @@ public class Multiplayer {
             food = new Food(s, root);
 
             if (player.getUsername().equalsIgnoreCase("Samus")) {
-                food.changeFood(new Image(new File("snake_art/.samus/food.png").toURI().toString()));
+                food.changeFood(new Image(new File("resources/snake_art/.samus/food.png").toURI().toString()));
             }
 
             //makes game run until stopped

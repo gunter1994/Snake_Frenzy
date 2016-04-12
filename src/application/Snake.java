@@ -34,31 +34,29 @@ class Snake {
     }
 
     // draws the snake from tail to head
-    void drawSnake(Group root)
-    {
+    void drawSnake(Group root) {
         //draws the snake to the screen
         SnakePart c = head;
         while (c != null) {
             //checks what image to use
             if (c == head)
             {
-                c.getImage().setImage((new Image(new File("snake_art/" + pic + "/tail.png").toURI().toString())));
+                c.getImage().setImage((new Image(new File("resources/snake_art/" + pic + "/tail.png").toURI().toString())));
             }
             else if (c == tail)
             {
-                c.getImage().setImage((new Image(new File("snake_art/" + pic + "/head.png").toURI().toString())));
+                c.getImage().setImage((new Image(new File("resources/snake_art/" + pic + "/head.png").toURI().toString())));
             }
             else
             {
-                c.getImage().setImage(new Image(new File("snake_art/" + pic + "/body.png").toURI().toString()));
+                c.getImage().setImage(new Image(new File("resources/snake_art/" + pic + "/body.png").toURI().toString()));
             }
             root.getChildren().add(c.getImage()); //adds the imageview to the screen
             c = c.getNext();
         }
     }
 
-    void move(Group root, int d)
-    {
+    void move(Group root, int d) {
         //only moves if not colliding
         if (!this.checkCollision()) {
             //first clean up all the corners
@@ -67,7 +65,7 @@ class Snake {
             while (deCorn !=tail) {
                 if (deCorn.getCleanup() != -1) {
                     deCorn.getImage().setRotate(deCorn.getCleanup());
-                    deCorn.getImage().setImage(new Image(new File("snake_art/" + pic + "/body.png").toURI().toString()));
+                    deCorn.getImage().setImage(new Image(new File("resources/snake_art/" + pic + "/body.png").toURI().toString()));
                     deCorn.setCleanup(-1);
                 }
                 deCorn = deCorn.getNext();
@@ -132,7 +130,7 @@ class Snake {
                     }
 
                     // sets the picture to a corner picture
-                    c.getImage().setImage(new Image(new File("snake_art/" + pic + "/corner.png").toURI().toString()));
+                    c.getImage().setImage(new Image(new File("resources/snake_art/" + pic + "/corner.png").toURI().toString()));
                     c.getImage().setRotate(90.0 * cornerOri);
                     c.setCleanup(c.getNext().getImage().getRotate());
                 }

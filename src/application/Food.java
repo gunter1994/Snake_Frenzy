@@ -5,20 +5,17 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-
 import java.io.File;
 import java.net.URL;
 import java.util.Random;
 
-/**
- * Created by gunter on 4/10/16.
- */
+
 public class Food {
     ImageView foodPic;
     MediaPlayer foodSound;
 
     public Food(Snake s, Group root) {
-        foodPic = new ImageView(new Image(new File("snake_art/food.png").toURI().toString()));
+        foodPic = new ImageView(new Image(new File("resources/snake_art/food.png").toURI().toString()));
         URL resource = getClass().getResource("/audio/eat.mp3");
         foodSound = new MediaPlayer(new Media(resource.toString()));
         newFood(s, root);

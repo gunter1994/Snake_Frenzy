@@ -1,8 +1,5 @@
 package application;
 
-/**
- * Created by gunter on 3/20/16.
- */
 public class Position {
     private int x;
     private int y;
